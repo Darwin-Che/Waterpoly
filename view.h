@@ -22,9 +22,10 @@ class View: public Observer{
     //constructor
     View(); 
     // add a player
-    void addPlayer(char ID);
+    void addPlayer(const char & ID);
     // add a square 
-    void addSquare(std::string name);
+    void addSquare(const std::string & name);
+    // When notified by a Subject
     virtual void notify( Subject & whoNotified );
     virtual void drawBoard() = 0;
 };
