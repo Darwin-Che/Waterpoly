@@ -24,12 +24,12 @@ std::vector<int> View::get2Dlocation(int location){
 }
 
 // init the players at location 0 
-void View::addPlayer(char ID){
+void View::addPlayer(const char & ID)){
     players[ID]=0;
 } 
 
 // add a square
-void View::addSquare(std::string name){
+void View::addSquare(const std::string & name){
     squareName.emplace_back(name);
 }
 
