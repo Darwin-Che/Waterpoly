@@ -1,4 +1,6 @@
 #include "view.h"
+#include "player.h"
+#include "AcademicBuilding.h"
 
 //constructor
 View::View(){
@@ -33,4 +35,19 @@ void View::addSquare(const std::string & name){
     squareName.emplace_back(name);
 }
 
-void notify( Subject & whoNotified ){}
+// When notified. A View could only be notified by a player or an academic building
+void View::notify( Subject & whoNotified ){
+    Player *player = dynamic_cast<Player *>( &whoNotified );
+    AcademicBuilding *acbuilding = dynamic_cast<AcademicBuilding *>( &whoNotified );
+    if ( player != nullptr ){
+        if ( player->getMoney()<0 ){
+            players.erase( player->getSymbol() );
+        }
+        else{
+            players[ player->getSymbol() ] = player->getPosition();
+        }
+    }
+    else if( acbuilding != nullptr ){
+        improvements[acbuilding->getLocation()] = acbuilding->getImprovementLevel();
+    }
+}

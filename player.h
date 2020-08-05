@@ -1,9 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
-#include <vector>
-#include <map>
 #include <string>
-#include "subject.h"
+#include "Subject.h"
 
 class Player: public Subject{
     char symbol;
@@ -13,7 +11,29 @@ class Player: public Subject{
     bool isJailed;
     int numJailed;
   public:
-    
+    // constructor
+    Player(char symbol, std::string name);
+    // accessors and mutators
+    char getSymbol();
+    std::string getName();
+
+    int getMoney();
+    void setMoney(const int & money);
+
+    int getPosition();
+    void setPosition(const int & position);
+
+    int getNumCups();
+    void setNumCups(const int & numcups);
+
+    bool getIsJailed();
+    void setIsJailed(const bool & isJaied);
+
+    int getNumJailed();
+    void setNumJailed(const int & getNumJailed);
+
+    // notify Observers when the player bankrupt
+    void dropOut();
 };
 
 #endif
