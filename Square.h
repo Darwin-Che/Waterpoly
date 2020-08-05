@@ -3,19 +3,16 @@
 
 #include <string>
 #include <memory>
-class VisitStrategy;
 class Player;
 
 class Square {
     std::string name;
     int location;
-    std::shared_ptr<VisitStrategy> visitStrategy;
 
   public:
-    Square(const std::string& name, int location,
-            std::shared_ptr<VisitStrategy> visitStrategy);
+    Square(const std::string& name, int location);
     virtual ~Square() = default;
-    void acceptVisitor(Player& player);
+    void acceptVisitor(Player& player) = 0;
     std::string getName() const;
     int getLocation() const;
 };
