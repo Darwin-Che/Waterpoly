@@ -6,11 +6,12 @@
 class Observer;
 
 class Subject {
+  protected: 
     std::vector<std::shared_ptr<Observer>> observers;
 
   public:
     void attach(Observer *o);  
-    void notifyObservers();
+    virtual void notifyObservers()=0;
 };
 
 #endif
