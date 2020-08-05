@@ -6,7 +6,7 @@ Square::Square(std::string& name, int location,
     : name(name), location(location), visitStrategy(visitStrategy) {}
 
 void Square::acceptVisitor(Player& player) {
-    visitStrategy->visit(player);
+    visitStrategy->visit(*this, player);
 }
 
 std::string Square::getName() const {
