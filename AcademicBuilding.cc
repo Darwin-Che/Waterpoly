@@ -3,8 +3,8 @@
 AcademicBuilding::AcademicBuilding(const std::string name,
         int location, std::shared_ptr<VisitStrategy> visitStrategy,
         const std::string owner, int purchaseCost,
-        bool isMortgaged, const vector<int>& neighbourIndice,
-        int improvementCost, const vector<int>& improvementFee)
+        bool isMortgaged, const std::vector<int>& neighbourIndice,
+        int improvementCost, const std::vector<int>& improvementFee)
     : Building(name, location, visitStrategy, owner, purchaseCost,
             isMortgaged, neighbourIndice), improvementCost(improvementCost),
             improvementFee(improvementFee), improvementLevel(0) {}

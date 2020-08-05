@@ -22,7 +22,7 @@ class Building : public Square, public Subject, public Observer {
     Building(const std::string& name, int location,
             std::shared_ptr<VisitStrategy> visitStrategy,
             const std::string& owner, int purchaseCost,
-            bool isMortgaged, const vector<int>& neighbourIndice);
+            bool isMortgaged, const std::vector<int>& neighbourIndice);
     virtual void notify(Subject& whoNotified) override;
     virtual int getFee() const = 0;
     std::string getOwner() const;

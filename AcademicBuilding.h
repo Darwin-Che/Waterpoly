@@ -4,15 +4,15 @@
 
 class AcademicBuilding : public Building {
     int improvementCost;
-    vector<int> improvementFee;
+    std::vector<int> improvementFee;
     int improvementLevel;
 
   public:
     AcademicBuilding(const std::string name, int location,
             std::shared_ptr<VisitStrategy> visitStrategy,
             const std::string owner, int purchaseCost,
-            bool isMortgaged, const vector<int>& neighbourIndice,
-            int improvementCost, const vector<int>& improvementFee);
+            bool isMortgaged, const std::vector<int>& neighbourIndice,
+            int improvementCost, const std::vector<int>& improvementFee);
     virtual int getFee() const override;
     bool checkMonopoly() const;
     int getImprovementCost() const;
