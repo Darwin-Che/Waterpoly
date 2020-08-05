@@ -3,6 +3,7 @@
 #include <fstream>
 #include <stdexcept>
 #include "Controller.h"
+#include "ModelFail.h"
 
 struct cState
 {
@@ -19,11 +20,11 @@ void Controller::takeTurn(std::istream in)
         {
             int d1; // the first dice number
             int d2; // the second dice number
-            model.show("Player " + playerList[cur] + "rolls :" + std::to_string(d1) + " and " + std::to_string(d2) + ". ");
+            model->show("Player " + playerList[cur] + "rolls :" + std::to_string(d1) + " and " + std::to_string(d2) + ". ");
             if (d1 == d2)
             {
-                model.show("This is a double! ");
-                model.show("You have already rolled " + std::to_string(cstate->numDoubleRoll) + " doubles!.");
+                model->show("This is a double! ");
+                model->show("You have already rolled " + std::to_string(cstate->numDoubleRoll) + " doubles!.");
                 // prevent roll double three times
                 if (cstate->numDoubleRoll < 2)
                 {
@@ -34,7 +35,7 @@ void Controller::takeTurn(std::istream in)
                     cstate->numDoubleRoll++;
                     cstate->canRoll = false;
                     // need to call models method to go to Times line directly
-                    model.gotoTims(playerList[cur]);
+                    model->gotoTims(playerList[cur]);
                 }
             }
             else
@@ -42,18 +43,18 @@ void Controller::takeTurn(std::istream in)
                 cstate->canRoll = false;
             }
             // notify view to display the dice number
-            model.playerProceed(playerList[cur], d1 + d2);
+            model->playerProceed(playerList[cur], d1 + d2);
         }
         else if (command == "next")
         {
             // message is given by model
-            if (model.next(playerList[cur]))
+            if (model->next(playerList[cur]))
             {
                 cur++;
                 if (cur == playerList.size())
                     cur = 0;
             }
-            model.show("Current Active Player: " + playerList[cur]);
+            model->show("Current Active Player: " + playerList[cur]);
         }
         else if (command == "trade")
         {
@@ -79,21 +80,21 @@ void Controller::takeTurn(std::istream in)
             }
             if (n1 && n2)
             {
-                model.show("Can not trade money for money!");
+                model->show("Can not trade money for money!");
             }
             if (n1)
             {
                 // buy
-                model.trade(receiver, playerList[cur], arg2, a1);
+                model->trade(receiver, playerList[cur], arg2, a1);
             }
             else if (n2)
             {
                 // sell
-                model.trade(playerList[cur], receiver, arg1, a2);
+                model->trade(playerList[cur], receiver, arg1, a2);
             }
             else
             {
-                model.trade(playerList[cur], receiver, arg1, arg2);
+                model->trade(playerList[cur], receiver, arg1, arg2);
             }
         }
         else if (command == "improve")
@@ -102,52 +103,64 @@ void Controller::takeTurn(std::istream in)
             in >> arg1, arg2;
             if (arg2 == "sell")
             {
-                model.improve(playerList[cur], arg1, false);
+                model->improve(playerList[cur], arg1, false);
             }
             else if (arg2 == "buy")
             {
-                model.improve(playerList[cur], arg1, true);
+                model->improve(playerList[cur], arg1, true);
             }
             else
             {
-                model.show("Invalid second argument! Options: \"Sell\" or \"Buy\" ")
+                model->show("Invalid second argument! Options: \"Sell\" or \"Buy\" ");
             }
         }
         else if (command == "mortgage")
         {
             std::string arg;
             in >> arg;
-            model.improve(playerList[cur], arg, true);
+            model->improve(playerList[cur], arg, true);
         }
         else if (command == "unmortgage")
         {
             std::string arg;
             in >> arg;
-            model.improve(playerList[cur], arg, false);
+            model->improve(playerList[cur], arg, false);
         }
         else if (command == "bankrupt")
         {
-            model.bankrupt(playerList[cur]);
+            bool success = false;
+            try
+            {
+                model->bankrupt(playerList[cur]);
+                success = true;
+            }
+            catch (ModelFail &e)
+            {
+            }
+            if (success)
+            {
+                playerList.erase(playerList.begin() + cur);
+                model->show("Current Active Player: " + playerList[cur]);
+            }
         }
         else if (command == "asset")
         {
-            model.getInfo(playerList[cur]);
+            model->getInfo(playerList[cur]);
         }
         else if (command == "all")
         {
-            model.getInfo();
+            model->getInfo();
         }
         else if (command == "save")
         {
             std::string arg;
             in >> arg;
             std::ofstream outfile{arg};
-            model.save(outfile);
+            model->save(outfile);
         }
         else
         {
-            model.show("inValid Command!");
+            model->show("inValid Command!");
         }
     }
 }
-

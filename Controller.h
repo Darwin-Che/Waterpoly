@@ -5,17 +5,18 @@
 #include <string>
 #include <iostream>
 #include <memory>
+#include "Model.h"
+#include "ModelFail.h"
 
-class cState; 
+class cState;
 
 class Controller
 {
-    Model model;
+    std::shared_ptr<Model> model;
     std::unique_ptr<cState> cstate;
     std::vector<std::string> playerList;
     int cur;
     int seed;
-    
 
 public:
     void takeTurn(std::istream in);
