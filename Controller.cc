@@ -48,7 +48,7 @@ void Controller::takeTurn(std::istream in)
         else if (command == "next")
         {
             // message is given by model
-            if (model->next(playerList[cur]))
+            if (model->canNext(playerList[cur]))
             {
                 cur++;
                 if (cur == playerList.size())

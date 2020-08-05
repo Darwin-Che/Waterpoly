@@ -6,7 +6,7 @@
 #include <iostream>
 #include <memory>
 #include "Model.h"
-#include "ModelFail.h"
+
 
 class cState;
 
