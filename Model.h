@@ -1,16 +1,29 @@
 #ifndef _MODEL_
 #define _MODEL_
 
+#include <memory>
 #include <string>
 #include <map>
+#include <iostream>
 #include "Player.h"
+
+class View;
+class Board;
+class Player;
+class Strategy;
 
 class Model
 {
-    Board board;
-    std::map<std::string, Player> allPlayers;
+    std::map<int, Strategy> strategies;
+    std::istream &min;
+    std::ostream &mout;
+    std::shared_ptr<Board> board;
+    std::map<std::string, std::shared_ptr<Player>> allPlayers;
+
+    void payDebt(std::shared_ptr<Player> p1);
 
 public:
+    Model(std::istream &tin, std::ostream &tout);
     /************** Methods called by Controller **************/
 
     // let the view show the message, do nothing else
@@ -18,14 +31,14 @@ public:
     void show(const std::string &message) noexcept;
 
     // check if the player does not own any money
-    void canNext(const std::string &player) noexcept;
+    bool canNext(const std::string &player) noexcept;
 
     // playername1 give playername2 property, and get price back
     // noexception, but need to check if the action can be done (bankruptcy)
-    void trade(const std::string &pn1, const std::string &pn2, const std::string &property; int price) noexcept;
+    void trade(const std::string &pn1, const std::string &pn2, const std::string &property, int price) noexcept;
 
     // playername1 give playername2 property1, and get property2 back
-    void trade(const std::string &pn1, const std::string &pn2, const std::string &property1; const std::string &proptery2) noexcept;
+    void trade(const std::string &pn1, const std::string &pn2, const std::string &property1, const std::string &proptery2) noexcept;
 
     // action : true is buy, false is sell
     // need to check bankruptcy
