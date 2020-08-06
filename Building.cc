@@ -1,11 +1,10 @@
 #include "Building.h"
 
 Building::Building(const std::string& name, int location,
-        std::shared_ptr<VisitStrategy> visitStrategy,
         const std::string& owner, int purchaseCost,
         bool isMortgaged, const std::vector<int>& neighbourIndice)
-    : Square(name, location, visitStrategy), owner(owner),
-    purchaseCost(purchaseCost), isMortgaged(isMortgaged), neighbour() {
+    : Square(name, location), owner(owner), purchaseCost(purchaseCost),
+    isMortgaged(isMortgaged), neighbour() {
         for (index : neighbourIndice) {
             neighbour[index] = "BANK";
         }
