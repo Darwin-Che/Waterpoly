@@ -1,5 +1,5 @@
-#include "view.h"
-#include "player.h"
+#include "View.h"
+#include "Player.h"
 #include "AcademicBuilding.h"
 
 //constructor

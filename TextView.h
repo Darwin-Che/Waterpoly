@@ -1,6 +1,6 @@
 #ifndef TEXTVIEW_H
 #define TEXTVIEW_H
-#include "view.h"
+#include "View.h"
 #include <memory>
 
 class TextView: public View{
