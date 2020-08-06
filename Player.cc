@@ -1,4 +1,4 @@
-#include "player.h"
+#include "Player.h"
 
 // constructor
 Player::Player(char symbol, std::string name):symbol(symbol), name(name) {}
