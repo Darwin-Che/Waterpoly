@@ -1,7 +1,20 @@
 #include "Player.h"
 
-// constructor
-Player::Player(char symbol, std::string name):symbol(symbol), name(name) {}
+// constructors
+Player::Player(char symbol, std::string name):symbol(symbol), name(name) {
+    position = 0;
+    oldPosition = 0;
+}
+
+Player::Player(char symbol, std::string name, int position, int numCups, int money):
+    Player(symbol, name), position(position), numCups(numCups), money(money){
+        oldPosition = position;
+}
+
+Player::Player(char symbol, std::string name, int position, int numCups, int money, int numJailed):
+    Player(symbol, name, position, numCups, money), numJailed(numJailed) {
+    isJailed = true;
+}
 
 // accessors and mutators
 char Player::getSymbol(){ return symbol; }

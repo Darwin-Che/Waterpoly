@@ -6,7 +6,7 @@
 class Player: public Subject{
     char symbol;
     std::string name;
-    int money, position;
+    int money, position, oldPosition;
     int numCups;
     bool isJailed;
     int numJailed;
@@ -14,8 +14,10 @@ class Player: public Subject{
     std::string debtOwner;
     bool isBankrupt;
   public:
-    // constructor
+    // constructors
     Player(char symbol, std::string name);
+    Player(char symbol, std::string name, int position, int numCups, int money);
+    Player(char symbol, std::string name, int position, int numCups, int money, int numJailed);
     // accessors and mutators
     char getSymbol();
     std::string getName();
