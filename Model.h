@@ -11,7 +11,7 @@ class Model
     std::map<std::string, Player> allPlayers;
 
 public:
-    // methods called by Controller
+    /************** Methods called by Controller **************/
 
     // let the view show the message, do nothing else
     // provide noexcept guarantee

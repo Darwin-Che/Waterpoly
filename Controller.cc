@@ -54,6 +54,8 @@ void Controller::takeTurn(std::istream in)
                 if (cur == playerList.size())
                     cur = 0;
             }
+            cstate->canRoll = true;
+            cstate->numDoubleRoll = 0;
             model->show("Current Active Player: " + playerList[cur]);
         }
         else if (command == "trade")
