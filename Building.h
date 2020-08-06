@@ -12,6 +12,7 @@ class Building : public Square {
     int getPurchaseCost() const;
     bool getIsMortgaged() const;
     void setIsMortgaged(bool isMortgaged);
+    virtual int calculateNetworth() const;
 };
 
 #endif

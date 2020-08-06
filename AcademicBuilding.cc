@@ -23,3 +23,7 @@ void AcademicBuilding::setImprovementLevel(int improvementLevel) {
     this->improvementLevel = improvementLevel;
 }
 
+int AcademicBuilding::calculateNetworth() const {
+    return getPurchaseCost() + improvementLevel * improvementCost;
+}
+
