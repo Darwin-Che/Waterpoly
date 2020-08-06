@@ -4,7 +4,9 @@
 
 //constructor
 View::View(int height,int width):height(height), width(width) {
-    improvements = std::vector<int>(2*(width+height),-1);
+    actualH=height+1;
+    actualW=width+1;
+    improvements = std::vector<int>(2*(width+height),1);
 }
 
 // take a 1-d location and calculate its 2-d position on the board
@@ -12,21 +14,25 @@ std::vector<int> View::get2Dlocation(int location){
     if (location < 0) {location = 0; }
     else if ( location >= 2*(width+height) ) {location = 2*(width+height)-1; }
     if(location <= width ){
-        return std::vector<int>{height, width-location};
+        std::vector<int> position {height, width-location};
+        return position;
     }
     else if (location <= width+height ){
-        return std::vector<int>{width+height-location, 0};
+        std::vector<int> position {width+height-location, 0};
+        return position;
     }
     else if (location <=2*width+height ){
-        return std::vector<int>{0, location-(width+height) };
+        std::vector<int> position {0, location-(width+height) };
+        return position;
     }
     else{
-        return std::vector<int>{location-(2*width+height), width };
+       std::vector<int> position {location-(2*width+height), width };
+       return position;
     }
 }
 
 // init the players at location 0 
-void View::addPlayer(const char & ID)){
+void View::addPlayer(const char & ID){
     players[ID]=0;
 } 
 
@@ -51,3 +57,4 @@ void View::notify( Subject & whoNotified ){
         improvements[acbuilding->getLocation()] = acbuilding->getImprovementLevel();
     }
 }
+

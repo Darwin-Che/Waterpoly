@@ -4,7 +4,7 @@
 #include <memory>
 
 class TextView: public View{
-    int gridH = 4, gridW = 8;
+    int gridH, gridW;
 
     // the string representation of each square
     class Block{
@@ -25,7 +25,7 @@ class TextView: public View{
         int getWidth();
     };
 
-    std::vector<std::vector<std::unique_ptr<Block>>> Blocks;
+    std::vector<std::vector<std::shared_ptr<Block> > > Blocks;
     void updateBlocks();
   public:
     TextView(int height, int widths);

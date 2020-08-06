@@ -31,15 +31,17 @@ void TextView::Block::setName(std::string & name, int blockLine){
             }
             else{
                 blockLine++;
-                for (int i=0; i<min(blockW,word.length()); ++i){
-                    content[blockLine][i] = word[i];
-                }
-                if(word.length() <= blockW){
-                    lineIndex = word.length()+1;
-                }
-                else{
-                    lineIndex = 0; 
-                    blockLine++;
+                if (blockLine < blockH-1){
+                    for (int i=0; i<min(blockW,word.length()); ++i){
+                        content[blockLine][i] = word[i];
+                    }
+                    if(word.length() <= blockW){
+                        lineIndex = word.length()+1;
+                    }
+                    else{
+                        lineIndex = 0; 
+                        blockLine++;
+                    }
                 }
             }
         }
@@ -53,11 +55,11 @@ void TextView::Block::setName(std::string & name, int blockLine){
 }
 
 void TextView::Block::setUnderLine(){
-    for(int i=0; i<blockW ; i++){
+    for(int i=0; i<=blockW ; i++){
         content[blockH][i]='_';
     }
 }
-void TextView::Block::RightLine(){
+void TextView::Block::setRightLine(){
     for(int i=0; i<=blockH ; i++){
         content[i][blockW]='|';
     }
@@ -97,12 +99,14 @@ int TextView::Block::getWidth(){
 }
 
 TextView::TextView(int height, int width):View(height,width){
-    for (int i=0; i<height; i++){
-        vector<unique_ptr<Block>> row;
-        for (int j=0; j<width; j++){
-            row.emplace_back(make_unique<Block>(gridH,gridW));
+    gridH = 4;
+    gridW = 8;
+    for (int i=0; i<actualH; i++){
+        vector<shared_ptr<Block> > row;
+        for (int j=0; j<actualW; j++){
+            row.push_back(make_shared<Block>(gridH,gridW));
         }
-        Blocks.emplace_back(row);
+        Blocks.push_back(row);
     }
 }
 
@@ -115,27 +119,27 @@ void TextView::updateBlocks(){
         vector<int> position = get2Dlocation(i);
         Blocks[position[0]][position[1]]->setContent(improvements[i],squareName[i]);
     }
-    for (int i=1 ; i< width-1; i++){
-        Blocks[height-2][i]->setUnderLine();
+    for (int i=1 ; i< actualW-1; i++){
+        Blocks[actualH-2][i]->setUnderLine();
     }
-    for (int i=1 ; i< height-1; i++){
-        Blocks[width-2][i]->setRightLine();
+    for (int i=1 ; i< actualH-1; i++){
+        Blocks[i][actualW-2]->setRightLine();
     }
 }
 
 void TextView::drawBoard(){
     updateBlocks();
-    for (int i=0; i<width*(gridW+1); i++){
+    for (int i=0; i<=actualW*(gridW+1); i++){
         cout << "_";
     }
     cout << endl;
-    int yAxis = 0;
-    for (int i=0; i<height*(gridH+1); i++){
-        y = i/(gridH+1);
-        cout << "|";
-        for (int j=0; j<width;j++){
-            cout << Blocks[y][j]->getLine(i);
+    for (int i=0; i<actualH; i++){
+        for (int j=0; j<=gridH; j++){
+            cout << "|";
+            for (int k=0;k<actualW; k++){
+                cout << Blocks[i][k]->getLine(j);
+            }
+            cout << endl;
         }
-        cout << endl;
     }
 }
