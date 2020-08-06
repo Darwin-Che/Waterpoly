@@ -9,13 +9,10 @@ class AcademicBuilding : public Building {
 
   public:
     AcademicBuilding(const std::string name, int location,
-            const std::string owner, int purchaseCost,
-            bool isMortgaged, const std::vector<int>& neighbourIndice,
-            int improvementCost, const std::vector<int>& improvementFee);
-    virtual int getFee() const override;
-    virtual void acceptVisitor(Player& player) override;
-    bool checkMonopoly() const;
+            int purchaseCost, bool isMortgaged, int improvementCost,
+            const std::vector<int>& improvementFee);
     int getImprovementCost() const;
+    int getImprovementFee(int improvementLevel) const;
     int getImprovementLevel() const;
     void setImprovementLevel(int improvementLevel);
 };
