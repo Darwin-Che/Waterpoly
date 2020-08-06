@@ -46,14 +46,18 @@ void View::notify( Subject & whoNotified ){
     Player *player = dynamic_cast<Player *>( &whoNotified );
     AcademicBuilding *acbuilding = dynamic_cast<AcademicBuilding *>( &whoNotified );
     if ( player != nullptr ){
-        if ( player->getMoney()<0 ){
+        // If View is notified by a player
+        if ( player->getIsBankrupt() ){
+            // If the player bankrupt
             players.erase( player->getSymbol() );
         }
         else{
+            // otherwise the player's position has changed
             players[ player->getSymbol() ] = player->getPosition();
         }
     }
     else if( acbuilding != nullptr ){
+        // If the view is notified by a academic building
         improvements[acbuilding->getLocation()] = acbuilding->getImprovementLevel();
     }
 }

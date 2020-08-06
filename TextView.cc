@@ -3,6 +3,7 @@
 #include <iostream>
 using namespace std;
 
+// Block constructor
 TextView::Block::Block(int h, int w): blockH(h), blockW(w) {
     for (int i=0; i<h+1; ++i ){
         string str="";
@@ -12,11 +13,13 @@ TextView::Block::Block(int h, int w): blockH(h), blockW(w) {
     playerNum=0;
 }
 
+// helper function: minimum
 int TextView::Block::min(int a, int b){
     if(a<b){ return a; }
     return b;
 }
 
+// set the name of a block
 void TextView::Block::setName(std::string & name, int blockLine){
     istringstream strm{name};
     string word;
@@ -54,17 +57,21 @@ void TextView::Block::setName(std::string & name, int blockLine){
     }
 }
 
+// draw a line at the bottom of the block
 void TextView::Block::setUnderLine(){
     for(int i=0; i<=blockW ; i++){
         content[blockH][i]='_';
     }
 }
+
+// draw a line in the rightmost column of the block
 void TextView::Block::setRightLine(){
     for(int i=0; i<=blockH ; i++){
         content[i][blockW]='|';
     }
 }
 
+// fill in Square information 
 void TextView::Block::setContent(const int & imp,std::string & name){
     setUnderLine();
     setRightLine();
@@ -82,42 +89,38 @@ void TextView::Block::setContent(const int & imp,std::string & name){
     }
 }
 
+// add a player's symbol to the block
 void TextView::Block::setPlayer(const char & symbol){
     content[blockH-1][playerNum] = symbol;
     playerNum++;
 }
 
+// get the i-th line of the block
 std::string TextView::Block::getLine(const int & i){
     return content[i];
 }
 
+// get the height of the block
 int TextView::Block::getHeight(){
     return blockH;
 }
+
+// get the width of the block
 int TextView::Block::getWidth(){
     return blockW;
 }
 
+// TextView constructor
 TextView::TextView(int height, int width):View(height,width){
     gridH = 4;
     gridW = 8;
+    // initialize the 2d Block vector
     for (int i=0; i<actualH; i++){
         vector<shared_ptr<Block> > row;
         for (int j=0; j<actualW; j++){
             row.push_back(make_shared<Block>(gridH,gridW));
         }
         Blocks.push_back(row);
-    }
-}
-
-void TextView::updateBlocks(){
-    for (auto it:players){
-        vector<int> position = get2Dlocation(it.second);
-        Blocks[position[0]][position[1]]->setPlayer(it.first);
-    }
-    for (int i=0; i<2*(width+height); i++){
-        vector<int> position = get2Dlocation(i);
-        Blocks[position[0]][position[1]]->setContent(improvements[i],squareName[i]);
     }
     for (int i=1 ; i< actualW-1; i++){
         Blocks[actualH-2][i]->setUnderLine();
@@ -127,8 +130,23 @@ void TextView::updateBlocks(){
     }
 }
 
+// update the blocks
+void TextView::updateBlocks(){
+    for (auto it:players){ // update the players
+        vector<int> position = get2Dlocation(it.second);
+        Blocks[position[0]][position[1]]->setPlayer(it.first);
+    }
+    for (int i=0; i<2*(width+height); i++){ // update the squares
+        vector<int> position = get2Dlocation(i);
+        Blocks[position[0]][position[1]]->setContent(improvements[i],squareName[i]);
+    }
+}
+
+// draw the view
 void TextView::drawBoard(){
     updateBlocks();
+
+    // draw an overline
     for (int i=0; i<=actualW*(gridW+1); i++){
         cout << "_";
     }

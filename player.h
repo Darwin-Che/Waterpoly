@@ -10,6 +10,9 @@ class Player: public Subject{
     int numCups;
     bool isJailed;
     int numJailed;
+    int debt;
+    std::string debtOwner;
+    bool isBankrupt;
   public:
     // constructor
     Player(char symbol, std::string name);
@@ -31,6 +34,17 @@ class Player: public Subject{
 
     int getNumJailed();
     void setNumJailed(const int & getNumJailed);
+
+    int getDebt();
+    void setDebt(const int & debt);
+
+    std::string getDebtOwner();
+    void setDebtOwner(const std::string & name);
+
+    bool getIsBankrupt();
+
+    // check if the player has enough money to pay debt
+    bool canPayDebt();
 
     // notify Observers when the player bankrupt
     void dropOut();
