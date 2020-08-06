@@ -1,5 +1,6 @@
 #ifndef _ACADEMICBUILDING_H_
 #define _ACADEMICBUILDING_H_
+#include <vector>
 #include "Building.h"
 
 class AcademicBuilding : public Building {
@@ -15,6 +16,7 @@ class AcademicBuilding : public Building {
     int getImprovementFee(int improvementLevel) const;
     int getImprovementLevel() const;
     void setImprovementLevel(int improvementLevel);
+    virtual int calculateNetworth() const;
 };
 
 #endif
