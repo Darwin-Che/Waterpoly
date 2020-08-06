@@ -4,15 +4,14 @@
 #include <string>
 #include <map>
 #include "Player.h"
-#include "Board.h"
 
 class Model
 {
     Board board;
-    std::map<Player> allPlayers;
+    std::map<std::string, Player> allPlayers;
 
 public:
-    // methods called by Controller
+    /************** Methods called by Controller **************/
 
     // let the view show the message, do nothing else
     // provide noexcept guarantee

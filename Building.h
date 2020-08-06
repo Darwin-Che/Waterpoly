@@ -20,7 +20,6 @@ class Building : public Square, public Subject, public Observer {
 
   public:
     Building(const std::string& name, int location,
-            std::shared_ptr<VisitStrategy> visitStrategy,
             const std::string& owner, int purchaseCost,
             bool isMortgaged, const std::vector<int>& neighbourIndice);
     virtual void notify(Subject& whoNotified) override;

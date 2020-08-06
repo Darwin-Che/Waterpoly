@@ -1,11 +1,10 @@
 #include "Residence.h"
 
 Residence::Residence(const std::string name, int location,
-        std::shared_ptr<VisitStrategy> visitStrategy,
         const std::string owner, int purchaseCost,
         bool isMortgaged, const std::vector<int>& neighbourIndice)
-    : Building(name, location, visitStrategy, owner
-            purchaseCost, isMortgaged, neighbourIndice) {}
+    : Building(name, location, owner, purchaseCost,
+            isMortgaged, neighbourIndice) {}
 
 int Residence::getFee() const {
     int numOwned = numNeighbourOwned();
