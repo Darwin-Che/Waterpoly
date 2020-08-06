@@ -1,5 +1,6 @@
 #include "TextView.h"
 #include <sstream>
+#include <iostream>
 using namespace std;
 
 TextView::Block::Block(int h, int w): blockH(h), blockW(w) {
@@ -51,13 +52,20 @@ void TextView::Block::setName(std::string & name, int blockLine){
     }
 }
 
-void TextView::Block::setContent(const int & imp,std::string & name){
+void TextView::Block::setUnderLine(){
     for(int i=0; i<blockW ; i++){
         content[blockH][i]='_';
     }
+}
+void TextView::Block::RightLine(){
     for(int i=0; i<=blockH ; i++){
-            content[i][blockW]='|';
-        }
+        content[i][blockW]='|';
+    }
+}
+
+void TextView::Block::setContent(const int & imp,std::string & name){
+    setUnderLine();
+    setRightLine();
     if(imp >= 0){
         for(int i=0; i<imp ; i++){
             content[0][i]='I';
@@ -82,9 +90,52 @@ std::string TextView::Block::getLine(const int & i){
 }
 
 int TextView::Block::getHeight(){
-    return blockH+1;
+    return blockH;
+}
+int TextView::Block::getWidth(){
+    return blockW;
+}
+
+TextView::TextView(int height, int width):View(height,width){
+    for (int i=0; i<height; i++){
+        vector<unique_ptr<Block>> row;
+        for (int j=0; j<width; j++){
+            row.emplace_back(make_unique<Block>(gridH,gridW));
+        }
+        Blocks.emplace_back(row);
+    }
+}
+
+void TextView::updateBlocks(){
+    for (auto it:players){
+        vector<int> position = get2Dlocation(it.second);
+        Blocks[position[0]][position[1]]->setPlayer(it.first);
+    }
+    for (int i=0; i<2*(width+height); i++){
+        vector<int> position = get2Dlocation(i);
+        Blocks[position[0]][position[1]]->setContent(improvements[i],squareName[i]);
+    }
+    for (int i=1 ; i< width-1; i++){
+        Blocks[height-2][i]->setUnderLine();
+    }
+    for (int i=1 ; i< height-1; i++){
+        Blocks[width-2][i]->setRightLine();
+    }
 }
 
 void TextView::drawBoard(){
-
+    updateBlocks();
+    for (int i=0; i<width*(gridW+1); i++){
+        cout << "_";
+    }
+    cout << endl;
+    int yAxis = 0;
+    for (int i=0; i<height*(gridH+1); i++){
+        y = i/(gridH+1);
+        cout << "|";
+        for (int j=0; j<width;j++){
+            cout << Blocks[y][j]->getLine(i);
+        }
+        cout << endl;
+    }
 }

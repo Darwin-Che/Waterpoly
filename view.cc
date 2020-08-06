@@ -3,7 +3,7 @@
 #include "AcademicBuilding.h"
 
 //constructor
-View::View(){
+View::View(int height,int width):height(height), width(width) {
     improvements = std::vector<int>(2*(width+height),-1);
 }
 

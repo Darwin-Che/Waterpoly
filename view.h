@@ -6,7 +6,7 @@
 #include "Observer.h"
 
 class View: public Observer{
-  
+  protected:
     //board size
     int height=10, width=10;
     // maps each player's ID to the player's current position
@@ -21,7 +21,7 @@ class View: public Observer{
     std::vector<int> get2Dlocation(int location);
   public:
     //constructor
-    View(); 
+    View(int height, int width); 
     // add a player
     void addPlayer(const char & ID);
     // add a square 
