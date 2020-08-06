@@ -6,6 +6,7 @@
 #include "Observer.h"
 
 class View: public Observer{
+  
     //board size
     int height=10, width=10;
     // maps each player's ID to the player's current position
