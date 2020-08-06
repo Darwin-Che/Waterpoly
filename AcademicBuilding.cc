@@ -1,12 +1,11 @@
 #include "AcademicBuilding.h"
 
 AcademicBuilding::AcademicBuilding(const std::string name,
-        int location, std::shared_ptr<VisitStrategy> visitStrategy,
-        const std::string owner, int purchaseCost,
+        int location, const std::string owner, int purchaseCost,
         bool isMortgaged, const std::vector<int>& neighbourIndice,
         int improvementCost, const std::vector<int>& improvementFee)
-    : Building(name, location, visitStrategy, owner, purchaseCost,
-            isMortgaged, neighbourIndice), improvementCost(improvementCost),
+    : Building(name, location, owner, purchaseCost, isMortgaged,
+            neighbourIndice), improvementCost(improvementCost),
             improvementFee(improvementFee), improvementLevel(0) {}
 
 int AcademicBuilding::getImprovementCost() const {
@@ -35,4 +34,7 @@ int AcademicBuilding::getFee() const {
         return improvementFee[improvementLevel];
     }
 }
+
+void AcademicBuilding::acceptVisitor(Player& player) {
+    player.setMoney(player.getMoney() - getFee());
 
