@@ -11,6 +11,7 @@ class View;
 class Board;
 class Player;
 class Strategy;
+class Square;
 
 class Model
 {
@@ -20,6 +21,7 @@ class Model
     std::shared_ptr<Board> board;
     std::map<std::string, std::shared_ptr<Player>> allPlayers;
 
+    bool squareTradable(std::shared_ptr<Square> s);
     void payDebt(std::shared_ptr<Player> p1);
 
 public:
@@ -38,7 +40,7 @@ public:
     void trade(const std::string &pn1, const std::string &pn2, const std::string &property, int price) noexcept;
 
     // playername1 give playername2 property1, and get property2 back
-    void trade(const std::string &pn1, const std::string &pn2, const std::string &property1, const std::string &proptery2) noexcept;
+    void trade(const std::string &pn1, const std::string &pn2, const std::string &property1, const std::string &property2) noexcept;
 
     // action : true is buy, false is sell
     // need to check bankruptcy

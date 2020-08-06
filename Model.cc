@@ -23,6 +23,31 @@ void Model::payDebt(std::shared_ptr<Player> p1)
     }
 }
 
+bool Model::squareTradable(std::shared_ptr<Square> s)
+{
+    Building* sBuilding = dynamic_cast<Building*>(s.get());
+    AcademicBuilding* sAcademic = dynamic_cast<AcademicBuilding*>(s.get());
+
+    bool checkProperty_type = (sBuilding != nullptr);
+    if (!checkProperty_type) {
+        show(s->getName() + " is not an Ownable Bulding!");
+        return false;
+    }
+
+    bool checkProperty_Mort = (sBuilding->getIsMortgaged() == false);
+    if (!checkProperty_Mort) {
+        show(s->getName() + " must first be unmortgaged!");
+        return false;
+    }
+
+    bool checkProperty_Impr = (sAcademic != nullptr) || (sAcademic->getImprovementLevel() == 0);
+    if (!checkProperty_Impr) {
+        show("All improvement of " + s->getName() + " must first be sold!");
+        return false;
+    }
+    return true;
+}
+
 Model::Model(std::istream &tin, std::ostream &tout)
     : min{ tin }, mout{ tout }
 {
@@ -43,7 +68,7 @@ void Model::trade(const std::string &pn1, const std::string &pn2, const std::str
     std::shared_ptr<Square> s = board->getSquare(property);
 
     // checking process 
-    bool checkP1 = (board->getOwner(property) == allPlayers[pn2]);
+    bool checkP1 = (board->getOwner(property) == allPlayers[pn1]);
     if (!checkP1) {
         show(property + " is not owned by " + pn1);
         return;
@@ -59,26 +84,7 @@ void Model::trade(const std::string &pn1, const std::string &pn2, const std::str
         return;
     }
 
-    Building* sBuilding = dynamic_cast<Building*>(s.get());
-    AcademicBuilding* sAcademic = dynamic_cast<AcademicBuilding*>(s.get());
-
-    bool checkProperty_type = (sBuilding != nullptr);
-    if (!checkProperty_type) {
-        show(property + " is not an Ownable Bulding!");
-        return;
-    }
-
-    bool checkProperty_Mort = (sBuilding->getIsMortgaged() == false);
-    if (!checkProperty_Mort) {
-        show(pn1 + " must first unmortgage this Building!");
-        return;
-    }
-
-    bool checkProperty_Impr = (sAcademic != nullptr) || (sAcademic->getImprovementLevel() == 0);
-    if (!checkProperty_Impr) {
-        show(pn1 + " must first sell all improvement on the Building!");
-        return;
-    }
+    if (!squareTradable(s)) return;
 
     // trade
     allPlayers[pn1]->setMoney(allPlayers[pn1]->getMoney() + price);
@@ -89,9 +95,42 @@ void Model::trade(const std::string &pn1, const std::string &pn2, const std::str
 
 }
 
-void Model::trade(const std::string &pn1, const std::string &pn2, const std::string &property1, const std::string &proptery2)
+void Model::trade(const std::string &pn1, const std::string &pn2, const std::string &property1, const std::string &property2)
 {
+    std::shared_ptr<Square> s1 = board->getSquare(property1);
+    std::shared_ptr<Square> s2 = board->getSquare(property2);
 
+    // checking process 
+    bool checkP1_prop = (board->getOwner(property1) == allPlayers[pn1]);
+    if (!checkP1_prop) {
+        show(property1 + " is not owned by " + pn1);
+        return;
+    }
+
+    bool checkP2_prop = (board->getOwner(property2) == allPlayers[pn2]);
+    if (!checkP2_prop) {
+        show(property2 + " is not owned by " + pn2);
+        return;
+    }
+
+    bool checkP1_debt = (allPlayers[pn1]->getDebt() == 0);
+    if (!checkP1_debt) {
+        show(pn1 + " is in debt, cannot trade before pays off debt!");
+        return;
+    }
+
+    bool checkP2_debt = (allPlayers[pn2]->getDebt() == 0);
+    if (!checkP2_debt) {
+        show(pn2 + " is in debt, cannot trade before pays off debt!");
+        return;
+    }
+
+    if (!squareTradable(s1)) return;
+    if (!squareTradable(s2)) return;
+
+    // trade
+    board->setOwner(property1, pn2);
+    board->setOwner(property2, pn1);
 }
 
 void Model::improve(const std::string &pn, const std::string &property, bool action)
