@@ -1,13 +1,7 @@
 #include "Square.h"
-#include "VisitStrategy.h"
 
-Square::Square(std::string& name, int location,
-        std::shared_ptr<VisitStrategy> visitStrategy)
-    : name(name), location(location), visitStrategy(visitStrategy) {}
-
-void Square::acceptVisitor(Player& player) {
-    visitStrategy->visit(player);
-}
+Square::Square(std::string& name, int location)
+    : name(name), location(location) {}
 
 std::string Square::getName() const {
     return name;

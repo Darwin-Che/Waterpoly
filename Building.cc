@@ -3,7 +3,7 @@
 Building::Building(const std::string& name, int location,
         std::shared_ptr<VisitStrategy> visitStrategy,
         const std::string& owner, int purchaseCost,
-        bool isMortgaged, const vector<int>& neighbourIndice)
+        bool isMortgaged, const std::vector<int>& neighbourIndice)
     : Square(name, location, visitStrategy), owner(owner),
     purchaseCost(purchaseCost), isMortgaged(isMortgaged), neighbour() {
         for (index : neighbourIndice) {
@@ -32,8 +32,9 @@ void Building::setIsMortgaged(bool isMortgaged) {
 }
 
 void Building::notify(Subject& whoNotified) {
-    Building& nb = dynamic_cast<Building&>(whoNotified);
-    neighbour[nb.getLocation()] = nb.getOwner();
+    Building* nb = dynamic_cast<Building*>(&whoNotified);
+    if (nb != nullptr)
+        neighbour[nb->getLocation()] = nb->getOwner();
 }
 
 int Building::numNeighbourOwned() const {
