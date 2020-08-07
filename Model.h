@@ -16,6 +16,7 @@ class Square;
 
 class Model
 {
+    std::shared_ptr<View> view;
     std::vector<std::shared_ptr<VisitStrategy>> strategies;
     std::istream &min;
     std::ostream &mout;
@@ -54,6 +55,8 @@ public:
     // construct strategies and board
     void loadMap(std::shared_ptr<Board> tboard, std::vector<std::shared_ptr<VisitStrategy>> tstrategies);
     void clearMap();
+
+    void setView(std::shared_ptr<View> t_view);
 
     /************** Methods called by Controller **************/
 

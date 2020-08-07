@@ -39,6 +39,11 @@ void Model::clearMap()
     strategies.clear();
 }
 
+void Model::setView(std::shared_ptr<View> t_view)
+{
+    view = t_view;
+}
+
 void Model::payDebt(std::shared_ptr<Player> p1)
 {
     if (p1->getDebt() > 0 && p1->canPayDebt())
@@ -228,6 +233,7 @@ void Model::playerProceed(const std::string &pn, int steps)
     if (p->getIsJailed())
     {
         strategies[board->getSquareLocation("DC Times Line")]->acceptVisitor(p, board, min, mout);
+        view->drawBoard();
     }
     else
     {
@@ -235,11 +241,13 @@ void Model::playerProceed(const std::string &pn, int steps)
         strategies[board->getSquareLocation("COLLECT OSAP")]->acceptVisitor(p, board, min, mout);
         int prevPos = p->getPosition();
         strategies[p->getPosition()]->acceptVisitor(p, board, min, mout);
+        view->drawBoard();
         while (prevPos != p->getPosition() && !(p->getIsJailed()))
         {
             strategies[board->getSquareLocation("COLLECT OSAP")]->acceptVisitor(p, board, min, mout);
             prevPos = p->getPosition();
             strategies[p->getPosition()]->acceptVisitor(p, board, min, mout);
+            view->drawBoard();
         }
     }
 }
@@ -249,6 +257,7 @@ void Model::gotoTims(const std::string &pn)
     allPlayers[pn]->setIsJailed(true);
     allPlayers[pn]->setNumJailed(0);
     strategies[board->getSquareLocation("DC Times Line")]->acceptVisitor(allPlayers[pn], board, min, mout);
+    view->drawBoard();
 }
 
 void Model::show(const std::string &message)
@@ -419,6 +428,7 @@ void Model::improve(const std::string &pn, const std::string &property, bool act
         // see if debt can be paid
         payDebt(allPlayers[pn]);
     }
+    view->drawBoard();
 }
 
 void Model::mortgage(const std::string &pn, const std::string &property, bool action)
@@ -536,6 +546,7 @@ bool Model::bankrupt(const std::string &pn)
         allPlayers[pn]->dropOut();
         allPlayers.erase(pn);
         playerOrder.erase(std::remove(playerOrder.begin(), playerOrder.end(), pn), playerOrder.end());
+        view->drawBoard();
         return true;
     }
     else
@@ -617,6 +628,7 @@ void Model::auctionPlayer(const std::string &pn)
             board->setOwner(b->getName(), bank);
         }
     }
+    view->drawBoard();
 }
 
 void Model::auctionBuilding(const std::string &bn)
@@ -688,6 +700,7 @@ void Model::auctionBuilding(const std::string &bn)
         std::shared_ptr<Player> bank;
         board->setOwner(b->getName(), bank);
     }
+    view->drawBoard();
 }
 
 void Model::getInfo()
