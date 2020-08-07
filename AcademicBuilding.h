@@ -9,7 +9,7 @@ class AcademicBuilding : public Building {
     int improvementLevel;
 
   public:
-    AcademicBuilding(const std::string name, int location,const std::string &description,
+    AcademicBuilding(const std::string& name, int location, const std::string &description,
             int purchaseCost, bool isMortgaged, int improvementCost,
             const std::vector<int>& improvementFee);
     int getImprovementCost() const;

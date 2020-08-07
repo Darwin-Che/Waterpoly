@@ -1,6 +1,6 @@
 #include "AcademicBuilding.h"
 
-AcademicBuilding::AcademicBuilding(const std::string name,
+AcademicBuilding::AcademicBuilding(const std::string& name,
     int location, const std::string &description, int purchaseCost, bool isMortgaged,
     int improvementCost, const std::vector<int>& improvementFee)
     : Building(name, location, description, purchaseCost, isMortgaged),
