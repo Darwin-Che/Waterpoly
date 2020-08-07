@@ -706,7 +706,7 @@ void Model::getInfo(const std::string &pn)
          << " is at " << s->getName()
          << " Money - " << p->getMoney()
          << " Debt - " << p->getDebt() << (p->getDebt() > 0 ? " toward " + p->getDebtOwner() : "")
-         << " Jailed - " << std::boolalpha << p->getIsJailed() << (p->getIsJailed() ? " for " + p->getNumJailed() + " turns" : "")
+         << " Jailed - " << std::boolalpha << p->getIsJailed() << (p->getIsJailed() ? (" for " + p->getNumJailed() + " turns") : "")
          << " Cups - " << p->getNumCups() << std::endl;
     mout << "All Assets: " << std::endl;
     for (auto &s : board->getAssets(pn))
