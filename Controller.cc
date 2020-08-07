@@ -33,43 +33,50 @@ void Controller::takeTurn(std::istream &in)
     {
         if (command == "roll")
         {
-            int d1; // the first dice number
-            int d2; // the second dice number
-            if (cstate->testingMode_roll)
+            if (cstate->canRoll)
             {
-                // because is in testing mode, omit error checking
-                in >> d1;
-                in >> d2;
-            }
-            else
-            {
-                d1 = rand() % 6 + 1;
-                d2 = rand() % 6 + 1;
-            }
-            model->show("Player " + curPlayerName + "rolls :" + std::to_string(d1) + " and " + std::to_string(d2) + ". ");
-            if (d1 == d2)
-            {
-                model->show("This is a double! ");
-                model->show("You have already rolled " + std::to_string(cstate->numDoubleRoll) + " doubles!.");
-                // prevent roll double three times
-                if (cstate->numDoubleRoll < 2)
+                int d1; // the first dice number
+                int d2; // the second dice number
+                if (cstate->testingMode_roll)
                 {
-                    cstate->numDoubleRoll++;
+                    // because is in testing mode, omit error checking
+                    in >> d1;
+                    in >> d2;
                 }
                 else
                 {
-                    cstate->numDoubleRoll++;
-                    cstate->canRoll = false;
-                    // need to call models method to go to Times line directly
-                    model->gotoTims(curPlayerName);
+                    d1 = rand() % 6 + 1;
+                    d2 = rand() % 6 + 1;
                 }
+                model->show("Player " + curPlayerName + "rolls :" + std::to_string(d1) + " and " + std::to_string(d2) + ". ");
+                if (d1 == d2)
+                {
+                    model->show("This is a double! ");
+                    model->show("You have already rolled " + std::to_string(cstate->numDoubleRoll) + " doubles!.");
+                    // prevent roll double three times
+                    if (cstate->numDoubleRoll < 2)
+                    {
+                        cstate->numDoubleRoll++;
+                    }
+                    else
+                    {
+                        cstate->numDoubleRoll++;
+                        cstate->canRoll = false;
+                        // need to call models method to go to Times line directly
+                        model->gotoTims(curPlayerName);
+                    }
+                }
+                else
+                {
+                    cstate->canRoll = false;
+                }
+                // notify view to display the dice number
+                model->playerProceed(curPlayerName, d1 + d2);
             }
             else
             {
-                cstate->canRoll = false;
+                show("You are not permitted to roll!");
             }
-            // notify view to display the dice number
-            model->playerProceed(curPlayerName, d1 + d2);
         }
         else if (command == "next")
         {
