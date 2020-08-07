@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <memory>
 #include <cstdlib>
+#include <ctime>
 #include "Controller.h"
 #include "ModelFail.h"
 #include "Model.h"
@@ -22,7 +23,7 @@ struct cState
 Controller::Controller(std::shared_ptr<Model> t_model, const std::string &startPlayerName, bool t_testingMode_roll)
     : model{t_model}, cstate{std::make_shared<cState>(0, true, t_testingMode_roll)}, curPlayerName{startPlayerName}
 {
-    std::srand(std::time());
+    srand(time(NULL));
 }
 
 void Controller::takeTurn(std::istream &in)
@@ -42,8 +43,8 @@ void Controller::takeTurn(std::istream &in)
             }
             else
             {
-                d1 = std::rand() % 6 + 1;
-                d2 = std::rand() % 6 + 1;
+                d1 = rand() % 6 + 1;
+                d2 = rand() % 6 + 1;
             }
             model->show("Player " + curPlayerName + "rolls :" + std::to_string(d1) + " and " + std::to_string(d2) + ". ");
             if (d1 == d2)
