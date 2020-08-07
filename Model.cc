@@ -248,7 +248,7 @@ void Model::gotoTims(const std::string &pn)
 {
     allPlayers[pn]->setIsJailed(true);
     allPlayers[pn]->setNumJailed(0);
-    strategies[board->getSquareLocation("DC Times Line")].acceptVisitor(p, board, min, mout);
+    strategies[board->getSquareLocation("DC Times Line")].acceptVisitor(pn, board, min, mout);
 }
 
 void Model::show(const std::string &message)
