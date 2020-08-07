@@ -14,6 +14,8 @@
 #include "GooseNestingStrategy.h"
 #include "GoToTimsStrategy.h"
 #include "GymStrategy.h"
+#include "ResidenceStrategy.h"
+#include "SLCStrategy.h"
 #include <iostream>
 #include <fstream>
 
@@ -35,20 +37,28 @@ int main(){
     string name;
     string description;
     int squareNum=0;
-    while (infile >> command){
+    while (getline(infile, command)){
+        getline(infile, name);
+        getline(infile,description);
         if ( command == "square"){
-            infile >> name;
-            getline(infile,description);
             board.push_back(make_shared<Square>(name,squareNum,description));
+            view->addSquare(name);
+            if (name == "SLC"){
+                strategies.push_back(SLCStrategy());
+            }
+            else if (name == "OSAP"){
+                strategies.push_back(CollectOSAPStrategy());
+            }
+            else if (name == "GoToTims"){
+
+            }
             squareNum++;
         }
         else if(command == "gym"){
             string blockName;
             int purchaseCost;
-            infile >> name;
             infile >> blockName;
             infile >> purchaseCost;
-            getline(infile,description);
             shared_ptr<Gym> gym=make_shared<Gym>(name,squareNum,description,purchaseCost, false);
             board.push_back(gym);
             if(monopolyBlock.count(blockName) == 0){
@@ -59,14 +69,14 @@ int main(){
             else{
                 monopolyBlock[blockName].push_back(gym);
             } 
+            view->addSquare(name);
+            squareNum++;
         }
         else if(command == "residence"){
             string blockName;
             int purchaseCost;
-            infile >> name;
             infile >> blockName;
             infile >> purchaseCost;
-            getline(infile,description);
             shared_ptr<Residence> residence=make_shared<Residence>(name,squareNum,description,purchaseCost, false);
             board.push_back(residence);
             if(monopolyBlock.count(blockName) == 0){
@@ -77,6 +87,8 @@ int main(){
             else{
                 monopolyBlock[blockName].push_back(residence);
             } 
+            view->addSquare(name);
+            squareNum++;
         }
         else if(command == "academicbuilding"){
             string blockName;
@@ -84,8 +96,6 @@ int main(){
             int improvementCost;
             int maximprovement;
             vector<int> improvementfee;
-
-            infile >> name;
             infile >> blockName;
             infile >> purchaseCost;
             infile >> improvementCost;
@@ -97,8 +107,6 @@ int main(){
                 improvementfee.push_back(fee);
             }
 
-            getline(infile,description);
-
             auto acbuilding=make_shared<AcademicBuilding>(name,squareNum,description,purchaseCost, false,improvementCost,improvementfee);
             board.push_back(acbuilding);
             if(monopolyBlock.count(blockName) == 0){
@@ -109,7 +117,10 @@ int main(){
             else{
                 monopolyBlock[blockName].push_back(acbuilding);
             } 
-            acbuilding->attach(View);
+            acbuilding->attach(view);
+             view->addSquare(name);
+            acbuilding->notifyObservers();
+            squareNum++;
         }
     }
 }

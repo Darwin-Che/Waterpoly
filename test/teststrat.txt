@@ -1,0 +1,47 @@
+Step 1: 
+    test loading file (numplayers, playernames, buildings)
+    test show assests / show all
+
+Step 2: 
+    test Strategies without bankrupcy
+    - Collect OSAP
+    - pay rent for academic buildings
+    - pay rent for Gym
+    - pay rent for Residence
+    - Goose Nesting
+    - Tuition
+    - Coop Fee
+    - SLC 
+    - Needles Hall
+    - Roll Cup
+
+    - goto Tims ( Collect OSAP goto prison, cannot roll immediately )
+    - Waiting in Tims Line
+
+Step 3:
+    test game logic:
+    - auction logic
+    - improve logic
+    - mortgage logic
+    - trade logic
+
+Step 4:
+    test bankrupcy: bankrupt in middle of
+    - pay rent
+    - pay Tuition
+    - pay prison
+    - pay Coop Fee
+    - pay Needles Hall
+    - receive a mortgaged property
+    test bankrupcy status cannot 
+    - trade / improve / mortgage with money
+    - next
+    test game status after dropout ( players, board, view ) 
+    - debtor's money
+    - debtor's property (monopoly, improvement, mortgage status)
+
+Step 5:
+    test saving file
+
+Step 6:
+    Play a game in real time, test if anything can go wrong
