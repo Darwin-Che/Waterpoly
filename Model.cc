@@ -12,6 +12,33 @@
 #include <vector>
 #include <algorithm>
 
+void Model::loadPlayer(std::vector<std::shared_ptr<Player>> playerList)
+{
+    for (auto & p : playerList)
+    {
+        playerOrder.emplace_back(p->getName());
+        allPlayers[p->getName()] = p;
+    }
+}
+
+void Model::clearPlayer()
+{
+    playerOrder.clear();
+    allPlayers.clear();
+}
+
+void Model::loadMap(std::shared_ptr<Board> tboard, std::vector<VisitStrategy> tstrategies)
+{
+    board = tboard;
+    strategies = tstrategies;
+}
+
+void Model::clearMap()
+{
+    board = std::shared_ptr<Board>();
+    strategies.clear();
+}
+
 void Model::payDebt(std::shared_ptr<Player> p1)
 {
     if (p1->getDebt() > 0 && p1->canPayDebt())
@@ -204,9 +231,24 @@ void Model::show(const std::string &message)
     mout << message << std::endl;
 }
 
-bool Model::canNext(const std::string &player)
+std::string Model::nextPlayerName(const std::string &pn)
 {
-    return allPlayers[player]->getDebt() == 0;
+    if (allPlayers[pn]->getDebt() == 0) {
+        std::vector<std::string>::iterator it = std::find(playerOrder.begin(), playerOrder.end(), pn);
+        if (it != playerOrder.end()) {
+            int index = std::distance(playerOrder.begin(), it);
+            index++;
+            if (index = playerOrder.size()) index = 0;
+            return playerOrder[index];
+        }
+        else {
+            std::cerr << pn << " is not a player!" << std::endl;
+            return pn;
+        }
+    } else {
+        show("You are in debt, must first pay off your debt then next! If you cannot pay off, declare bankruptcy!");
+        return pn;
+    }
 }
 
 void Model::trade(const std::string &pn1, const std::string &pn2, const std::string &property, int price)

@@ -44,6 +44,17 @@ class Model
 
 public:
     Model(std::istream &tin, std::ostream &tout);
+
+    /************** Methods called by Main **************/
+
+    // construct playerOrder and allPlayers
+    void loadPlayer(std::vector<std::shared_ptr<Player>> playerList);
+    void clearPlayer();
+
+    // construct strategies and board
+    void loadMap(std::shared_ptr<Board> tboard, std::vector<VisitStrategy> tstrategies);
+    void clearMap();
+
     /************** Methods called by Controller **************/
 
     // call corresponding strategy
@@ -57,7 +68,7 @@ public:
     void show(const std::string &message) noexcept;
 
     // check if the player does not own any money
-    bool canNext(const std::string &player) noexcept;
+    std::string nextPlayerName(const std::string &pn) noexcept;
 
     // playername1 give playername2 property, and get price back
     // noexception, but need to check if the action can be done (bankruptcy)

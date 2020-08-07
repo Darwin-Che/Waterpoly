@@ -2,14 +2,23 @@
 #include <iostream>
 #include <fstream>
 #include <stdexcept>
+#include <memory>
+#include <cstdlib>
 #include "Controller.h"
 #include "ModelFail.h"
+#include "Model.h"
 
 struct cState
 {
     int numDoubleRoll;
     bool canRoll;
+    bool testingMode_roll;
 };
+
+Controller::Controller(std::shared_ptr<Model> t_model, const std::string &startPlayerName, bool t_testingMode_roll)
+    : model{ t_model }, curPlayerName{ startPlayerName }, cstate{ std::make_unique<cState>(0, true, t_testingMode_roll) }
+{
+}
 
 void Controller::takeTurn(std::istream &in)
 {
@@ -20,7 +29,16 @@ void Controller::takeTurn(std::istream &in)
         {
             int d1; // the first dice number
             int d2; // the second dice number
-            model->show("Player " + playerList[cur] + "rolls :" + std::to_string(d1) + " and " + std::to_string(d2) + ". ");
+            if (cstate->testingMode_roll) {
+                // because is in testing mode, omit error checking
+                in >> d1;
+                in >> d2;
+            }
+            else {
+                d1 = std::rand();
+                d2 = std::rand();
+            }
+            model->show("Player " + curPlayerName + "rolls :" + std::to_string(d1) + " and " + std::to_string(d2) + ". ");
             if (d1 == d2)
             {
                 model->show("This is a double! ");
@@ -35,7 +53,7 @@ void Controller::takeTurn(std::istream &in)
                     cstate->numDoubleRoll++;
                     cstate->canRoll = false;
                     // need to call models method to go to Times line directly
-                    model->gotoTims(playerList[cur]);
+                    model->gotoTims(curPlayerName);
                 }
             }
             else
@@ -43,20 +61,16 @@ void Controller::takeTurn(std::istream &in)
                 cstate->canRoll = false;
             }
             // notify view to display the dice number
-            model->playerProceed(playerList[cur], d1 + d2);
+            model->playerProceed(curPlayerName, d1 + d2);
         }
         else if (command == "next")
         {
-            // message is given by model
-            if (model->canNext(playerList[cur]))
-            {
-                cur++;
-                if (cur == playerList.size())
-                    cur = 0;
+            std::string nextPlayer = model->nextPlayerName(curPlayerName);
+            if (nextPlayer != curPlayerName) {
+                cstate->canRoll = true;
+                cstate->numDoubleRoll = 0;
             }
-            cstate->canRoll = true;
-            cstate->numDoubleRoll = 0;
-            model->show("Current Active Player: " + playerList[cur]);
+            model->show("Current Active Player: " + curPlayerName);
         }
         else if (command == "trade")
         {
@@ -87,16 +101,16 @@ void Controller::takeTurn(std::istream &in)
             if (n1)
             {
                 // buy
-                model->trade(receiver, playerList[cur], arg2, a1);
+                model->trade(receiver, curPlayerName, arg2, a1);
             }
             else if (n2)
             {
                 // sell
-                model->trade(playerList[cur], receiver, arg1, a2);
+                model->trade(curPlayerName, receiver, arg1, a2);
             }
             else
             {
-                model->trade(playerList[cur], receiver, arg1, arg2);
+                model->trade(curPlayerName, receiver, arg1, arg2);
             }
         }
         else if (command == "improve")
@@ -105,11 +119,11 @@ void Controller::takeTurn(std::istream &in)
             in >> arg1, arg2;
             if (arg2 == "sell")
             {
-                model->improve(playerList[cur], arg1, false);
+                model->improve(curPlayerName, arg1, false);
             }
             else if (arg2 == "buy")
             {
-                model->improve(playerList[cur], arg1, true);
+                model->improve(curPlayerName, arg1, true);
             }
             else
             {
@@ -120,26 +134,23 @@ void Controller::takeTurn(std::istream &in)
         {
             std::string arg;
             in >> arg;
-            model->mortgage(playerList[cur], arg, true);
+            model->mortgage(curPlayerName, arg, true);
         }
         else if (command == "unmortgage")
         {
             std::string arg;
             in >> arg;
-            model->mortgage(playerList[cur], arg, false);
+            model->mortgage(curPlayerName, arg, false);
         }
         else if (command == "bankrupt")
         {
-            bool success = model->bankrupt(playerList[cur]);
-            if (success)
-            {
-                playerList.erase(playerList.begin() + cur);
-                model->show("Current Active Player: " + playerList[cur]);
-            }
+            bool success = model->bankrupt(curPlayerName);
+            if (success) curPlayerName = model->nextPlayerName(curPlayerName);
+            model->show("Current Active Player: " + curPlayerName);
         }
         else if (command == "asset")
         {
-            model->getInfo(playerList[cur]);
+            model->getInfo(curPlayerName);
         }
         else if (command == "all")
         {
@@ -149,7 +160,7 @@ void Controller::takeTurn(std::istream &in)
         {
             std::string arg;
             in >> arg;
-            std::ofstream outfile{arg};
+            std::ofstream outfile{ arg };
             model->save(outfile);
         }
         else

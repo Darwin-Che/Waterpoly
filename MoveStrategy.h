@@ -7,9 +7,10 @@ class MoveStrategy : public VisitStrategy {
 
   public:
     MoveStrategy(int moveAmount);
+    // Player will move an amount equal to private field moveAmount
     virtual void acceptVisitor(std::shared_ptr<Player> player,
             std::shared_ptr<Board> board,
-            std::istream in, std::ostream out) override;
+            std::istream& in, std::ostream& out) override;
 };
 
 #endif
