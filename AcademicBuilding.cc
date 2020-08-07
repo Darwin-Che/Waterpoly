@@ -27,3 +27,19 @@ int AcademicBuilding::calculateNetworth() const {
     return getPurchaseCost() + improvementLevel * improvementCost;
 }
 
+std::string AcademicBuilding::getInfo() const 
+{
+    return getName() + "(Academic Building)"
+                     + " ; Mortgaged - " + (getIsMortgaged() ? "true" : "false")
+                     + " ; ImproveLevel - " + std::to_string(getImprovementLevel())
+                     + " ; Cost Information: \n"
+                     + " \t Purchase Cost: " + std::to_string(getPurchaseCost())
+                     + " \t Improvement Cost: " + std::to_string(getImprovementCost());
+                     + " \t Tuition with Improvements: " + std::to_string(improvementFee[0]) 
+                     + " " + std::to_string(improvementFee[1])
+                     + " " + std::to_string(improvementFee[2])
+                     + " " + std::to_string(improvementFee[3])
+                     + " " + std::to_string(improvementFee[4])
+                     + " \n";
+}
+
