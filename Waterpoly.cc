@@ -173,6 +173,7 @@ int main(){
     auto model = make_shared<Model>(in,out);
     model->loadPlayer(Players);
     model->loadMap(boardMap,strategies);
+    model->setView(view);
     Controller game {model,Players[0]->getName(), false};
     game.takeTurn(in);
 }

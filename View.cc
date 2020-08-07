@@ -6,7 +6,7 @@
 View::View(int height,int width):height(height), width(width) {
     actualH=height+1;
     actualW=width+1;
-    improvements = std::vector<int>(2*(width+height),1);
+    improvements = std::vector<int>(2*(width+height),-1);
 }
 
 // take a 1-d location and calculate its 2-d position on the board
