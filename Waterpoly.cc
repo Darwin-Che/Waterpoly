@@ -33,7 +33,7 @@ int main(){
 
     std::vector<std::shared_ptr<Square>> board;
     std::map<std::string,std::vector<std::shared_ptr<Square> > >  monopolyBlock;
-    std::vector<VisitStrategy> strategies;
+    std::vector<shared_ptr<VisitStrategy>> strategies;
     vector<shared_ptr<Player>> ownershipList;
 
     std::string command;
@@ -47,28 +47,28 @@ int main(){
             board.push_back(make_shared<Square>(name,squareNum,description));
             view->addSquare(name);
             if (name == "SLC"){
-                strategies.push_back(SLCStrategy());
+                strategies.push_back(make_shared<SLCStrategy>());
             }
             else if (name == "Collect OSAP"){
-                strategies.push_back(CollectOSAPStrategy());
+                strategies.push_back(make_shared<CollectOSAPStrategy>());
             }
             else if (name == "Go To Tims"){
-                strategies.push_back(GoToTimsStrategy());
+                strategies.push_back(make_shared<GoToTimsStrategy>());
             }
             else if (name == "DC Tims Line"){
-                strategies.push_back(DCTimsLineStrategy());
+                strategies.push_back(make_shared<DCTimsLineStrategy>());
             }
             else if (name == "Goose Nesting"){
-                strategies.push_back(GooseNestingStrategy());
+                strategies.push_back(make_shared<GooseNestingStrategy>());
             }
             else if (name == "Tuition"){
-                strategies.push_back(TuitionStrategy());
+                strategies.push_back(make_shared<TuitionStrategy>());
             }
             else if (name == "Coop Fee"){
-                strategies.push_back(CoopFeeStrategy());
+                strategies.push_back(make_shared<CoopFeeStrategy>());
             }
             else if (name == "Needles Hall"){
-                strategies.push_back(NeedlesHallStrategy());
+                strategies.push_back(make_shared<NeedlesHallStrategy>());
             }
         }
         else if(command == "gym"){
@@ -87,7 +87,7 @@ int main(){
                 monopolyBlock[blockName].push_back(gym);
             } 
             view->addSquare(name);
-            strategies.push_back(GymStrategy());
+            strategies.push_back(make_shared<GymStrategy>());
             getline(infile,command);
         }
         else if(command == "residence"){
@@ -106,7 +106,7 @@ int main(){
                 monopolyBlock[blockName].push_back(residence);
             } 
             view->addSquare(name);
-            strategies.push_back(ResidenceStrategy());
+            strategies.push_back(make_shared<ResidenceStrategy>());
             getline(infile,command);
         }
         else if(command == "academicbuilding"){
@@ -139,7 +139,7 @@ int main(){
             acbuilding->attach(view);
             view->addSquare(name);
             acbuilding->notifyObservers();
-            strategies.push_back(AcademicBuildingStrategy());
+            strategies.push_back(make_shared<AcademicBuildingStrategy>());
             getline(infile,command);
         }
          ownershipList.push_back(shared_ptr<Player>());
