@@ -36,7 +36,7 @@ std::string AcademicBuilding::getInfo() const
         + "\n\tImproveLevel: " + std::to_string(getImprovementLevel())
         + "\n\tPurchase Cost: " + std::to_string(getPurchaseCost())
         + "\n\tImprovement Cost: " + std::to_string(getImprovementCost())
-        +"\n\tTuition with Improvements: " + std::to_string(improvementFee[0])
+        + "\n\tTuition with Improvements: " + std::to_string(improvementFee[0])
         + " " + std::to_string(improvementFee[1])
         + " " + std::to_string(improvementFee[2])
         + " " + std::to_string(improvementFee[3])
