@@ -3,7 +3,7 @@
 #include <cstdlib>
 
 DCTimsLineStrategy::DCTimsLineStrategy()
-    : roll1(0), roll2(0) {}
+    : roll1(-1), roll2(-1) {}
 
 int DCTimsLineStrategy::roll() {
     int result = rand() % 6;
@@ -54,8 +54,10 @@ void DCTimsLineStrategy::payCup(std::shared_ptr<Player> player, std::ostream out
 
 void DCTimsLineStrategy::acceptVisitor(std::shared_ptr<Player> player,
         std::shared_ptr<Board> board, std::istream in, std::ostream out) {
-    if (player->getIsJailed() == false)
+    if (player->getIsJailed() == false) {
+        out << "You directly landed on DC Tims line, so nothing happened." << std::endl;
         return;
+    }
 
     out << "You are stuck in DC Tims line, but you really want to leave." << std::endl
         << "Type 1 if you want to try to roll doubles, type 2 if you want to pay $50, "
@@ -102,7 +104,7 @@ void DCTimsLineStrategy::acceptVisitor(std::shared_ptr<Player> player,
     }
 
     if (player->getIsJailed() == false) {
-        if (roll1 == 0 && roll2 == 0) {
+        if (roll1 == -1 && roll2 == -1) {
             roll1 = roll();
             roll2 = roll();
             out << "You rolled " << roll1 << " and " << roll2 << "." << std::endl;
