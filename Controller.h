@@ -19,7 +19,7 @@ class Controller
     int seed;
 
 public:
-    void takeTurn(std::istream in);
+    void takeTurn(std::istream &in);
 };
 
 #endif

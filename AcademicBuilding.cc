@@ -11,7 +11,7 @@ int AcademicBuilding::getImprovementCost() const {
     return improvementCost;
 }
 
-int AcademicBuilding::getImprovementFee(int improvementLevel) const {
+int AcademicBuilding::getImprovementFee() const {
     return improvementFee[improvementLevel];
 }
 
