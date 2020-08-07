@@ -1,6 +1,7 @@
 Step 1: 
     test loading file (numplayers, playernames, buildings)
     test show assests / show all
+
 Step 2: 
     test Strategies without bankrupcy
     - Collect OSAP
@@ -37,7 +38,7 @@ Step 4:
     - next
     test game status after dropout ( players, board, view ) 
     - debtor's money
-    - 
+    - debtor's property (monopoly, improvement, mortgage status)
 
 Step 5:
     test saving file
