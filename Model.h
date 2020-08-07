@@ -20,9 +20,11 @@ class Model
     std::ostream &mout;
     std::shared_ptr<Board> board;
     std::map<std::string, std::shared_ptr<Player>> allPlayers;
+    std::vector<std::string> playerOrder;
 
     bool squareTradable(std::shared_ptr<Square> s);
     void payDebt(std::shared_ptr<Player> p1);
+    bool deductMoney(std::shared_ptr<Player> p, int price, const std::string& debtor);
 
 public:
     Model(std::istream &tin, std::ostream &tout);
@@ -46,12 +48,20 @@ public:
     // need to check bankruptcy
     void improve(const std::string &pn, const std::string &property, bool action) noexcept;
 
-    // check if the player is able to dropout;
-    // if no, raise ModelFail exception;
-    // if yes, take care of 
+    // action : true is mortgage, false is unmortgage
+    // need to check bankruptcy
+    void mortgage(const std::string &pn, const std::string &property, bool action) noexcept;
+
+    // check if the player is able to dropout; 
+    // if yes, take care of, return true
     // 1. player property and debt; 2. allPlayer vector
+    // if no, return false
     // strong exception guarentee
-    void bankrupt(const std::string &pn);
+    bool bankrupt(const std::string &pn) noexcept;
+
+    void auctionPlayer(const std::string &pn);
+
+    void auctionBuilding(const std::string &pn);
 
     // check if able and output all player information by view
     void getInfo();
@@ -62,7 +72,7 @@ public:
     // save the game progress to out, in the pnorder's order
     // pnorder is a list of player names
     // strong exception guarentee: could throw if ostream cannot be written
-    void save(std::ostream out, std::vector<std::string> pnorder);
+    void save(std::ostream &out);
 };
 
 #endif

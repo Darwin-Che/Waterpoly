@@ -11,7 +11,7 @@ struct cState
     bool canRoll;
 };
 
-void Controller::takeTurn(std::istream in)
+void Controller::takeTurn(std::istream &in)
 {
     std::string command;
     while (in >> command)
@@ -120,25 +120,17 @@ void Controller::takeTurn(std::istream in)
         {
             std::string arg;
             in >> arg;
-            model->improve(playerList[cur], arg, true);
+            model->mortgage(playerList[cur], arg, true);
         }
         else if (command == "unmortgage")
         {
             std::string arg;
             in >> arg;
-            model->improve(playerList[cur], arg, false);
+            model->mortgage(playerList[cur], arg, false);
         }
         else if (command == "bankrupt")
         {
-            bool success = false;
-            try
-            {
-                model->bankrupt(playerList[cur]);
-                success = true;
-            }
-            catch (ModelFail &e)
-            {
-            }
+            bool success = model->bankrupt(playerList[cur]);
             if (success)
             {
                 playerList.erase(playerList.begin() + cur);
