@@ -4,6 +4,12 @@
 Player::Player(char symbol, std::string name):symbol(symbol), name(name) {
     position = 0;
     oldPosition = 0;
+    numCups = 0;
+    numJailed = 0;
+    isJailed = false;
+    debt = 0;
+    debtOwner = "";
+    isBankrupt = false;
 }
 
 Player::Player(char symbol, std::string name, int position, int numCups, int money):

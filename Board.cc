@@ -1,4 +1,5 @@
-#include "Board.h" 
+#include "Board.h"
+#include "Building.h" 
 
 using namespace std;
  
@@ -8,7 +9,14 @@ using namespace std;
         ownershipList(ownershipList), board(board), monopolyBlock(monopolyBlock) {}
 
 int Board::calcNetworth(std::string playername){
-
+    int worth = 0;
+    for (int i=0; i<board.size(); i++){
+        if(ownershipList[i]->getName() == playername){
+            shared_ptr<Building> build = dynamic_pointer_cast<Building>(board[i]);
+            worth+=build->calculateNetworth();
+        }
+    }
+    return worth;
 }
 
 std::shared_ptr<Player> Board::getOwner(std::string buildingname){
