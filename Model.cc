@@ -10,6 +10,7 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <vector>
 
 void Model::payDebt(std::shared_ptr<Player> p1)
 {
@@ -72,6 +73,38 @@ Model::Model(std::istream &tin, std::ostream &tout)
     : min{ tin }, mout{ tout }
 {
 }
+
+// Model.playerProceed(Player, int steps)
+//     If (player.isJailed)
+// feed TimsLineStrategy
+// else
+//         getStrategy of (Player.position + steps)
+//         Set Player position; record the changed value as prev position
+//         Strategy(player, building name, ...)
+//     While (position != prev position && not toBeJailed)
+// getStrategy of (Player.position)
+//         Strategy(player, building name, ...)
+
+
+void Model::playerProceed(const std::string &pn, int steps)
+{
+    std::shared_ptr<Player> p = allPlayers[pn];
+    if (p->getIsJailed()) {
+        strategies[board->getSquareLocation("DC Times Line")].acceptVisitor(p, board, min, mout);
+    }
+    else {
+        p->setPosition((p->getPosition() + steps) % board->getTotalSquareNum());
+        strategies[board->getSquareLocation("COLLECT OSAP")].acceptVisitor(p, board, min, mout);
+        int prevPos = p->getPosition();
+        strategies[p->getPosition()].acceptVisitor(p, board, min, mout);
+        while (prevPos != p->getPosition() && !(p->getIsJailed())) {
+            strategies[board->getSquareLocation("COLLECT OSAP")].acceptVisitor(p, board, min, mout);
+            prevPos = p->getPosition();
+            strategies[p->getPosition()].acceptVisitor(p, board, min, mout);
+        }
+    }
+}
+
 
 void Model::show(const std::string &message)
 {
@@ -255,9 +288,6 @@ void Model::mortgage(const std::string &pn, const std::string &property, bool ac
         allPlayers[pn]->setMoney(allPlayers[pn]->getMoney() - cost);
     }
 }
-
-
-
 
 bool Model::bankrupt(const std::string &pn)
 {

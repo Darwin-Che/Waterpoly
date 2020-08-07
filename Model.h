@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 #include <map>
+#include <vector>
 #include <iostream>
 #include "Player.h"
 
@@ -15,7 +16,7 @@ class Square;
 
 class Model
 {
-    std::map<int, Strategy> strategies;
+    std::vector<Strategy> strategies;
     std::istream &min;
     std::ostream &mout;
     std::shared_ptr<Board> board;
@@ -29,6 +30,10 @@ class Model
 public:
     Model(std::istream &tin, std::ostream &tout);
     /************** Methods called by Controller **************/
+
+    void playerProceed(const std::string &pn, int steps) noexcept;
+
+    void gotoTims(const std::string &pn) noexcept;
 
     // let the view show the message, do nothing else
     // provide noexcept guarantee
