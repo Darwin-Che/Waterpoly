@@ -83,7 +83,7 @@ bool Model::squareTradable(std::shared_ptr<Square> s)
     return true;
 }
 
-bool deductMoney(std::shared_ptr<Player> p, int price, const std::string &debtor)
+bool Model::deductMoney(std::shared_ptr<Player> p, int price, const std::string &debtor)
 {
     if (p->getMoney() >= price)
     {
