@@ -92,7 +92,6 @@ int main(){
             } 
             view->addSquare(name);
             strategies.push_back(make_shared<GymStrategy>());
-            getline(infile,command);
         }
         else if(command == "residence"){
             string blockName;
@@ -112,7 +111,6 @@ int main(){
             } 
             view->addSquare(name);
             strategies.push_back(make_shared<ResidenceStrategy>());
-            getline(infile,command);
         }
         else if(command == "academicbuilding"){
             string blockName;
@@ -149,7 +147,6 @@ int main(){
             view->addSquare(name);
             acbuilding->notifyObservers();
             strategies.push_back(make_shared<AcademicBuildingStrategy>());
-            getline(infile,command);
         }
          ownershipList.push_back(shared_ptr<Player>());
          squareNum++;
