@@ -71,6 +71,18 @@ std::shared_ptr<Square> Board::getSquare(int location){
     return board[location];
 }
 
+// find the square by name
+int Board::getSquareLocation(std::string buildingname){
+    int count =0;
+    for (auto it : board){
+        if(it->getName() == buildingname){
+            return count;
+        }
+        count ++;
+    }
+    return -1;
+}
+
 // check if two buildings have the same owner
 bool Board::sameOwner(string building1, string building2){
     shared_ptr<Player> owner1 = getOwner(building1);
