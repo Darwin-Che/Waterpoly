@@ -75,7 +75,7 @@ void Controller::takeTurn(std::istream &in)
             }
             else
             {
-                show("You are not permitted to roll!");
+                model->show("You are not permitted to roll!");
             }
         }
         else if (command == "next")
