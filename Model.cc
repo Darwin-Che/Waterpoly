@@ -143,12 +143,12 @@ void Model::getInfo(std::shared_ptr<Square> s)
         std::string fee;
         if (b->getName() == "PAC" || b->getName() == "CIF")
         {
-            if (board->numNeighbourOwned() == 1) fee = "four times dice";
-            if (board->numNeighbourOwned() == 2) fee = "ten times dice";
+            if (board->numNeighbourOwned(b->getName()) == 1) fee = "four times dice";
+            if (board->numNeighbourOwned(b->getName()) == 2) fee = "ten times dice";
         }
         if (b->getName() == "MKV" || b->getName() == "UWP" || b->getName() == "V1" || b->getName() == "REV")
         {
-            int numOwned = board->numNeighbourOwned();
+            int numOwned = board->numNeighbourOwned(b->getName());
             if (numOwned == 1)
                 fee = "25";
             else if (numOwned == 2)
@@ -166,7 +166,7 @@ void Model::getInfo(std::shared_ptr<Square> s)
         // output all names of the block
         // output a list of numbers
     }
-    else 
+    else
     {
         mout << s->getInfo() << std::endl;
     }
@@ -553,8 +553,16 @@ void Model::save(std::ostream &out)
     out << playerOrder.size() << std::endl;
     for (auto & pn : playerOrder) {
         std::shared_ptr<Player> p = allPlayers[pn];
-        out << p->getName() << " " << p->getSymbol() << " " << p->getNumCups() << " " << p->getMoney() << " " << p->getPosition() << std::endl;
+        out << p->getName() << " " << p->getSymbol() << " " << p->getNumCups() << " " << p->getMoney() << " " << p->getPosition();
+        if (p->getPosition() == board->getSquareLocation("DC Tims Line"))
+        {
+            out << p->getIsJailed();
+            if (p->getIsJailed()) out << p->getNumJailed();
+        }
+        out << std::endl;
+        for (auto & s : board->getAllSquare())
+        {
+            out << s->getInfo();
+        }
     }
-    for (auto & s : )
-}
 
