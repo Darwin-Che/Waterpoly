@@ -92,7 +92,7 @@ void DCTimsLineStrategy::acceptVisitor(std::shared_ptr<Player> player,
 
     // If the player has already rolled 3 times including this time,
     // then the player must leave using either option 2 or option 3
-    if (player->numJailed() == 3) {
+    if (player->getNumJailed() == 3) {
         out << "This is your third turn of being stuck in DC Tims Line, "
             << "so you must leave now." << std::endl;
         out << "Type 2 if you want to pay $50, type 3 if you want to "

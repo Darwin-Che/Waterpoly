@@ -26,7 +26,7 @@ void NeedlesHallStrategy::acceptVisitor(std::shared_ptr<Player> player,
 
     // There is 1% chance to receive a cup instead of the normal effects
     out << "You stepped on Needles Hall square. A random outcome will occur." << std::endl;
-    if (Player::totalNumCups < 4 && rand() % 100 == 0) {
+    if (Player::getTotalNumCups() < 4 && rand() % 100 == 0) {
         player->setNumCups(player->getNumCups() + 1);
         out << "Luckily, you received a Roll Up the Rim Cup." << std::endl;
         return;

@@ -22,17 +22,17 @@ void SLCStrategy::acceptVisitor(std::shared_ptr<Player> player,
 
     // There is 1% chance to receive a cup instead of normal effects
     out << "You stepped on SLC square. A random outcome will occur." << std::endl;
-    if (Player::totalNumCups < 4 && rand() % 100 == 0) {
+    if (Player::getTotalNumCups() < 4 && rand() % 100 == 0) {
         player->setNumCups(player->getNumCups() + 1);
         out << "Luckily, you received a Roll Up the Rim Cup." << std::endl;
         return;
     }
 
-    int timsLocation = board->getSquare("DC Tims Line")->getLocation();
+    int timsLocation = board->getSquareBuilding("DC Tims Line")->getLocation();
     int moveAmount = timsLocation - player->getPosition();
     strategies.push_back(std::make_shared<MoveStrategy>(moveAmount));
 
-    int OSAPLocation = board->getSquare("Collect OSAP")->getLocation();
+    int OSAPLocation = board->getSquareBuilding("Collect OSAP")->getLocation();
     moveAmount = OSAPLocation - player->getPosition();
     strategies.push_back(std::make_shared<MoveStrategy>(moveAmount));
 

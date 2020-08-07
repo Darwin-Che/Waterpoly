@@ -19,11 +19,11 @@ void TuitionStrategy::acceptVisitor(std::shared_ptr<Player> player,
         payment = 300;
     } else {
         int networth = board->calcNetworth(player->getName());
-        payment = std::static_cast<int>(0.1 * networth);
+        payment = static_cast<int>(0.1 * networth);
     }
 
     // The work will be done by MoneyStrategy to avoid duplicate code
     MoneyStrategy strat(payment);
-    strat(player, board, in, out);
+    strat.acceptVisitor(player, board, in, out);
 }
 

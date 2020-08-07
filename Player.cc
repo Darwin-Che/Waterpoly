@@ -1,7 +1,7 @@
 #include "Player.h"
 
 // constructors
-Player::Player(char symbol, std::string name):symbol(symbol), name(name) {
+Player::Player(char symbol, const std::string& name):symbol(symbol), name(name) {
     position = 0;
     oldPosition = 0;
     numCups = 0;
@@ -12,7 +12,7 @@ Player::Player(char symbol, std::string name):symbol(symbol), name(name) {
     isBankrupt = false;
 }
 
-Player::Player(char symbol, std::string name, int position, int numCups, int money){
+Player::Player(char symbol, const std::string& name, int position, int numCups, int money){
     Player(symbol, name);
     this->position = position;
     this->numCups = numCups;
@@ -20,56 +20,66 @@ Player::Player(char symbol, std::string name, int position, int numCups, int mon
     oldPosition = position;
 }
 
-Player::Player(char symbol, std::string name, int position, int numCups, int money, int numJailed){
+Player::Player(char symbol, const std::string& name, int position, int numCups, int money, int numJailed){
     Player(symbol, name, position, numCups, money);
     this->numJailed = numJailed;
     isJailed = true;
 }
 
 // accessors and mutators
-char Player::getSymbol(){ return symbol; }
+char Player::getSymbol() const { return symbol; }
 
-std::string Player::getName(){ return name; }
+std::string Player::getName() const { return name; }
 
-int Player::getMoney(){ return money; }
+int Player::getMoney() const { return money; }
 
 void Player::setMoney(const int & money){ this->money = money; }
 
-int Player::getPosition(){ return position; }
+int Player::getPosition() const { return position; }
 
 // When the position of a player is set, notify observers
-void Player::setPosition(const int & position){ 
+void Player::setPosition(const int & position) { 
     this->position = position; 
     notifyObservers();
 }
 
-int Player::getNumCups(){ return numCups; }
+int Player::getNumCups() const { return numCups; }
 
-void Player::setNumCups(const int & numcups){ this->numCups = numCups; }
+void Player::setNumCups(const int & numCups) {
+    int change = numCups - this->numCups;
+    totalNumCups += change;
+    this->numCups = numCups;
+}
 
-bool Player::getIsJailed(){ return isJailed; }
+bool Player::getIsJailed() const { return isJailed; }
 
 void Player::setIsJailed(const bool & isJaied){ this->isJailed = isJailed; }
 
-int Player::getNumJailed(){ return numJailed; }
+int Player::getNumJailed() const { return numJailed; }
 
 void Player::setNumJailed(const int & getNumJailed){ this->numJailed = numJailed; }
 
-int Player::getDebt(){ return debt; 
-}
+int Player::getDebt() const { return debt; }
+
 void Player::setDebt(const int & debt){ this->debt = debt; }
 
-std::string Player::getDebtOwner(){ return debtOwner; }
+std::string Player::getDebtOwner() const { return debtOwner; }
 
 void Player::setDebtOwner(const std::string & name){ debtOwner = name; }
 
-bool Player::getIsBankrupt(){ return isBankrupt; }
+bool Player::getIsBankrupt() const { return isBankrupt; }
 
 // check if the player has enough money to pay debt
-bool Player::canPayDebt(){ return money >= debt; }
+bool Player::canPayDebt() const { return money >= debt; }
 
 // notify Observers when the player bankrupt
 void Player::dropOut(){
     isBankrupt = true;
     notifyObservers();
 }
+
+// set up static memebrs
+int Player::totalNumCups = 0;
+
+int Player::getTotalNumCups() { return totalNumCups; }
+

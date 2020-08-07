@@ -6,7 +6,7 @@ void AcademicBuildingStrategy::acceptVisitor(std::shared_ptr<Player> player,
         std::shared_ptr<Board> board, std::istream& in, std::ostream& out) {
     std::shared_ptr<Square> square = board->getSquare(player->getPosition());
     std::shared_ptr<AcademicBuilding> building =
-        dynamic_pointer_cast<AcademicBuilding>(square);
+        std::dynamic_pointer_cast<AcademicBuilding>(square);
 
     if (building != nullptr) {
         std::string buildingName = building->getName();
