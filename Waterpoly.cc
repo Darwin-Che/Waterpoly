@@ -29,6 +29,8 @@ int main(){
     int boardW;
     infile >> boardH;
     infile >> boardW;
+    std::string throwaway;
+    getline(infile, throwaway);
     auto view = make_shared<TextView>(boardH,boardW);
 
     std::vector<std::shared_ptr<Square>> board;
