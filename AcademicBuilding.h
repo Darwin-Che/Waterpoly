@@ -13,7 +13,7 @@ class AcademicBuilding : public Building {
             int purchaseCost, bool isMortgaged, int improvementCost,
             const std::vector<int>& improvementFee);
     int getImprovementCost() const;
-    int getImprovementFee(int improvementLevel) const;
+    int getImprovementFee() const;
     int getImprovementLevel() const;
     void setImprovementLevel(int improvementLevel);
     virtual int calculateNetworth() const;
