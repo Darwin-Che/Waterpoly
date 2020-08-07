@@ -14,6 +14,7 @@ class Building : public Square {
     void setIsMortgaged(bool isMortgaged);
     virtual int calculateNetworth() const;
     virtual std::string getInfo() const;
+    virtual std::string saveInfo() const;
 };
 
 #endif
