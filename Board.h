@@ -3,12 +3,13 @@
 #include "Square.h"
 #include "Player.h"
 #include <vector>
+#include <map>
 #include <memory>
 
 class Board {
     std::vector<std::shared_ptr<Player>> ownershipList;
     std::vector<std::shared_ptr<Square>> board;
-    std::vector<std::vector<std::shared_ptr<Square> > >  monopolyBlock;
+    std::map<std::string,std::vector<std::shared_ptr<Square> > >  monopolyBlock;
 
     // check if two buildings have the same owner
     bool sameOwner(std::string building1, std::string building2);
@@ -18,7 +19,7 @@ class Board {
     // constructor 
     Board(std::vector<std::shared_ptr<Player>> ownershipList,
         std::vector<std::shared_ptr<Square>> board,
-        std::vector<std::vector<std::shared_ptr<Square> > >  monopolyBlock);
+        std::map<std::string,std::vector<std::shared_ptr<Square> > >  monopolyBlock);
 
     // return the number of squares
     int getTotalSquareNum();
