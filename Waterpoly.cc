@@ -16,13 +16,15 @@
 #include "GymStrategy.h"
 #include "ResidenceStrategy.h"
 #include "SLCStrategy.h"
+#include "TuitionStrategy.h"
+#include "NeedlesHallStrategy.h"
 #include <iostream>
 #include <fstream>
 
 using namespace std;
 
 int main(){
-    std::ifstream infile{ "intial_information.txt" };
+    std::ifstream infile{ "initial_information.txt" };
     int boardH;
     int boardW;
     infile >> boardH;
@@ -32,6 +34,7 @@ int main(){
     std::vector<std::shared_ptr<Square>> board;
     std::map<std::string,std::vector<std::shared_ptr<Square> > >  monopolyBlock;
     std::vector<VisitStrategy> strategies;
+    vector<shared_ptr<Player>> ownershipList;
 
     std::string command;
     string name;
@@ -46,13 +49,27 @@ int main(){
             if (name == "SLC"){
                 strategies.push_back(SLCStrategy());
             }
-            else if (name == "OSAP"){
+            else if (name == "Collect OSAP"){
                 strategies.push_back(CollectOSAPStrategy());
             }
-            else if (name == "GoToTims"){
-
+            else if (name == "Go To Tims"){
+                strategies.push_back(GoToTimsStrategy());
             }
-            squareNum++;
+            else if (name == "DC Tims Line"){
+                strategies.push_back(DCTimsLineStrategy());
+            }
+            else if (name == "Goose Nesting"){
+                strategies.push_back(GooseNestingStrategy());
+            }
+            else if (name == "Tuition"){
+                strategies.push_back(TuitionStrategy());
+            }
+            else if (name == "Coop Fee"){
+                strategies.push_back(CoopFeeStrategy());
+            }
+            else if (name == "Needles Hall"){
+                strategies.push_back(NeedlesHallStrategy());
+            }
         }
         else if(command == "gym"){
             string blockName;
@@ -70,7 +87,8 @@ int main(){
                 monopolyBlock[blockName].push_back(gym);
             } 
             view->addSquare(name);
-            squareNum++;
+            strategies.push_back(GymStrategy());
+            getline(infile,command);
         }
         else if(command == "residence"){
             string blockName;
@@ -88,7 +106,8 @@ int main(){
                 monopolyBlock[blockName].push_back(residence);
             } 
             view->addSquare(name);
-            squareNum++;
+            strategies.push_back(ResidenceStrategy());
+            getline(infile,command);
         }
         else if(command == "academicbuilding"){
             string blockName;
@@ -118,9 +137,42 @@ int main(){
                 monopolyBlock[blockName].push_back(acbuilding);
             } 
             acbuilding->attach(view);
-             view->addSquare(name);
+            view->addSquare(name);
             acbuilding->notifyObservers();
-            squareNum++;
+            strategies.push_back(AcademicBuildingStrategy());
+            getline(infile,command);
+        }
+         ownershipList.push_back(shared_ptr<Player>());
+         squareNum++;
+    }
+
+    std::vector<shared_ptr<Player>> Players;
+    int playernum=0;
+    istream & in = cin;
+    ostream & out = cout;
+
+    while (playernum < 6 || playernum > 8){
+        cout << "Please choose enter the number of players (6~8):" << endl;
+        if (!(in >> playernum)) {
+            if (in.eof()) break;
+            in.clear();
+            in.ignore();
         }
     }
+
+    for (int i=0; i< playernum;i++){
+        string name,symbol;
+        cout <<"(Player #"<<(i+1)<<") Please enter your symbol and name:"<<endl;
+        cin >> name >> symbol;
+        auto player = make_shared<Player>(symbol[0],name);
+        Players.push_back(player);
+        getline(cin,name);
+    }
+
+    auto boardMap = make_shared<Board>(ownershipList,board,monopolyBlock);
+    auto model = make_shared<Model>(in,out);
+    model->loadPlayer(Players);
+    model->loadMap(boardMap,strategies);
+    Controller game {model,Players[0]->getName(), false};
+    game.takeTurn(in);
 }
