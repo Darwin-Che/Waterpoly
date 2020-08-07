@@ -26,7 +26,13 @@ class Model
     bool squareTradable(std::shared_ptr<Square> s);
     void payDebt(std::shared_ptr<Player> p1);
     bool deductMoney(std::shared_ptr<Player> p, int price, const std::string& debtor);
+    std::pair<std::string, int> auctionHelper();
 
+    void getInfo(std::shared_ptr<Square> s);
+    void getInfo(std::shared_ptr<Building> b);
+    void getInfo(std::shared_ptr<Gym> g);
+    void getInfo(std::shared_ptr<Residence> r);
+    void getInfo(std::shared_ptr<AcademicBuilding> a);
 public:
     Model(std::istream &tin, std::ostream &tout);
     /************** Methods called by Controller **************/
@@ -64,9 +70,9 @@ public:
     // strong exception guarentee
     bool bankrupt(const std::string &pn) noexcept;
 
-    void auctionPlayer(const std::string &pn);
+    void auctionPlayer(const std::string &pn) noexcept;
 
-    void auctionBuilding(const std::string &pn);
+    void auctionBuilding(const std::string &bn) noexcept;
 
     // check if able and output all player information by view
     void getInfo();
