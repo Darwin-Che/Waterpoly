@@ -74,8 +74,9 @@ int main(){
         else if(command == "gym"){
             string blockName;
             int purchaseCost;
-            infile >> blockName;
+            getline(infile, blockName);
             infile >> purchaseCost;
+            getline(infile,command);
             shared_ptr<Gym> gym=make_shared<Gym>(name,squareNum,description,purchaseCost, false);
             board.push_back(gym);
             if(monopolyBlock.count(blockName) == 0){
@@ -93,8 +94,9 @@ int main(){
         else if(command == "residence"){
             string blockName;
             int purchaseCost;
-            infile >> blockName;
+            getline(infile, blockName);
             infile >> purchaseCost;
+            getline(infile,command);
             shared_ptr<Residence> residence=make_shared<Residence>(name,squareNum,description,purchaseCost, false);
             board.push_back(residence);
             if(monopolyBlock.count(blockName) == 0){
@@ -115,14 +117,18 @@ int main(){
             int improvementCost;
             int maximprovement;
             vector<int> improvementfee;
-            infile >> blockName;
+            getline(infile, blockName);
             infile >> purchaseCost;
+            getline(infile,command);
             infile >> improvementCost;
+            getline(infile,command);
             infile >> maximprovement;
+            getline(infile,command);
 
             for (int i=0;i<maximprovement; i++){
                 int fee;
                 infile >> fee;
+                getline(infile,command);
                 improvementfee.push_back(fee);
             }
 
@@ -144,6 +150,18 @@ int main(){
         }
          ownershipList.push_back(shared_ptr<Player>());
          squareNum++;
+    }
+
+    for (int i=0; i<board.size();i++){
+        cout << i << " " << board[i]->getName() << endl;
+    }
+
+    for (auto it : monopolyBlock){
+        cout << it.first << ": ";
+        for (auto t : it.second){
+            cout << t->getName() << " ";
+        }
+        cout << endl;
     }
 
     std::vector<shared_ptr<Player>> Players;
