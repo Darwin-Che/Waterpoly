@@ -13,10 +13,14 @@ struct cState
     int numDoubleRoll;
     bool canRoll;
     bool testingMode_roll;
+    cState(int t_numDoubleRoll, bool t_canRoll, bool t_testingMode_roll)
+        : numDoubleRoll{t_numDoubleRoll}, canRoll{t_canRoll}, testingMode_roll{t_testingMode_roll}
+    {
+    }
 };
 
 Controller::Controller(std::shared_ptr<Model> t_model, const std::string &startPlayerName, bool t_testingMode_roll)
-    : model{ t_model }, curPlayerName{ startPlayerName }, cstate{ std::make_unique<cState>(0, true, t_testingMode_roll) }
+    : model{t_model}, cstate{std::make_unique<cState>(0, true, t_testingMode_roll)}, curPlayerName{startPlayerName}
 {
 }
 
@@ -29,12 +33,14 @@ void Controller::takeTurn(std::istream &in)
         {
             int d1; // the first dice number
             int d2; // the second dice number
-            if (cstate->testingMode_roll) {
+            if (cstate->testingMode_roll)
+            {
                 // because is in testing mode, omit error checking
                 in >> d1;
                 in >> d2;
             }
-            else {
+            else
+            {
                 d1 = std::rand();
                 d2 = std::rand();
             }
@@ -66,7 +72,8 @@ void Controller::takeTurn(std::istream &in)
         else if (command == "next")
         {
             std::string nextPlayer = model->nextPlayerName(curPlayerName);
-            if (nextPlayer != curPlayerName) {
+            if (nextPlayer != curPlayerName)
+            {
                 cstate->canRoll = true;
                 cstate->numDoubleRoll = 0;
             }
@@ -116,7 +123,7 @@ void Controller::takeTurn(std::istream &in)
         else if (command == "improve")
         {
             std::string arg1, arg2;
-            in >> arg1, arg2;
+            in >> arg1 >> arg2;
             if (arg2 == "sell")
             {
                 model->improve(curPlayerName, arg1, false);
@@ -145,7 +152,8 @@ void Controller::takeTurn(std::istream &in)
         else if (command == "bankrupt")
         {
             bool success = model->bankrupt(curPlayerName);
-            if (success) curPlayerName = model->nextPlayerName(curPlayerName);
+            if (success)
+                curPlayerName = model->nextPlayerName(curPlayerName);
             model->show("Current Active Player: " + curPlayerName);
         }
         else if (command == "asset")
@@ -160,7 +168,7 @@ void Controller::takeTurn(std::istream &in)
         {
             std::string arg;
             in >> arg;
-            std::ofstream outfile{ arg };
+            std::ofstream outfile{arg};
             model->save(outfile);
         }
         else

@@ -17,7 +17,7 @@ class Controller
     std::string curPlayerName;
 
 public:
-    Controller::Controller(std::shared_ptr<Model> t_model, const std::string &startPlayerName, bool t_testingMode_roll);
+    Controller(std::shared_ptr<Model> t_model, const std::string &startPlayerName, bool t_testingMode_roll);
     void takeTurn(std::istream &in);
 };
 
