@@ -44,6 +44,16 @@ class Model
 
 public:
     Model(std::istream &tin, std::ostream &tout);
+
+    /************** Methods called by Main **************/
+
+    // construct playerOrder and allPlayers
+    void loadPlayer(std::vector<std::shared_ptr<Player>> playerList);
+    void clearPlayer();
+    // construct strategies and board
+    void loadMap(std::shared_ptr<Board> tboard, std::vector<VisitStrategy> tstrategies);
+    void clearMap();
+    
     /************** Methods called by Controller **************/
 
     // call corresponding strategy

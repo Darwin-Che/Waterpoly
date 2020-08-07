@@ -12,6 +12,33 @@
 #include <vector>
 #include <algorithm>
 
+void Model::loadPlayer(std::vector<std::shared_ptr<Player>> playerList)
+{
+    for (auto & p : playerList)
+    {
+        playerOrder.emplace_back(p->getName());
+        allPlayers[p->getName()] = p;
+    }
+}
+
+void Model::clearPlayer()
+{
+    playerOrder.clear();
+    allPlayers.clear();
+}
+
+void Model::loadMap(std::shared_ptr<Board> tboard, std::vector<VisitStrategy> tstrategies)
+{
+    board = tboard;
+    strategies = tstrategies;
+}
+
+void Model::clearMap()
+{
+    board = std::shared_ptr<Board>();
+    strategies.clear();
+}
+
 void Model::payDebt(std::shared_ptr<Player> p1)
 {
     if (p1->getDebt() > 0 && p1->canPayDebt())
