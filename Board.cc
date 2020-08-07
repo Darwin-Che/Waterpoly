@@ -139,4 +139,22 @@ int Board::numNeighbourOwned(std::string buildingname){
     return count;
 }
 
+// return the information for saving the file
+std::string Board::saveInfo(){
+    string info="";
+    for (auto it:board){
+        string squareinfo = it->saveInfo();
+        if(squareinfo != ""){
+            info = info + it->getName() + " ";
+            auto owner = getOwner(it->getName());
+            if (owner != nullptr){
+                info = info + owner->getName() + squareinfo + "\n";
+            }
+            else{
+                info = info + "BANK" + squareinfo + "\n";
+            }
+        }
+    }
+    return info;
+}
 

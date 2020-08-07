@@ -2,6 +2,7 @@
 #define _ACADEMICBUILDING_H_
 #include <vector>
 #include "Building.h"
+#include "Subject.h"
 
 class AcademicBuilding : public Building, public Subject {
     int improvementCost;

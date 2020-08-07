@@ -51,6 +51,9 @@ class Board {
     // return the number of neibours owned by owner
     int numNeighbourOwned(std::string buildingname);
 
+    // return the information for saving the file
+    std::string saveInfo();
+
 };
 
 #endif
