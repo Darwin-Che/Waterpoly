@@ -20,10 +20,7 @@ class TextView: public View{
         int min(int x, int y);
         // set the name of a block
         void setName(std::string & name, int blockLine);
-        // draw a line at the bottom of the block
-        void setUnderLine();
-        // draw a line in the rightmost column of the block
-        void setRightLine();
+        
       public:
         // constructor
         Block(int h, int w);
@@ -37,6 +34,10 @@ class TextView: public View{
         int getHeight();
         // get the width of the block
         int getWidth();
+        // draw a line at the bottom of the block
+        void setUnderLine();
+        // draw a line in the rightmost column of the block
+        void setRightLine();
     };
     // 2d vector storing blocks
     // each block represents a square
