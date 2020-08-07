@@ -2,7 +2,7 @@
 
 // Constructor
 MoveStrategy::MoveStrategy(int moveAmount)
-    moveAmount(moveAmount) {}
+    : moveAmount(moveAmount) {}
 
 // Player will move an amount equal to the private field moveAmount
 void MoveStrategy::acceptVisitor(std::shared_ptr<Player> player,

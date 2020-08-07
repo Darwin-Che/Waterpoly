@@ -2,7 +2,7 @@
 
 // Constructor
 MoneyStrategy::MoneyStrategy(int gainAmount)
-    gainAmount(gainAmount) {}
+    : gainAmount(gainAmount) {}
 
 // Player will gain an amount of money equal to the private field gainAmount
 void MoneyStrategy::acceptVisitor(std::shared_ptr<Player> player,
