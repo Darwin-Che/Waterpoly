@@ -43,10 +43,12 @@ void Model::payDebt(std::shared_ptr<Player> p1)
 {
     if (p1->getDebt() > 0 && p1->canPayDebt())
     {
-        std::shared_ptr<Player> p2 = allPlayers[p1->getDebtOwner()];
         int amount = p1->getDebt();
         p1->setMoney(p1->getMoney() - amount);
-        p2->setMoney(p2->getMoney() + amount);
+        if (p1->getDebtOwner() != "BANK") {
+            std::shared_ptr<Player> p2 = allPlayers[p1->getDebtOwner()];
+            p2->setMoney(p2->getMoney() + amount);
+        }
         p1->setDebt(0);
         p1->setDebtOwner("");
     }
@@ -245,7 +247,8 @@ std::string Model::nextPlayerName(const std::string &pn)
             std::cerr << pn << " is not a player!" << std::endl;
             return pn;
         }
-    } else {
+    }
+    else {
         show("You are in debt, must first pay off your debt then next! If you cannot pay off, declare bankruptcy!");
         return pn;
     }
