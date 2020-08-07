@@ -1,7 +1,8 @@
 Step 1: 
-    test loading file (numplayers, playernames, buildings)
-    test show assests / show all
-
+    1_testload: test loading file (numplayers, playernames, buildings)
+                test show assests / show all
+    1_testroll: test roll and -testing mode
+    
 Step 2: 
     test Strategies without bankrupcy
     - Collect OSAP
@@ -42,6 +43,6 @@ Step 4:
 
 Step 5:
     test saving file
-
+    try -testing mode
 Step 6:
     Play a game in real time, test if anything can go wrong
