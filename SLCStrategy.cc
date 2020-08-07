@@ -32,7 +32,7 @@ void SLCStrategy::acceptVisitor(std::shared_ptr<Player> player,
     int moveAmount = timsLocation - player->getPosition();
     strategies.push_back(std::make_shared<MoveStrategy>(moveAmount));
 
-    int OSAPLocation = board->getSquareBuilding("Collect OSAP")->getLocation();
+    int OSAPLocation = board->getSquareBuilding("COLLECT OSAP")->getLocation();
     moveAmount = OSAPLocation - player->getPosition();
     strategies.push_back(std::make_shared<MoveStrategy>(moveAmount));
 

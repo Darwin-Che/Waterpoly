@@ -52,10 +52,10 @@ int main(){
             if (name == "SLC"){
                 strategies.push_back(make_shared<SLCStrategy>());
             }
-            else if (name == "Collect OSAP"){
+            else if (name == "COLLECT OSAP"){
                 strategies.push_back(make_shared<CollectOSAPStrategy>());
             }
-            else if (name == "Go To Tims"){
+            else if (name == "GO TO TIMS"){
                 strategies.push_back(make_shared<GoToTimsStrategy>());
             }
             else if (name == "DC Tims Line"){
@@ -64,13 +64,13 @@ int main(){
             else if (name == "Goose Nesting"){
                 strategies.push_back(make_shared<GooseNestingStrategy>());
             }
-            else if (name == "Tuition"){
+            else if (name == "TUITION"){
                 strategies.push_back(make_shared<TuitionStrategy>());
             }
-            else if (name == "Coop Fee"){
+            else if (name == "COOP FEE"){
                 strategies.push_back(make_shared<CoopFeeStrategy>());
             }
-            else if (name == "Needles Hall"){
+            else if (name == "NEEDLES HALL"){
                 strategies.push_back(make_shared<NeedlesHallStrategy>());
             }
         }

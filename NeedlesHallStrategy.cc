@@ -23,7 +23,6 @@ NeedlesHallStrategy::NeedlesHallStrategy() {
 void NeedlesHallStrategy::acceptVisitor(std::shared_ptr<Player> player,
             std::shared_ptr<Board> board, std::istream& in, std::ostream& out) {
 
-
     // There is 1% chance to receive a cup instead of the normal effects
     out << "You stepped on Needles Hall square. A random outcome will occur." << std::endl;
     if (Player::getTotalNumCups() < 4 && rand() % 100 == 0) {

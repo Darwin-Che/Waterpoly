@@ -6,7 +6,7 @@ void CollectOSAPStrategy::acceptVisitor(std::shared_ptr<Player> player,
         std::shared_ptr<Board> board, std::istream& in, std::ostream& out) {
 
     // Check if the player landed on or passed over OSAP square
-    int OSAPLocation = board->getSquareBuilding("Collect OSAP")->getLocation();
+    int OSAPLocation = board->getSquareBuilding("COLLECT OSAP")->getLocation();
     int newLocation = player->getPosition();
     int oldLocation = player->getOldPosition();
     if (newLocation >= oldLocation) {
