@@ -730,9 +730,6 @@ void Model::save(std::ostream &out)
                 out << p->getNumJailed();
         }
         out << std::endl;
-        for (auto &s : board->getAllSquare())
-        {
-            out << s->getInfo();
-        }
     }
+    out << board->saveInfo();
 }

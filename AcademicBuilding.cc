@@ -47,7 +47,7 @@ std::string AcademicBuilding::saveInfo() const
 {
 
     if (getIsMortgaged()) {
-        "-1";
+        return "-1";
     }
     else {
         return std::to_string(getImprovementLevel());
