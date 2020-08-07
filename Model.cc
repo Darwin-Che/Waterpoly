@@ -168,8 +168,7 @@ void Model::getInfo(std::shared_ptr<Square> s)
     }
     else 
     {
-        mout << s->getName() << "(Square)" << std::endl;
-        // output description
+        mout << s->getInfo() << std::endl;
     }
 }
 

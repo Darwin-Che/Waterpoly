@@ -1,8 +1,8 @@
 #include "Building.h"
 
-Building::Building(const std::string& name, int location,
+Building::Building(const std::string& name, int location, const std::string &description,
         int purchaseCost, bool isMortgaged)
-    : Square(name, location), purchaseCost(purchaseCost),
+    : Square(name, location, description), purchaseCost(purchaseCost),
     isMortgaged(isMortgaged) {}
 
 int Building:getPurchaseCost() const {
@@ -20,4 +20,3 @@ void Building::setIsMortgaged(bool isMortgaged) {
 int Building::calculateNetworth() const {
     return purchaseCost;
 }
-
