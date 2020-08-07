@@ -156,7 +156,7 @@ void Controller::takeTurn(std::istream &in)
                 curPlayerName = model->nextPlayerName(curPlayerName);
             model->show("Current Active Player: " + curPlayerName);
         }
-        else if (command == "asset")
+        else if (command == "assets")
         {
             model->getInfo(curPlayerName);
         }
