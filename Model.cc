@@ -231,9 +231,24 @@ void Model::show(const std::string &message)
     mout << message << std::endl;
 }
 
-bool Model::canNext(const std::string &player)
+std::string Model::nextPlayerName(const std::string &pn)
 {
-    return allPlayers[player]->getDebt() == 0;
+    if (allPlayers[pn]->getDebt() == 0) {
+        std::vector<std::string>::iterator it = std::find(playerOrder.begin(), playerOrder.end(), pn);
+        if (it != playerOrder.end()) {
+            int index = std::distance(playerOrder.begin(), it);
+            index++;
+            if (index = playerOrder.size()) index = 0;
+            return playerOrder[index];
+        }
+        else {
+            std::cerr << pn << " is not a player!" << std::endl;
+            return pn;
+        }
+    } else {
+        show("You are in debt, must first pay off your debt then next! If you cannot pay off, declare bankruptcy!");
+        return pn;
+    }
 }
 
 void Model::trade(const std::string &pn1, const std::string &pn2, const std::string &property, int price)

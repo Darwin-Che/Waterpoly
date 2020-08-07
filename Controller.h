@@ -14,12 +14,10 @@ class Controller
 {
     std::shared_ptr<Model> model;
     std::unique_ptr<cState> cstate;
-    std::vector<std::string> playerList;
-    int cur;
-    int seed;
+    std::string curPlayerName;
 
 public:
-    Controller(std::shared_ptr<Model> t_model);
+    Controller::Controller(std::shared_ptr<Model> t_model, const std::string &startPlayerName, bool t_testingMode_roll);
     void takeTurn(std::istream &in);
 };
 
