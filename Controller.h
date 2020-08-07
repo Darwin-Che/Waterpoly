@@ -19,6 +19,7 @@ class Controller
     int seed;
 
 public:
+    Controller(std::shared_ptr<Model> t_model);
     void takeTurn(std::istream &in);
 };
 

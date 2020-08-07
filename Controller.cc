@@ -2,14 +2,21 @@
 #include <iostream>
 #include <fstream>
 #include <stdexcept>
+#include <memory>
 #include "Controller.h"
 #include "ModelFail.h"
+#include "Model.h"
 
 struct cState
 {
     int numDoubleRoll;
     bool canRoll;
 };
+
+Controller::Controller(std::shared_ptr<Model> t_model, )
+: model{t_model}
+{
+}
 
 void Controller::takeTurn(std::istream &in)
 {

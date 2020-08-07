@@ -17,6 +17,7 @@ class AcademicBuilding : public Building {
     int getImprovementLevel() const;
     void setImprovementLevel(int improvementLevel);
     virtual int calculateNetworth() const;
+    virtual std::string getInfo() const;
 };
 
 #endif

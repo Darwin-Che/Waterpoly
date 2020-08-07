@@ -12,9 +12,36 @@
 #include <vector>
 #include <algorithm>
 
+void Model::loadPlayer(std::vector<std::shared_ptr<Player>> playerList)
+{
+    for (auto & p : playerList)
+    {
+        playerOrder.emplace_back(p->getName());
+        allPlayers[p->getName()] = p;
+    }
+}
+
+void Model::clearPlayer()
+{
+    playerOrder.clear();
+    allPlayers.clear();
+}
+
+void Model::loadMap(std::shared_ptr<Board> tboard, std::vector<VisitStrategy> tstrategies)
+{
+    board = tboard;
+    strategies = tstrategies;
+}
+
+void Model::clearMap()
+{
+    board = std::shared_ptr<Board>();
+    strategies.clear();
+}
+
 void Model::payDebt(std::shared_ptr<Player> p1)
 {
-    if (p1->canPayDebt())
+    if (p1->getDebt() > 0 && p1->canPayDebt())
     {
         std::shared_ptr<Player> p2 = allPlayers[p1->getDebtOwner()];
         int amount = p1->getDebt();
@@ -124,16 +151,15 @@ std::pair<std::string, int> Model::auctionHelper()
 
 void Model::getInfo(std::shared_ptr<Square> s)
 {
+    mout << s->getInfo() << std::endl;
     std::shared_ptr<Building> b = std::dynamic_pointer_cast<Building>(s);
     std::shared_ptr<AcademicBuilding> ab = std::dynamic_pointer_cast<AcademicBuilding>(s);
     if (ab != nullptr) {
         int fee = ab->getImprovementFee();
         if (board->inMonopoly(ab->getName()) && ab->getImprovementLevel() == 0)
             fee = fee * 2;
-        mout << ab->getName() << "(Academic Building): Owner - " << board->getOwner(ab->getName())
-            << " ; Mortgaged - " << std::boolalpha << ab->getIsMortgaged()
-            << " ; ImproveLevel - " << ab->getImprovementLevel()
-            << " ; Rent - " << fee << std::endl;
+        mout << ab->getName() << "'s Owner - " << board->getOwner(ab->getName()) << std::endl;
+        mout << "Current Rent - " << fee << std::endl;
         mout << "Monopoly block: ";
         // output all names of the block
         // output a list of numbers
@@ -158,17 +184,14 @@ void Model::getInfo(std::shared_ptr<Square> s)
             else
                 fee = "200";
         }
-        mout << b->getName() << "(Building): Owner - " << board->getOwner(ab->getName())
-            << " ; Mortgaged - " << std::boolalpha << ab->getIsMortgaged()
-            << " ; ImproveLevel - " << ab->getImprovementLevel()
-            << " ; Rent - " << fee << std::endl;
+        mout << b->getName() << "'s Owner - " << board->getOwner(ab->getName()) << std::endl;
+        mout << "Current Rent - " << fee << std::endl;
         mout << "Monopoly block: ";
         // output all names of the block
         // output a list of numbers
     }
     else
     {
-        mout << s->getInfo() << std::endl;
     }
 }
 
@@ -196,6 +219,12 @@ void Model::playerProceed(const std::string &pn, int steps)
     }
 }
 
+void Model::gotoTims(const std::string &pn)
+{
+    allPlayers[pn]->setIsJailed(true);
+    allPlayers[pn]->setNumJailed(0);
+    strategies[board->getSquareLocation("DC Times Line")].acceptVisitor(p, board, min, mout);
+}
 
 void Model::show(const std::string &message)
 {
@@ -565,4 +594,4 @@ void Model::save(std::ostream &out)
             out << s->getInfo();
         }
     }
-
+}
