@@ -22,6 +22,7 @@ struct cState
 Controller::Controller(std::shared_ptr<Model> t_model, const std::string &startPlayerName, bool t_testingMode_roll)
     : model{t_model}, cstate{std::make_shared<cState>(0, true, t_testingMode_roll)}, curPlayerName{startPlayerName}
 {
+    std::srand(std::time());
 }
 
 void Controller::takeTurn(std::istream &in)
