@@ -13,7 +13,7 @@ class cState;
 class Controller
 {
     std::shared_ptr<Model> model;
-    std::unique_ptr<cState> cstate;
+    std::shared_ptr<cState> cstate;
     std::string curPlayerName;
 
 public:
