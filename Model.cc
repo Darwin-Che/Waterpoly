@@ -6,6 +6,7 @@
 #include "Gym.h"
 #include "AcademicBuilding.h"
 #include "Residence.h"
+#include "Board.h"
 #include <vector>
 #include <map>
 #include <string>
@@ -89,7 +90,7 @@ void Model::trade(const std::string &pn1, const std::string &pn2, const std::str
     // trade
     allPlayers[pn1]->setMoney(allPlayers[pn1]->getMoney() + price);
     allPlayers[pn2]->setMoney(allPlayers[pn2]->getMoney() - price);
-    board->setOwner(property, pn2);
+    board->setOwner(property, allPlayers[pn2]);
 
     payDebt(allPlayers[pn1]);
 
@@ -129,18 +130,68 @@ void Model::trade(const std::string &pn1, const std::string &pn2, const std::str
     if (!squareTradable(s2)) return;
 
     // trade
-    board->setOwner(property1, pn2);
-    board->setOwner(property2, pn1);
+    board->setOwner(property1, allPlayers[pn2]);
+    board->setOwner(property2, allPlayers[pn1]);
 }
 
 void Model::improve(const std::string &pn, const std::string &property, bool action)
 {
-
+    std::shared_ptr<Square> s = board->getSquare(property);
+    std::shared_ptr<AcademicBuilding> sAcademic = std::dynamic_pointer_cast<AcademicBuilding>(s);
+    // check valid
+    bool checkProperty_Impr = (sAcademic.get() != nullptr);
+    // check building is improvable
+    if (!checkProperty_Impr) {
+        show(property + " is not an improvable Square!");
+        return;
+    }
+    // check building is in monopoly
+    if (!(board->inMonopoly(property))) {
+        show(property + "'s Monopoly block is not entirely owned by you!");
+        return;
+    }
+    // improve
+    if (action)
+    {
+        // check if player is in debt
+        if (allPlayers[pn]->getDebt() > 0) {
+            show("You are still in Debt! First pay off your debt then improve the building!")
+        }
+        // check improvement is at maximum
+        if (sAcademic->getImprovementLevel() > 4) {
+            show(property + "'s improvement level is already at maximum!");
+            return;
+        }
+        int cost = sAcademic->getImprovementCost();
+        // check if player can afford
+        if (allPlayers[pn]->getMoney() < cost) {
+            show("Your money ( " + std::to_string(allPlayers[pn]->getMoney()) + " ) is insufficient for improvement cost ( " + std::to_string(cost) + " )!");
+            return;
+        }
+        // execute change
+        sAcademic->setImprovementLevel(sAcademic->getImprovementLevel() + 1);
+        allPlayers[pn]->setMoney(allPlayers[pn]->getMoney() - cost);
+    }
+    else
+    {
+        // check improvement is at minimum
+        if (sAcademic->getImprovementLevel() < 1) {
+            show(property + "'s improvement level is already at minimum!");
+            return;
+        }
+        int refund = sAcademic->getImprovementCost() / 2;
+        // execute change
+        sAcademic->setImprovementLevel(sAcademic->getImprovementLevel() - 1);
+        allPlayers[pn]->setMoney(allPlayers[pn]->getMoney() + refund);
+        // see if debt can be paid
+        payDebt(allPlayers[pn]);
+    }
 }
+
 
 void Model::bankrupt(const std::string &pn)
 {
-
+    
 }
 
 void Model::getInfo()
