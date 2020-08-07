@@ -1,17 +1,15 @@
 #include "Gym.h"
 
-Gym::Gym(const std::string& name, int location,
-        const std::string& description,
-        int purchaseCost, bool isMortgaged)
-    : Building(name, location, description, purchaseCost, isMortgaged) {}
+Gym::Gym(const std::string &name, int location,
+         const std::string &t_description,
+         int purchaseCost, bool isMortgaged)
+    : Building(name, location, t_description, purchaseCost, isMortgaged) {
+        description = "Gym";
+    }
 
-std::string Gym::getInfo() const 
+std::string Gym::getInfo() const
 {
-    return getName() + "(Gym)"
-                     + " ; Mortgaged - " + (getIsMortgaged() ? "true" : "false")
-                     + " ; Cost Information: \n"
-                     + " \t Purchase Cost: " + std::to_string(getPurchaseCost())
-                     + " \t Tuition with owning more: " 
-                     + " one - four times dice; two - ten times dice"
-                     + " \n";
+    return Building::getInfo() +
+           + "\n\tPurchase Cost: " + std::to_string(getPurchaseCost()) 
+           + "\n\tTuition with owning more: " + " one - four times dice; two - ten times dice ";
 }

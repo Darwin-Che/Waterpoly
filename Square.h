@@ -5,6 +5,7 @@
 class Square {
     std::string name;
     int location;
+  protected: 
     std::string description;
   public:
     Square(const std::string& name, int location, const std::string& description);
