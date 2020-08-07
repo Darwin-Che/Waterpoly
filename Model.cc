@@ -124,6 +124,7 @@ std::pair<std::string, int> Model::auctionHelper()
 
 void Model::getInfo(std::shared_ptr<Square> s)
 {
+    mout << s->getInfo() << std::endl;
     std::shared_ptr<Building> b = std::dynamic_pointer_cast<Building>(s);
     std::shared_ptr<AcademicBuilding> ab = std::dynamic_pointer_cast<AcademicBuilding>(s);
     if (ab != nullptr) {
@@ -131,7 +132,6 @@ void Model::getInfo(std::shared_ptr<Square> s)
         if (board->inMonopoly(ab->getName()) && ab->getImprovementLevel() == 0)
             fee = fee * 2;
         mout << ab->getName() << "'s Owner - " << board->getOwner(ab->getName()) << std::endl;
-        mout << ab->getInfo();
         mout << "Current Rent - " << fee << std::endl;
         mout << "Monopoly block: ";
         // output all names of the block
@@ -158,7 +158,6 @@ void Model::getInfo(std::shared_ptr<Square> s)
                 fee = "200";
         }
         mout << b->getName() << "'s Owner - " << board->getOwner(ab->getName()) << std::endl;
-        mout << b->getInfo();
         mout << "Current Rent - " << fee << std::endl;
         mout << "Monopoly block: ";
         // output all names of the block
@@ -166,7 +165,6 @@ void Model::getInfo(std::shared_ptr<Square> s)
     }
     else
     {
-        mout << s->getInfo() << std::endl;
     }
 }
 
@@ -194,7 +192,7 @@ void Model::playerProceed(const std::string &pn, int steps)
     }
 }
 
-void Model::gotoTims(const std::string &pn) 
+void Model::gotoTims(const std::string &pn)
 {
     allPlayers[pn]->setIsJailed(true);
     allPlayers[pn]->setNumJailed(0);
