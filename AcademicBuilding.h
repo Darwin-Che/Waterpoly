@@ -3,7 +3,7 @@
 #include <vector>
 #include "Building.h"
 
-class AcademicBuilding : public Building {
+class AcademicBuilding : public Building, public Subject {
     int improvementCost;
     std::vector<int> improvementFee;
     int improvementLevel;
