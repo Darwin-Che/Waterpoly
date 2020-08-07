@@ -2,12 +2,14 @@
 #include "Building.h" 
 
 using namespace std;
- 
- Board::Board(std::vector<std::shared_ptr<Player>> ownershipList,
+
+// constructor
+Board::Board(std::vector<std::shared_ptr<Player>> ownershipList,
         std::vector<std::shared_ptr<Square>> board,
         std::vector<std::vector<std::shared_ptr<Square> > >  monopolyBlock):
         ownershipList(ownershipList), board(board), monopolyBlock(monopolyBlock) {}
 
+// return player's net asset woth
 int Board::calcNetworth(std::string playername){
     int worth = 0;
     for (int i=0; i<board.size(); i++){
@@ -19,6 +21,18 @@ int Board::calcNetworth(std::string playername){
     return worth;
 }
 
+// return the squares owned by the player
+std::vector<std::shared_ptr<Square>> Board::getAssets(std::string playername){
+    std::vector<std::shared_ptr<Square>> assets;
+    for (int i=0; i<board.size(); i++){
+        if(ownershipList[i]->getName() == playername){
+            assets.push_back(board[i]);
+        }
+    }
+    return assets;
+}
+
+// return the owner of the building
 std::shared_ptr<Player> Board::getOwner(std::string buildingname){
     int i=0;
     for (auto it : board){
@@ -30,6 +44,7 @@ std::shared_ptr<Player> Board::getOwner(std::string buildingname){
     return shared_ptr<Player>(nullptr);
 }
 
+// set the owner to the building
 void Board::setOwner(std::string buildingname, std::shared_ptr<Player> player){
     int i=0;
     for (auto it : board){
@@ -41,6 +56,7 @@ void Board::setOwner(std::string buildingname, std::shared_ptr<Player> player){
     }
 }
 
+// find the square by name
 std::shared_ptr<Square> Board::getSquareBuilding(std::string buildingname){
     for (auto it : board){
         if(it->getName() == buildingname){
@@ -50,10 +66,12 @@ std::shared_ptr<Square> Board::getSquareBuilding(std::string buildingname){
     return shared_ptr<Square>(nullptr);
 }
 
+// find the square by location
 std::shared_ptr<Square> Board::getSquare(int location){
     return board[location];
 }
 
+// check if two buildings have the same owner
 bool Board::sameOwner(string building1, string building2){
     shared_ptr<Player> owner1 = getOwner(building1);
     shared_ptr<Player> owner2 = getOwner(building2);
@@ -62,7 +80,8 @@ bool Board::sameOwner(string building1, string building2){
     }
     return owner1->getSymbol() == owner2->getSymbol();
 }
-    
+
+// check if a building is in a certain block    
 bool Board::inBlock(string building, vector<shared_ptr<Square>> block){
     for (auto square : block){
         if(square->getName() == building){
@@ -72,6 +91,7 @@ bool Board::inBlock(string building, vector<shared_ptr<Square>> block){
     return false;
 }
 
+// check if the owner of the building owns the entire block
 bool Board::inMonopoly(std::string buildingname){
     for (auto monopoly : monopolyBlock){
         if (inBlock(buildingname, monopoly)){
@@ -86,6 +106,7 @@ bool Board::inMonopoly(std::string buildingname){
     return false;
 }
 
+// return the number of neibours owned by owner
 int Board::numNeighbourOwned(std::string buildingname){
     int count = 0;
     for (auto monopoly : monopolyBlock){
@@ -100,3 +121,5 @@ int Board::numNeighbourOwned(std::string buildingname){
     }
     return count;
 }
+
+
