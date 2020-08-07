@@ -16,6 +16,8 @@ void CollectOSAPStrategy::acceptVisitor(std::shared_ptr<Player> player,
         if (!(OSAPLocation > oldLocation || OSAPLocation <= newLocation))
             return;
     }
+    if (player->getIsJailed() == true)
+        return;
 
     out << "You stepped on or over Collect OSAP square. "
         << "You will receive $200." << std::endl;
