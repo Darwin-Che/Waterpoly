@@ -2,6 +2,7 @@
 #include "MoneyStrategy.h"
 #include <cstdlib>
 
+// Constructor: Set up the strategies based on the probabilities given in specification
 NeedlesHallStrategy::NeedlesHallStrategy() {
     strategies.push_back(std::make_shared<MoneyStrategy>(-200));
     strategies.push_back(std::make_shared<MoneyStrategy>(200));
@@ -18,8 +19,12 @@ NeedlesHallStrategy::NeedlesHallStrategy() {
     }
 }
 
+// The player will gain or lose a random amount of money
 void NeedlesHallStrategy::acceptVisitor(std::shared_ptr<Player> player,
-            std::shared_ptr<Board> board, std::istream in, std::ostream out) {
+            std::shared_ptr<Board> board, std::istream& in, std::ostream& out) {
+
+
+    // There is 1% chance to receive a cup instead of the normal effects
     out << "You stepped on Needles Hall square. A random outcome will occur." << std::endl;
     if (Player::totalNumCups < 4 && rand() % 100 == 0) {
         player->setNumCups(player->getNumCups() + 1);
@@ -27,6 +32,7 @@ void NeedlesHallStrategy::acceptVisitor(std::shared_ptr<Player> player,
         return;
     }
 
+    // Randomly pick a strategy from the vector and apply it to the player
     int randomResult = rand() % 18;
     strategies[randomResult]->acceptVisitor(player, board, in, out);
 }

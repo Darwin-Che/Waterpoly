@@ -4,9 +4,10 @@
 
 class CollectOSAPStrategy : public VisitStrategy {
   public:
+    // The player will collect $200 OSAP fund
     virtual void acceptVisitor(std::shared_ptr<Player> player,
             std::shared_ptr<Board> board,
-            std::istream in, std::ostream out) override;
+            std::istream& in, std::ostream& out) override;
 };
 
 #endif
