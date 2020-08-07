@@ -43,6 +43,8 @@ void Player::setPosition(const int & position) {
     notifyObservers();
 }
 
+int Player::getOldPosition() const { return oldPosition; }
+
 int Player::getNumCups() const { return numCups; }
 
 void Player::setNumCups(const int & numCups) {

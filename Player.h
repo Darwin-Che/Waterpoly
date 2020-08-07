@@ -29,6 +29,8 @@ class Player: public Subject{
     int getPosition() const;
     void setPosition(const int & position);
 
+    int getOldPosition() const;
+
     int getNumCups() const;
     void setNumCups(const int & numcups);
 

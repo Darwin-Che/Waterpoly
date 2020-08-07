@@ -4,6 +4,19 @@
 // The player will collect $200 OSAP fund
 void CollectOSAPStrategy::acceptVisitor(std::shared_ptr<Player> player,
         std::shared_ptr<Board> board, std::istream& in, std::ostream& out) {
+
+    // Check if the player landed on or passed over OSAP square
+    int OSAPLocation = board->getSquareBuilding("Collect OSAP")->getLocation();
+    int newLocation = player->getPosition();
+    int oldLocation = player->getOldPosition();
+    if (newLocation >= oldLocation) {
+        if (OSAPLocation <= oldLocation || OSAPLocation > newLocation)
+            return;
+    } else {
+        if (!(OSAPLocation > oldLocation || OSAPLocation <= newLocation))
+            return;
+    }
+
     out << "You stepped on or over Collect OSAP square. "
         << "You will receive $200." << std::endl;
 
