@@ -1,0 +1,354 @@
+10
+10
+square
+Collect OSAP
+Receive $200 when passing over or landing on
+academicbuilding
+AL
+Pay tuition to the owner
+Arts1
+40
+50
+5
+2
+10
+30
+90
+160
+250
+square
+SLC
+Move a random amount
+academicbuilding
+ML
+Pay tuition to the owner
+Arts1
+60
+50
+5
+4
+20
+60
+180
+320
+450
+square
+Tuition
+Pay $300 or 10% of total networth
+residence
+MKV
+Pay rent to the owner
+Residence
+200
+academicbuilding
+ECH
+Pay tuition to the owner
+Arts2
+100
+50
+5
+6
+30
+90
+270
+400
+550
+square
+Needles Hall
+Gain or lose a random amount of money
+academicbuilding
+PAS
+Pay tuition to the owner
+Arts2
+100
+50
+5
+6
+30
+90
+270
+400
+550
+academicbuilding
+HH
+Pay tuition to the owner
+Arts2
+120
+50
+5
+8
+40
+100
+300
+450
+600
+square
+DC Tims Line
+Player is put into jail
+academicbuilding
+RCH
+Pay tuition to the owner
+Eng
+140
+100
+5
+10
+50
+150
+450
+625
+750
+gym
+PAC
+Pay usage fee to the owner
+Gym
+150
+academicbuilding
+DWE
+Pay tuition to the owner
+Eng
+140
+100
+5
+10
+50
+150
+450
+625
+750
+academicbuilding
+CPH
+Pay tuition to the owner
+Eng
+160
+100
+5
+12
+60
+180
+500
+700
+900
+residence
+UWP
+Pay rent to the owner
+Residence
+200
+academicbuilding
+LHI
+Pay tuition to the owner
+Health
+180
+100
+5
+14
+70
+200
+550
+750
+950
+square
+SLC
+Move a random amount
+academicbuilding
+BMH
+Pay tuition to the owner
+Health
+180
+100
+5
+14
+70
+200
+550
+750
+950
+academicbuilding
+OPT
+Pay tuition to the owner
+Health
+200
+100
+5
+16
+80
+220
+600
+800
+1000
+square
+Goose Nesting
+Attacked by a flock of nesting geese
+academicbuilding
+EV1
+Pay tuition to the owner
+Env
+220
+150
+5
+18
+90
+250
+700
+875
+1050
+square
+Needles Hall
+Gain or lose a random amount of money
+academicbuilding
+EV2
+Pay tuition to the owner
+Env
+220
+150
+5
+18
+90
+250
+700
+875
+1050
+academicbuilding
+EV3
+Pay tuition to the owner
+Env
+240
+150
+5
+20
+100
+300
+750
+925
+1100
+residence
+V1
+Pay rent to the owner
+Residence
+200
+academicbuilding
+PHYS
+Pay tuition to the owner
+Sci1
+260
+150
+5
+22
+110
+330
+800
+975
+1150
+academicbuilding
+B1
+Pay tuition to the owner
+Sci1
+260
+150
+5
+22
+110
+330
+800
+975
+1150
+gym
+CIF
+Pay usage fee to the owner
+Gym
+150
+academicbuilding
+B2
+Pay tuition to the owner
+Sci1
+280
+150
+5
+24
+120
+360
+850
+1025
+1200
+square
+Go To Tims
+Sent to DC Tims Line
+academicbuilding
+EIT
+Pay tuition to the owner
+Sci2
+300
+200
+5
+26
+130
+390
+900
+1100
+1275
+academicbuilding
+ESC
+Pay tuition to the owner
+Sci2
+300
+200
+5
+26
+130
+390
+900
+1100
+1275
+square
+SLC
+Move a random amount
+academicbuilding
+C2
+Pay tuition to the owner
+Sci2
+320
+200
+5
+28
+150
+450
+1000
+1200
+1400
+residence
+REV
+Pay rent to the owner
+Residence
+200
+square
+Needles Hall
+Gain or lose a random amount of money
+academicbuilding
+MC
+Pay tuition to the owner
+Math
+350
+200
+5
+35
+175
+500
+1100
+1300
+1500
+square
+Coop Fee
+Pay $150 coop fee
+academicbuilding
+DC
+Pay tuition to the owner
+Math
+400
+200
+5
+50
+200
+600
+1400
+1700
+2000
