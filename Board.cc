@@ -6,7 +6,7 @@ using namespace std;
 // constructor
 Board::Board(std::vector<std::shared_ptr<Player>> ownershipList,
         std::vector<std::shared_ptr<Square>> board,
-        std::vector<std::vector<std::shared_ptr<Square> > >  monopolyBlock):
+        std::map<string,std::vector<std::shared_ptr<Square> > >  monopolyBlock):
         ownershipList(ownershipList), board(board), monopolyBlock(monopolyBlock) {}
 
 // return the number of squares
@@ -111,8 +111,8 @@ bool Board::inBlock(string building, vector<shared_ptr<Square>> block){
 // check if the owner of the building owns the entire block
 bool Board::inMonopoly(std::string buildingname){
     for (auto monopoly : monopolyBlock){
-        if (inBlock(buildingname, monopoly)){
-            for (auto square: monopoly){
+        if (inBlock(buildingname, monopoly.second)){
+            for (auto square: monopoly.second){
                 if(!sameOwner(buildingname, square->getName())){
                     return false;
                 }
@@ -127,8 +127,8 @@ bool Board::inMonopoly(std::string buildingname){
 int Board::numNeighbourOwned(std::string buildingname){
     int count = 0;
     for (auto monopoly : monopolyBlock){
-        if (inBlock(buildingname, monopoly)){
-            for (auto square: monopoly){
+        if (inBlock(buildingname, monopoly.second)){
+            for (auto square: monopoly.second){
                 if(sameOwner(buildingname, square->getName())){
                     count++;
                 }

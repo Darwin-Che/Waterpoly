@@ -10,7 +10,7 @@ class Subject {
   protected: 
     virtual void notifyObservers();
   public:
-    void attach(Observer *o);  
+    void attach(<std::shared_ptr<Observer> o);  
 };
 
 #endif
