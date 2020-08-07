@@ -12,13 +12,17 @@ Player::Player(char symbol, std::string name):symbol(symbol), name(name) {
     isBankrupt = false;
 }
 
-Player::Player(char symbol, std::string name, int position, int numCups, int money):
-    Player(symbol, name), position(position), numCups(numCups), money(money){
-        oldPosition = position;
+Player::Player(char symbol, std::string name, int position, int numCups, int money){
+    Player(symbol, name);
+    this->position = position;
+    this->numCups = numCups;
+    this->money = money;
+    oldPosition = position;
 }
 
-Player::Player(char symbol, std::string name, int position, int numCups, int money, int numJailed):
-    Player(symbol, name, position, numCups, money), numJailed(numJailed) {
+Player::Player(char symbol, std::string name, int position, int numCups, int money, int numJailed){
+    Player(symbol, name, position, numCups, money);
+    this->numJailed = numJailed;
     isJailed = true;
 }
 
