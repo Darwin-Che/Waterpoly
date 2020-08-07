@@ -27,7 +27,7 @@ void Model::clearPlayer()
     allPlayers.clear();
 }
 
-void Model::loadMap(std::shared_ptr<Board> tboard, std::vector<VisitStrategy> tstrategies)
+void Model::loadMap(std::shared_ptr<Board> tboard, std::vector<std::shared_ptr<VisitStrategy>> tstrategies)
 {
     board = tboard;
     strategies = tstrategies;
@@ -234,7 +234,7 @@ void Model::playerProceed(const std::string &pn, int steps)
         p->setPosition((p->getPosition() + steps) % board->getTotalSquareNum());
         strategies[board->getSquareLocation("COLLECT OSAP")]->acceptVisitor(p, board, min, mout);
         int prevPos = p->getPosition();
-        strategies[p->getPosition()].acceptVisitor(p, board, min, mout);
+        strategies[p->getPosition()]->acceptVisitor(p, board, min, mout);
         while (prevPos != p->getPosition() && !(p->getIsJailed()))
         {
             strategies[board->getSquareLocation("COLLECT OSAP")]->acceptVisitor(p, board, min, mout);
