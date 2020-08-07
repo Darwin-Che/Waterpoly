@@ -28,7 +28,7 @@ class Model
     bool squareTradable(std::shared_ptr<Square> s);
 
     // check if p1 is in debt and can pay debt, if so, paydebt to debtor, otherwise do nothing
-    void payDebt(std::shared_ptr<Player> p1) noexcept;
+    void payDebt(std::shared_ptr<Player> p1);
 
     // deduct money price from p:
     // if p is not in debt, p can pay price, pay directly
