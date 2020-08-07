@@ -7,7 +7,7 @@
 #include <vector>
 #include <iostream>
 #include <string>
-
+/*
 int main() {
     std::shared_ptr<Square> s = std::make_shared<Square>("square 0", 0, "square 0");
     std::shared_ptr<Building> b = std::make_shared<Building>("bulding 1", 1, "building 1", 100, false);
@@ -22,3 +22,4 @@ int main() {
     g->setIsMortgaged(true);
     std::cout << ab->getInfo() << std::endl;
 }
+*/

@@ -7,7 +7,7 @@ EXEC=waterpoly
 
 # First target in the makefile is the default target.
 $(EXEC): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(EXEC) -lX11
+	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(EXEC) 
 #	strip ${EXEC}
 
 %.o: %.cc 

@@ -44,7 +44,8 @@ int main(){
         getline(infile, name);
         getline(infile,description);
         if ( command == "square"){
-            board.push_back(make_shared<Square>(name,squareNum,description));
+            auto square = make_shared<Square>(name,squareNum,description);
+            board.push_back(square);
             view->addSquare(name);
             if (name == "SLC"){
                 strategies.push_back(make_shared<SLCStrategy>());
@@ -125,7 +126,7 @@ int main(){
             infile >> maximprovement;
             getline(infile,command);
 
-            for (int i=0;i<maximprovement; i++){
+            for (int i=0;i<=maximprovement; i++){
                 int fee;
                 infile >> fee;
                 getline(infile,command);
@@ -193,6 +194,6 @@ int main(){
     model->loadMap(boardMap,strategies);
     model->setView(view);
     Controller game {model,Players[0]->getName(), false};
-    //view->drawBoard();
+    view->drawBoard();
     game.takeTurn(in);
 }
