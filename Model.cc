@@ -240,13 +240,27 @@ void Model::playerProceed(const std::string &pn, int steps)
         p->setPosition((p->getPosition() + steps) % board->getTotalSquareNum());
         strategies[board->getSquareLocation("COLLECT OSAP")]->acceptVisitor(p, board, min, mout);
         int prevPos = p->getPosition();
-        strategies[p->getPosition()]->acceptVisitor(p, board, min, mout);
+        if (board->getOwner(board->getSquare(p->getPosition())->getName()).get() == nullptr)
+        {
+            auctionBuilding(board->getSquare(p->getPosition())->getName());
+        }
+        else
+        {
+            strategies[p->getPosition()]->acceptVisitor(p, board, min, mout);
+        }
         view->drawBoard();
         while (prevPos != p->getPosition() && !(p->getIsJailed()))
         {
             strategies[board->getSquareLocation("COLLECT OSAP")]->acceptVisitor(p, board, min, mout);
             prevPos = p->getPosition();
-            strategies[p->getPosition()]->acceptVisitor(p, board, min, mout);
+            if (board->getOwner(board->getSquare(p->getPosition())->getName()).get() == nullptr)
+            {
+                auctionBuilding(board->getSquare(p->getPosition())->getName());
+            }
+            else
+            {
+                strategies[p->getPosition()]->acceptVisitor(p, board, min, mout);
+            }
             view->drawBoard();
         }
     }
@@ -382,6 +396,14 @@ void Model::improve(const std::string &pn, const std::string &property, bool act
         show(property + " is not an improvable Square!");
         return;
     }
+    // check owner
+    bool checkProperty_pn = (board->getOwner(property) == allPlayers[pn]);
+    // check building is owned by pn
+    if (!checkProperty_pn)
+    {
+        show(property + " is not even owned by you!");
+        return;
+    }
     // check building is in monopoly
     if (!(board->inMonopoly(property)))
     {
@@ -441,6 +463,14 @@ void Model::mortgage(const std::string &pn, const std::string &property, bool ac
     if (!checkProperty)
     {
         show(property + " is not an ownable property!");
+        return;
+    }
+    // check owner
+    bool checkProperty_pn = (board->getOwner(property) == allPlayers[pn]);
+    // check building is owned by pn
+    if (!checkProperty_pn)
+    {
+        show(property + " is not even owned by you!");
         return;
     }
     // improve
