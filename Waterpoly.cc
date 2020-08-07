@@ -37,10 +37,10 @@ int main(){
     string name;
     string description;
     int squareNum=0;
-    while (infile >> command){
+    while (getline(infile, command)){
+        getline(infile, name);
+        getline(infile,description);
         if ( command == "square"){
-            getline(infile, name);
-            getline(infile,description);
             board.push_back(make_shared<Square>(name,squareNum,description));
             view->addSquare(name);
             if (name == "SLC"){
@@ -49,16 +49,16 @@ int main(){
             else if (name == "OSAP"){
                 strategies.push_back(CollectOSAPStrategy());
             }
-            else if (name == "GoToTims")
+            else if (name == "GoToTims"){
+
+            }
             squareNum++;
         }
         else if(command == "gym"){
             string blockName;
             int purchaseCost;
-            getline(infile, name);
             infile >> blockName;
             infile >> purchaseCost;
-            getline(infile,description);
             shared_ptr<Gym> gym=make_shared<Gym>(name,squareNum,description,purchaseCost, false);
             board.push_back(gym);
             if(monopolyBlock.count(blockName) == 0){
@@ -76,9 +76,9 @@ int main(){
             string blockName;
             int purchaseCost;
             getline(infile, name);
+            getline(infile,description);
             infile >> blockName;
             infile >> purchaseCost;
-            getline(infile,description);
             shared_ptr<Residence> residence=make_shared<Residence>(name,squareNum,description,purchaseCost, false);
             board.push_back(residence);
             if(monopolyBlock.count(blockName) == 0){
