@@ -227,19 +227,19 @@ void Model::playerProceed(const std::string &pn, int steps)
     std::shared_ptr<Player> p = allPlayers[pn];
     if (p->getIsJailed())
     {
-        strategies[board->getSquareLocation("DC Times Line")].acceptVisitor(p, board, min, mout);
+        strategies[board->getSquareLocation("DC Times Line")]->acceptVisitor(p, board, min, mout);
     }
     else
     {
         p->setPosition((p->getPosition() + steps) % board->getTotalSquareNum());
-        strategies[board->getSquareLocation("COLLECT OSAP")].acceptVisitor(p, board, min, mout);
+        strategies[board->getSquareLocation("COLLECT OSAP")]->acceptVisitor(p, board, min, mout);
         int prevPos = p->getPosition();
         strategies[p->getPosition()].acceptVisitor(p, board, min, mout);
         while (prevPos != p->getPosition() && !(p->getIsJailed()))
         {
-            strategies[board->getSquareLocation("COLLECT OSAP")].acceptVisitor(p, board, min, mout);
+            strategies[board->getSquareLocation("COLLECT OSAP")]->acceptVisitor(p, board, min, mout);
             prevPos = p->getPosition();
-            strategies[p->getPosition()].acceptVisitor(p, board, min, mout);
+            strategies[p->getPosition()]->acceptVisitor(p, board, min, mout);
         }
     }
 }
@@ -248,7 +248,7 @@ void Model::gotoTims(const std::string &pn)
 {
     allPlayers[pn]->setIsJailed(true);
     allPlayers[pn]->setNumJailed(0);
-    strategies[board->getSquareLocation("DC Times Line")].acceptVisitor(pn, board, min, mout);
+    strategies[board->getSquareLocation("DC Times Line")]->acceptVisitor(allPlayers[pn], board, min, mout);
 }
 
 void Model::show(const std::string &message)
@@ -265,7 +265,7 @@ std::string Model::nextPlayerName(const std::string &pn)
         {
             int index = std::distance(playerOrder.begin(), it);
             index++;
-            if (index = playerOrder.size())
+            if (index == playerOrder.size())
                 index = 0;
             return playerOrder[index];
         }
@@ -706,7 +706,7 @@ void Model::getInfo(const std::string &pn)
          << " is at " << s->getName()
          << " Money - " << p->getMoney()
          << " Debt - " << p->getDebt() << (p->getDebt() > 0 ? " toward " + p->getDebtOwner() : "")
-         << " Jailed - " << std::boolalpha << p->getIsJailed() << (p->getIsJailed() ? (" for " + p->getNumJailed() + " turns") : "")
+         << " Jailed - " << std::boolalpha << p->getIsJailed() << (p->getIsJailed() ? (" for " + std::to_string(p->getNumJailed()) + " turns") : "")
          << " Cups - " << p->getNumCups() << std::endl;
     mout << "All Assets: " << std::endl;
     for (auto &s : board->getAssets(pn))
