@@ -20,6 +20,9 @@ class Board {
         std::vector<std::shared_ptr<Square>> board,
         std::vector<std::vector<std::shared_ptr<Square> > >  monopolyBlock);
 
+    // return the number of squares
+    int getTotalSquareNum();
+
     // return player's net asset woth
     int calcNetworth(std::string playername);
 

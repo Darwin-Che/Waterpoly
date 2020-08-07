@@ -9,6 +9,11 @@ Board::Board(std::vector<std::shared_ptr<Player>> ownershipList,
         std::vector<std::vector<std::shared_ptr<Square> > >  monopolyBlock):
         ownershipList(ownershipList), board(board), monopolyBlock(monopolyBlock) {}
 
+// return the number of squares
+int Board::getTotalSquareNum(){
+    return board.size();
+}
+
 // return player's net asset woth
 int Board::calcNetworth(std::string playername){
     int worth = 0;
