@@ -41,8 +41,8 @@ void Controller::takeTurn(std::istream &in)
             }
             else
             {
-                d1 = std::rand() % 6;
-                d2 = std::rand() % 6;
+                d1 = std::rand() % 6 + 1;
+                d2 = std::rand() % 6 + 1;
             }
             model->show("Player " + curPlayerName + "rolls :" + std::to_string(d1) + " and " + std::to_string(d2) + ". ");
             if (d1 == d2)
