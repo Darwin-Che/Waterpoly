@@ -1,9 +1,9 @@
 #include "AcademicBuilding.h"
 
 AcademicBuilding::AcademicBuilding(const std::string name,
-        int location, int purchaseCost, bool isMortgaged,
-        int improvementCost, const std::vector<int>& improvementFee)
-    : Building(name, location, purchaseCost, isMortgaged),
+    int location, const std::string &description, int purchaseCost, bool isMortgaged,
+    int improvementCost, const std::vector<int>& improvementFee)
+    : Building(name, location, description, purchaseCost, isMortgaged),
     improvementCost(improvementCost),
     improvementFee(improvementFee), improvementLevel(0) {}
 
@@ -27,19 +27,29 @@ int AcademicBuilding::calculateNetworth() const {
     return getPurchaseCost() + improvementLevel * improvementCost;
 }
 
-std::string AcademicBuilding::getInfo() const 
+std::string AcademicBuilding::getInfo() const
 {
     return getName() + "(Academic Building)"
-                     + " ; Mortgaged - " + (getIsMortgaged() ? "true" : "false")
-                     + " ; ImproveLevel - " + std::to_string(getImprovementLevel())
-                     + " ; Cost Information: \n"
-                     + " \t Purchase Cost: " + std::to_string(getPurchaseCost())
-                     + " \t Improvement Cost: " + std::to_string(getImprovementCost());
-                     + " \t Tuition with Improvements: " + std::to_string(improvementFee[0]) 
-                     + " " + std::to_string(improvementFee[1])
-                     + " " + std::to_string(improvementFee[2])
-                     + " " + std::to_string(improvementFee[3])
-                     + " " + std::to_string(improvementFee[4])
-                     + " \n";
+        + " ; Mortgaged - " + (getIsMortgaged() ? "true" : "false")
+        + " ; ImproveLevel - " + std::to_string(getImprovementLevel())
+        + " ; Cost Information: \n"
+        + " \t Purchase Cost: " + std::to_string(getPurchaseCost())
+        + " \t Improvement Cost: " + std::to_string(getImprovementCost());
+    +" \t Tuition with Improvements: " + std::to_string(improvementFee[0])
+        + " " + std::to_string(improvementFee[1])
+        + " " + std::to_string(improvementFee[2])
+        + " " + std::to_string(improvementFee[3])
+        + " " + std::to_string(improvementFee[4])
+        + " \n";
 }
 
+std::string AcademicBuilding::saveInfo() const
+{
+    if (getIsMortgaged()) {
+        return "-1";
+    }
+    else {
+        return std::to_string(getImprovementLevel());
+    }
+
+}

@@ -12,6 +12,7 @@ class Square {
     std::string getName() const;
     int getLocation() const;
     virtual std::string getInfo() const;
+    virtual std::string saveInfo() const;
 };
 
 #endif

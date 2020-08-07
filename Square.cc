@@ -12,5 +12,10 @@ int Square::getLocation() const {
 }
 
 std::string Square::getInfo() const {
-    return description;
+    return getName() + " : " + description;
+}
+
+std::string Square::saveInfo() const
+{
+    return "";
 }
