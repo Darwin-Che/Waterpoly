@@ -3,10 +3,10 @@
 #include "VisitStrategy.h"
 
 class MoneyStrategy : public VisitStrategy {
-    int changeAmount;
+    int gainAmount;
 
   public:
-    MoneyStrategy(int changeAmount);
+    MoneyStrategy(int gainAmount);
     virtual void acceptVisitor(std::shared_ptr<Player> player,
             std::shared_ptr<Board> board,
             std::istream in, std::ostream out) override;
