@@ -75,8 +75,6 @@ int main(){
         else if(command == "residence"){
             string blockName;
             int purchaseCost;
-            getline(infile, name);
-            getline(infile,description);
             infile >> blockName;
             infile >> purchaseCost;
             shared_ptr<Residence> residence=make_shared<Residence>(name,squareNum,description,purchaseCost, false);
@@ -98,8 +96,6 @@ int main(){
             int improvementCost;
             int maximprovement;
             vector<int> improvementfee;
-
-            getline(infile, name);
             infile >> blockName;
             infile >> purchaseCost;
             infile >> improvementCost;
@@ -110,8 +106,6 @@ int main(){
                 infile >> fee;
                 improvementfee.push_back(fee);
             }
-
-            getline(infile,description);
 
             auto acbuilding=make_shared<AcademicBuilding>(name,squareNum,description,purchaseCost, false,improvementCost,improvementfee);
             board.push_back(acbuilding);
