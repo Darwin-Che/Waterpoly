@@ -181,8 +181,10 @@ int main(){
     for (int i=0; i< playernum;i++){
         string name,symbol;
         cout <<"(Player #"<<(i+1)<<") Please enter your symbol and name:"<<endl;
-        cin >> name >> symbol;
+        cin >> symbol >> name ;
         auto player = make_shared<Player>(symbol[0],name);
+        player->attach(view);
+        view->addPlayer(symbol[0]);
         Players.push_back(player);
         getline(cin,name);
     }
