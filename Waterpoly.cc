@@ -14,6 +14,8 @@
 #include "GooseNestingStrategy.h"
 #include "GoToTimsStrategy.h"
 #include "GymStrategy.h"
+#include "ResidenceStrategy.h"
+#include "SLCStrategy.h"
 #include <iostream>
 #include <fstream>
 
@@ -37,15 +39,23 @@ int main(){
     int squareNum=0;
     while (infile >> command){
         if ( command == "square"){
-            infile >> name;
+            getline(infile, name);
             getline(infile,description);
             board.push_back(make_shared<Square>(name,squareNum,description));
+            view->addSquare(name);
+            if (name == "SLC"){
+                strategies.push_back(SLCStrategy());
+            }
+            else if (name == "OSAP"){
+                strategies.push_back(CollectOSAPStrategy());
+            }
+            else if (name == "GoToTims")
             squareNum++;
         }
         else if(command == "gym"){
             string blockName;
             int purchaseCost;
-            infile >> name;
+            getline(infile, name);
             infile >> blockName;
             infile >> purchaseCost;
             getline(infile,description);
@@ -59,11 +69,13 @@ int main(){
             else{
                 monopolyBlock[blockName].push_back(gym);
             } 
+            view->addSquare(name);
+            squareNum++;
         }
         else if(command == "residence"){
             string blockName;
             int purchaseCost;
-            infile >> name;
+            getline(infile, name);
             infile >> blockName;
             infile >> purchaseCost;
             getline(infile,description);
@@ -77,6 +89,8 @@ int main(){
             else{
                 monopolyBlock[blockName].push_back(residence);
             } 
+            view->addSquare(name);
+            squareNum++;
         }
         else if(command == "academicbuilding"){
             string blockName;
@@ -85,7 +99,7 @@ int main(){
             int maximprovement;
             vector<int> improvementfee;
 
-            infile >> name;
+            getline(infile, name);
             infile >> blockName;
             infile >> purchaseCost;
             infile >> improvementCost;
@@ -109,7 +123,10 @@ int main(){
             else{
                 monopolyBlock[blockName].push_back(acbuilding);
             } 
-            acbuilding->attach(View);
+            acbuilding->attach(view);
+             view->addSquare(name);
+            acbuilding->notifyObservers();
+            squareNum++;
         }
     }
 }

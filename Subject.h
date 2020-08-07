@@ -7,10 +7,9 @@ class Observer;
 
 class Subject {
     std::vector<std::shared_ptr<Observer>> observers;
-  protected: 
-    virtual void notifyObservers();
   public:
-    void attach(<std::shared_ptr<Observer> o);  
+    void attach(std::shared_ptr<Observer> o);  
+    virtual void notifyObservers();
 };
 
 #endif
