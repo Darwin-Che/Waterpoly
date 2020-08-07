@@ -3,10 +3,9 @@
 #include "Player.h"
 #include "Square.h"
 #include "Building.h"
-#include "Gym.h"
 #include "AcademicBuilding.h"
-#include "Residence.h"
 #include "Board.h"
+#include "VisitStrategy.h"
 #include <vector>
 #include <map>
 #include <string>
@@ -121,6 +120,57 @@ std::pair<std::string, int> Model::auctionHelper()
     }
 
     return std::make_pair(maxOfferer, maxOffer);
+}
+
+void Model::getInfo(std::shared_ptr<Square> s)
+{
+    std::shared_ptr<Building> b = std::dynamic_pointer_cast<Building>(s);
+    std::shared_ptr<AcademicBuilding> ab = std::dynamic_pointer_cast<AcademicBuilding>(s);
+    if (ab != nullptr) {
+        int fee = ab->getImprovementFee();
+        if (board->inMonopoly(ab->getName()) && ab->getImprovementLevel() == 0)
+            fee = fee * 2;
+        mout << ab->getName() << "(Academic Building): Owner - " << board->getOwner(ab->getName())
+            << " ; Mortgaged - " << std::boolalpha << ab->getIsMortgaged()
+            << " ; ImproveLevel - " << ab->getImprovementLevel()
+            << " ; Rent - " << fee << std::endl;
+        mout << "Monopoly block: ";
+        // output all names of the block
+        // output a list of numbers
+    }
+    else if (b != nullptr)
+    {
+        std::string fee;
+        if (b->getName() == "PAC" || b->getName() == "CIF")
+        {
+            if (board->numNeighbourOwned() == 1) fee = "four times dice";
+            if (board->numNeighbourOwned() == 2) fee = "ten times dice";
+        }
+        if (b->getName() == "MKV" || b->getName() == "UWP" || b->getName() == "V1" || b->getName() == "REV")
+        {
+            int numOwned = board->numNeighbourOwned();
+            if (numOwned == 1)
+                fee = "25";
+            else if (numOwned == 2)
+                fee = "50";
+            else if (numOwned == 3)
+                fee = "100";
+            else
+                fee = "200";
+        }
+        mout << b->getName() << "(Building): Owner - " << board->getOwner(ab->getName())
+            << " ; Mortgaged - " << std::boolalpha << ab->getIsMortgaged()
+            << " ; ImproveLevel - " << ab->getImprovementLevel()
+            << " ; Rent - " << fee << std::endl;
+        mout << "Monopoly block: ";
+        // output all names of the block
+        // output a list of numbers
+    }
+    else 
+    {
+        mout << s->getName() << "(Square)" << std::endl;
+        // output description
+    }
 }
 
 Model::Model(std::istream &tin, std::ostream &tout)
@@ -476,16 +526,36 @@ void Model::auctionBuilding(const std::string &bn)
 
 void Model::getInfo()
 {
-
+    for (auto & p : playerOrder)
+    {
+        getInfo(p);
+    }
 }
 
 void Model::getInfo(const std::string &pn)
 {
-
+    std::shared_ptr<Player> p = allPlayers[pn];
+    std::shared_ptr<Square> s = board->getSquare(p->getPosition());
+    mout << "Player " << pn << " (" << p->getSymbol() << ") "<< " is at " << s->getName()
+        << " Money - " << p->getMoney()
+        << " Debt - " << p->getDebt() << (p->getDebt() > 0 ? " toward " + p->getDebtOwner() : "")
+        << " Jailed - " << std::boolalpha << p->getIsJailed() << (p->getIsJailed() ? " for " + p->getNumJailed() + " turns" : "")
+        << " Cups - " << p->getNumCups() << std::endl;
+    mout << "All Assets: " << std::endl;
+    for (auto & s: board->getAssets(pn))
+    {
+        mout << "\t";
+        getInfo(s);
+    }
 }
 
 void Model::save(std::ostream &out)
 {
-
+    out << playerOrder.size() << std::endl;
+    for (auto & pn : playerOrder) {
+        std::shared_ptr<Player> p = allPlayers[pn];
+        out << p->getName() << " " << p->getSymbol() << " " << p->getNumCups() << " " << p->getMoney() << " " << p->getPosition() << std::endl;
+    }
+    for (auto & s : )
 }
 

@@ -11,12 +11,12 @@
 class View;
 class Board;
 class Player;
-class Strategy;
+class VisitStrategy;
 class Square;
 
 class Model
 {
-    std::vector<Strategy> strategies;
+    std::vector<VisitStrategy> strategies;
     std::istream &min;
     std::ostream &mout;
     std::shared_ptr<Board> board;
@@ -29,10 +29,6 @@ class Model
     std::pair<std::string, int> auctionHelper();
 
     void getInfo(std::shared_ptr<Square> s);
-    void getInfo(std::shared_ptr<Building> b);
-    void getInfo(std::shared_ptr<Gym> g);
-    void getInfo(std::shared_ptr<Residence> r);
-    void getInfo(std::shared_ptr<AcademicBuilding> a);
 public:
     Model(std::istream &tin, std::ostream &tout);
     /************** Methods called by Controller **************/
