@@ -1,20 +1,19 @@
 #include "Residence.h"
 
-Residence::Residence(const std::string name, int location,
-        const std::string owner, int purchaseCost,
-        bool isMortgaged, const std::vector<int>& neighbourIndice)
-    : Building(name, location, owner, purchaseCost,
-            isMortgaged, neighbourIndice) {}
+Residence::Residence(const std::string& name, int location,
+        const std::string& description,
+        int purchaseCost, bool isMortgaged)
+    : Building(name, location, description, purchaseCost, isMortgaged) {}
 
-int Residence::getFee() const {
-    int numOwned = numNeighbourOwned();
-    if (numOwned == 0)
-        return 25;
-    else if (numOwned == 1)
-        return 50;
-    else if (numOwned == 2)
-        return 100;
-    else
-        return 200;
+std::string Residence::getInfo() const 
+{
+    return getName() + "(Residence)"
+                     + " ; Mortgaged - " + (getIsMortgaged() ? "true" : "false")
+                     + " ; Cost Information: \n"
+                     + " \t Purchase Cost: " + std::to_string(getPurchaseCost())
+                     + " \t Tuition with owning more: " + std::to_string(25) 
+                     + " " + std::to_string(50)
+                     + " " + std::to_string(100)
+                     + " " + std::to_string(200)
+                     + " \n";
 }
-

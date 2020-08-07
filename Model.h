@@ -4,31 +4,53 @@
 #include <memory>
 #include <string>
 #include <map>
+#include <vector>
 #include <iostream>
 #include "Player.h"
 
 class View;
 class Board;
 class Player;
-class Strategy;
+class VisitStrategy;
 class Square;
 
 class Model
 {
-    std::map<int, Strategy> strategies;
+    std::vector<VisitStrategy> strategies;
     std::istream &min;
     std::ostream &mout;
     std::shared_ptr<Board> board;
     std::map<std::string, std::shared_ptr<Player>> allPlayers;
     std::vector<std::string> playerOrder;
 
-    bool squareTradable(std::shared_ptr<Square> s);
-    void payDebt(std::shared_ptr<Player> p1);
-    bool deductMoney(std::shared_ptr<Player> p, int price, const std::string& debtor);
+    // check if the square is a building and is un mortgaged and does not have improvement
+    // return true is so, falso otherwise
+    bool squareTradable(std::shared_ptr<Square> s) noexcept;
+
+    // check if p1 is in debt and can pay debt, if so, paydebt to debtor, otherwise do nothing 
+    void payDebt(std::shared_ptr<Player> p1) noexcept;
+
+    // deduct money price from p:
+    // if p is not in debt, p can pay price, pay directly
+    // if p is not in debt, p cannot pay, add price to debt, take debtor
+    // if p is in debt, then debtor should be the same, and add debt up
+    bool deductMoney(std::shared_ptr<Player> p, int price, const std::string& debtor) noexcept;
+
+    // deal with interaction loop with Players
+    std::pair<std::string, int> auctionHelper() noexcept;
+
+    // wrapper around s's getInfo, add some current owner,rent information
+    void getInfo(std::shared_ptr<Square> s) noexcept;
 
 public:
     Model(std::istream &tin, std::ostream &tout);
     /************** Methods called by Controller **************/
+
+    // call corresponding strategy
+    void playerProceed(const std::string &pn, int steps) noexcept;
+
+    // directly gotoTims
+    void gotoTims(const std::string &pn) noexcept;
 
     // let the view show the message, do nothing else
     // provide noexcept guarantee
@@ -59,20 +81,20 @@ public:
     // strong exception guarentee
     bool bankrupt(const std::string &pn) noexcept;
 
-    void auctionPlayer(const std::string &pn);
+    void auctionPlayer(const std::string &pn) noexcept;
 
-    void auctionBuilding(const std::string &pn);
+    void auctionBuilding(const std::string &bn) noexcept;
 
     // check if able and output all player information by view
-    void getInfo();
+    void getInfo() noexcept;
 
     // check if able and output certain player information by view
-    void getInfo(const std::string &pn);
+    void getInfo(const std::string &pn) noexcept;
 
     // save the game progress to out, in the pnorder's order
     // pnorder is a list of player names
     // strong exception guarentee: could throw if ostream cannot be written
-    void save(std::ostream &out);
+    void save(std::ostream &out) noexcept;
 };
 
 #endif

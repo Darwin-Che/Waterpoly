@@ -7,12 +7,13 @@ class Building : public Square {
     bool isMortgaged;
 
   public:
-    Building(const std::string& name, int location,
-            int purchaseCost, bool isMortgaged);
+    Building(const std::string& name, int location, const std::string &description,
+        int purchaseCost, bool isMortgaged);
     int getPurchaseCost() const;
     bool getIsMortgaged() const;
     void setIsMortgaged(bool isMortgaged);
     virtual int calculateNetworth() const;
+    virtual std::string getInfo() const;
 };
 
 #endif

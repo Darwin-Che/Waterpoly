@@ -3,11 +3,11 @@
 #include "Building.h"
 
 class Residence : public Building {
-  public:
-    Residence(const std::string name, int location,
-            const std::string owner, int purchaseCost,
-            bool isMortgaged, const std::vector<int>& neighbourIndice);
-    virtual int getFee() const override; 
+public:
+    Residence(const std::string& name, int location,
+        const std::string& description,
+        int purchaseCost, bool isMortgaged);
+    virtual std::string getInfo() const;
 };
 
 #endif

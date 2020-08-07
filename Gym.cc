@@ -1,22 +1,17 @@
 #include "Gym.h"
-#include <cstdlib>
 
-Gym::Gym(const std::string name, int location,
-        const std::string owner, int purchaseCost,
-        bool isMortgaged, const std::vector<int>& neighbourIndice)
-    : Building(name, location, owner purchaseCost,
-            isMortgaged, neighbourIndice) {}
+Gym::Gym(const std::string& name, int location,
+        const std::string& description,
+        int purchaseCost, bool isMortgaged)
+    : Building(name, location, description, purchaseCost, isMortgaged) {}
 
-int Gym::getFee() const {
-    int roll1 = rand() % 6;
-    if (roll1 == 0)
-        roll1 = 6;
-    int roll2 = rand() % 6;
-    if (roll2 == 0)
-        roll2 = 6;
-    if (numNeighbourOwned() == 0)
-        return (roll1 + roll2) * 4;
-    else
-        return (roll1 + roll2) * 10;
+std::string Gym::getInfo() const 
+{
+    return getName() + "(Gym)"
+                     + " ; Mortgaged - " + (getIsMortgaged() ? "true" : "false")
+                     + " ; Cost Information: \n"
+                     + " \t Purchase Cost: " + std::to_string(getPurchaseCost())
+                     + " \t Tuition with owning more: " 
+                     + " one - four times dice; two - ten times dice"
+                     + " \n";
 }
-
