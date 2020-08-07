@@ -488,9 +488,9 @@ bool Model::bankrupt(const std::string &pn)
         else
         {
             show("Your properties are being transfered to Debtor: " + allPlayers[pn]->getDebtOwner());
-            std::shared_ptr<Player> py = allPlayers[allPlayers[pn]->getDebtOwner()];
+            std::string pyn = allPlayers[pn]->getDebtOwner();
             // transfer money
-            py->setMoney(py->getMoney() + allPlayers[pn]->getMoney());
+            allPlayers[pyn]->setMoney(allPlayers[pyn]->getMoney() + allPlayers[pn]->getMoney());
             allPlayers[pn]->setMoney(0);
             // transfer properties
             for (auto &s : board->getAssets(pn))
@@ -502,7 +502,7 @@ bool Model::bankrupt(const std::string &pn)
 
                 if (b->getIsMortgaged())
                 {
-                    show("Player " + maxOfferer + " would you like to unmortgage this property: " + b->getName() + "? ( yes/no )");
+                    show("Player " + pyn + " would you like to unmortgage this property: " + b->getName() + "? ( yes/no )");
                     std::string ans;
                     while (true)
                     {
@@ -517,9 +517,9 @@ bool Model::bankrupt(const std::string &pn)
                         else
                         {
                             if (ans == "yes")
-                                deductMoney(allPlayers[maxOfferer], b->getPurchaseCost() * 0.6, "BANK");
+                                deductMoney(allPlayers[pyn], b->getPurchaseCost() * 0.6, "BANK");
                             else if (ans == "no")
-                                deductMoney(allPlayers[maxOfferer], b->getPurchaseCost() * 0.1, "BANK");
+                                deductMoney(allPlayers[pyn], b->getPurchaseCost() * 0.1, "BANK");
                             else
                                 show("Your command is invalid! Please put in \"yes\" or \"no\": ");
                         }
@@ -529,7 +529,7 @@ bool Model::bankrupt(const std::string &pn)
                 {
                     ab->setImprovementLevel(0);
                 }
-                board->setOwner(b->getName(), allPlayers[maxOfferer]);
+                board->setOwner(b->getName(), allPlayers[pyn]);
             }
         }
 
