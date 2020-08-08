@@ -170,11 +170,13 @@ void TextView::movePlayer(char player, int newlocation){
     vector<int> new2D = get2Dlocation(newlocation);
     Blocks[old2D[0]][old2D[1]]->removePlayer(player);
     Blocks[new2D[0]][new2D[1]]->addPlayer(player);
+    players[player]=newlocation;
 }
 
 void TextView::changeImprovement(int location, int newimprovement) {
     vector<int> loc2D = get2Dlocation(location);
     Blocks[loc2D[0]][loc2D[1]]->changeImprovement(newimprovement);
+    improvements[location] = newimprovement;
 }
 
 // update the blocks
