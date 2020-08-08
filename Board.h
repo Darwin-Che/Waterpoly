@@ -25,7 +25,7 @@ class Board {
     int getTotalSquareNum();
 
     // return player's net asset woth
-    int calcNetworth(std::string playername);
+    int calcNetworth(std::shared_ptr<Player> player);
 
     // return the squares owned by the player
     std::vector<std::shared_ptr<Square>> getAssets(std::string player);

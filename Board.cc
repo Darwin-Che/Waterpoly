@@ -15,13 +15,13 @@ int Board::getTotalSquareNum(){
 }
 
 // return player's net asset worth
-int Board::calcNetworth(std::string playername){
-    int worth = 0;
+int Board::calcNetworth(std::shared_ptr<Player> player){
+    int worth = player->getMoney();
     for (int i=0; i<board.size(); i++){
         shared_ptr<Player> owner = ownershipList[i];
-        if(owner != nullptr && owner->getName() == playername){
+        if(owner != nullptr && owner->getName() == player->getName()){
             shared_ptr<Building> build = dynamic_pointer_cast<Building>(board[i]);
-            worth+=build->calculateNetworth();
+            worth += build->calculateNetworth();
         }
     }
     return worth;

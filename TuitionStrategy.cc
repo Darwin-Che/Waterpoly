@@ -18,7 +18,7 @@ void TuitionStrategy::acceptVisitor(std::shared_ptr<Player> player,
     if (choice == "1") {
         payment = 300;
     } else {
-        int networth = board->calcNetworth(player->getName());
+        int networth = board->calcNetworth(player);
         payment = static_cast<int>(0.1 * networth);
     }
 
