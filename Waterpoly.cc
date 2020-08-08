@@ -23,6 +23,20 @@
 
 using namespace std;
 
+bool findPlayer(char symbol, string name, vector<shared_ptr<Player>> Players,ostream &out){
+    for (auto p:Players){
+        if (p->getName() == name){
+            out << "The name " << name << " already exists" << endl;
+            return true;
+        }
+        else if (p->getSymbol() == symbol){
+            out << "The symbol " << symbol << " already exists" << endl;
+            return true;
+        }
+    }
+    return false;
+}
+
 int main(int argc, char *argv[])
 {
     std::string loadfilename;
@@ -234,6 +248,10 @@ int main(int argc, char *argv[])
         string name, symbol;
         cout << "(Player #" << (i + 1) << ") Please enter your symbol and name:" << endl;
         cin >> symbol >> name;
+        while(findPlayer( symbol , name , Players , out)){
+            cout << "(Player #" << (i + 1) << ") Please enter your symbol and name:" << endl;
+            cin >> symbol >> name;
+        }
         auto player = make_shared<Player>(symbol[0], name);
         player->attach(view);
         view->addPlayer(symbol[0]);
