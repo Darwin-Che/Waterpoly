@@ -76,14 +76,8 @@ int main(int argc, char *argv[])
         {
             auto square = make_shared<Square>(name, squareNum, description);
             board.push_back(square);
-<<<<<<< HEAD
             view->addSquare(name,-1);
             if (name == "SLC"){
-=======
-            view->addSquare(name);
-            if (name == "SLC")
-            {
->>>>>>> 7cbe48ee37059c1c8a3e48b08ada66c2f426932c
                 strategies.push_back(make_shared<SLCStrategy>());
             }
             else if (name == "COLLECT OSAP")
@@ -133,13 +127,8 @@ int main(int argc, char *argv[])
             else
             {
                 monopolyBlock[blockName].push_back(gym);
-<<<<<<< HEAD
             } 
             view->addSquare(name,-1);
-=======
-            }
-            view->addSquare(name);
->>>>>>> 7cbe48ee37059c1c8a3e48b08ada66c2f426932c
             strategies.push_back(make_shared<GymStrategy>());
         }
         else if (command == "residence")
@@ -160,13 +149,8 @@ int main(int argc, char *argv[])
             else
             {
                 monopolyBlock[blockName].push_back(residence);
-<<<<<<< HEAD
             } 
             view->addSquare(name,-1);
-=======
-            }
-            view->addSquare(name);
->>>>>>> 7cbe48ee37059c1c8a3e48b08ada66c2f426932c
             strategies.push_back(make_shared<ResidenceStrategy>());
         }
         else if (command == "academicbuilding")
