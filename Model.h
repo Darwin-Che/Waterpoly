@@ -43,6 +43,9 @@ class Model
     // wrapper around s's getInfo, add some current owner,rent information
     void getInfo(std::shared_ptr<Square> s);
 
+    // wrapper around auction building
+    void sellBuilding(std::string pn, std::string bn);
+
 public:
     Model(std::istream &tin, std::ostream &tout);
 
