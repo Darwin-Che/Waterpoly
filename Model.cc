@@ -79,7 +79,7 @@ bool Model::squareTradable(std::shared_ptr<Square> s)
         return false;
     }
 
-    bool checkProperty_Impr = (sAcademic != nullptr) || (sAcademic->getImprovementLevel() == 0);
+    bool checkProperty_Impr = (sAcademic != nullptr) && (sAcademic->getImprovementLevel() == 0);
     if (!checkProperty_Impr)
     {
         show("All improvement of " + s->getName() + " must first be sold!");
