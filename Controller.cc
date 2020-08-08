@@ -123,12 +123,12 @@ void Controller::takeTurn(std::istream &in)
             if (n1)
             {
                 // buy
-                model->trade(receiver, curPlayerName, arg2, a1);
+                model->trade(receiver, curPlayerName, arg2, a1, true);
             }
             else if (n2)
             {
                 // sell
-                model->trade(curPlayerName, receiver, arg1, a2);
+                model->trade(curPlayerName, receiver, arg1, a2, false);
             }
             else
             {

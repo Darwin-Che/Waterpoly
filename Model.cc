@@ -266,7 +266,6 @@ void Model::playerProceed(const std::string &pn, int steps)
             {
                 strategies[p->getPosition()]->acceptVisitor(p, board, min, mout);
             }
-
         }
     }
 }
@@ -276,7 +275,6 @@ void Model::gotoTims(const std::string &pn)
     allPlayers[pn]->setIsJailed(true);
     allPlayers[pn]->setNumJailed(0);
     allPlayers[pn]->setPosition(board->getSquareLocation("DC Tims Line"));
-
 }
 
 void Model::show(const std::string &message)
@@ -310,7 +308,35 @@ std::string Model::nextPlayerName(const std::string &pn)
     }
 }
 
-void Model::trade(const std::string &pn1, const std::string &pn2, const std::string &property, int price)
+bool Model::askTrade(const std::string &pn)
+{
+    show("Do you want to trade? " + (receiver ? pn1 : pn2));
+    std::string ans;
+    while (true)
+    {
+        if (!(min >> ans))
+        {
+            if (min.eof())
+                break;
+            min.clear();
+            min.ignore();
+            show("Your command is invalid! Please put in yes/no:");
+        }
+        else
+        {
+            if (ans == "yes" || ans == "no")
+                break;
+            else
+                show("Your command is invalid! Please put in yes/no:");
+        }
+    }
+    if (ans == "yes")
+        return true;
+    else
+        return false;
+}
+
+void Model::trade(const std::string &pn1, const std::string &pn2, const std::string &property, int price, bool receiver)
 {
     std::shared_ptr<Square> s = board->getSquareBuilding(property);
 
@@ -337,12 +363,21 @@ void Model::trade(const std::string &pn1, const std::string &pn2, const std::str
     if (!squareTradable(s))
         return;
 
-    // trade
-    allPlayers[pn1]->setMoney(allPlayers[pn1]->getMoney() + price);
-    allPlayers[pn2]->setMoney(allPlayers[pn2]->getMoney() - price);
-    board->setOwner(property, allPlayers[pn2]);
+    // ask receiver
+    bool result = askTrade(receiver ? pn1 : pn2);
+    if (ans == "yes")
+    {
+        // trade
+        allPlayers[pn1]->setMoney(allPlayers[pn1]->getMoney() + price);
+        allPlayers[pn2]->setMoney(allPlayers[pn2]->getMoney() - price);
+        board->setOwner(property, allPlayers[pn2]);
 
-    payDebt(allPlayers[pn1]);
+        payDebt(allPlayers[pn1]);
+    }
+    else
+    {
+        show("Trade offer is rejected!");
+    }
 }
 
 void Model::trade(const std::string &pn1, const std::string &pn2, const std::string &property1, const std::string &property2)
@@ -384,9 +419,20 @@ void Model::trade(const std::string &pn1, const std::string &pn2, const std::str
     if (!squareTradable(s2))
         return;
 
-    // trade
-    board->setOwner(property1, allPlayers[pn2]);
-    board->setOwner(property2, allPlayers[pn1]);
+    // ask receiver
+    bool result = askTrade(pn2);
+    if (ans == "yes")
+    {
+        // trade
+        board->setOwner(property1, allPlayers[pn2]);
+        board->setOwner(property2, allPlayers[pn1]);
+
+        payDebt(allPlayers[pn1]);
+    }
+    else
+    {
+        show("Trade offer is rejected!");
+    }
 }
 
 void Model::improve(const std::string &pn, const std::string &property, bool action)
@@ -455,7 +501,6 @@ void Model::improve(const std::string &pn, const std::string &property, bool act
         // see if debt can be paid
         payDebt(allPlayers[pn]);
     }
-
 }
 
 void Model::mortgage(const std::string &pn, const std::string &property, bool action)
@@ -664,7 +709,6 @@ void Model::auctionPlayer(const std::string &pn)
             board->setOwner(b->getName(), bank);
         }
     }
-
 }
 
 void Model::sellBuilding(std::string pn, std::string bn)
@@ -792,7 +836,6 @@ void Model::auctionBuilding(const std::string &bn)
         std::shared_ptr<Player> bank;
         board->setOwner(b->getName(), bank);
     }
-
 }
 
 void Model::getInfo()
@@ -814,7 +857,8 @@ void Model::getInfo(const std::string &pn)
          << " Jailed - " << std::boolalpha << p->getIsJailed() << (p->getIsJailed() ? (" for " + std::to_string(p->getNumJailed()) + " turns") : "")
          << " Cups - " << p->getNumCups() << std::endl;
     auto all = board->getAssets(pn);
-    if (all.size() != 0) mout << "All Assets: " << std::endl;
+    if (all.size() != 0)
+        mout << "All Assets: " << std::endl;
     for (auto &s : board->getAssets(pn))
     {
         mout << "\t";

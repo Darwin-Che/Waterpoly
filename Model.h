@@ -46,6 +46,8 @@ class Model
     // wrapper around auction building
     void sellBuilding(std::string pn, std::string bn);
 
+    bool askTrade(const std::string &pn);
+
 public:
     Model(std::istream &tin, std::ostream &tout);
 
@@ -78,7 +80,7 @@ public:
 
     // playername1 give playername2 property, and get price back
     // noexception, but need to check if the action can be done (bankruptcy)
-    void trade(const std::string &pn1, const std::string &pn2, const std::string &property, int price);
+    void trade(const std::string &pn1, const std::string &pn2, const std::string &property, int price, bool receiver);
 
     // playername1 give playername2 property1, and get property2 back
     void trade(const std::string &pn1, const std::string &pn2, const std::string &property1, const std::string &property2);
