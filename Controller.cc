@@ -52,11 +52,12 @@ void Controller::takeTurn(std::istream &in)
                 if (d1 == d2)
                 {
                     model->show("This is a double! ");
-                    model->show("You have already rolled " + std::to_string(cstate->numDoubleRoll) + " doubles!.");
+                    model->show("You have already rolled " + std::to_string(cstate->numDoubleRoll + 1) + " doubles!.");
                     // prevent roll double three times
                     if (cstate->numDoubleRoll < 2)
                     {
                         cstate->numDoubleRoll++;
+                        model->playerProceed(curPlayerName, d1 + d2);
                     }
                     else
                     {
@@ -69,9 +70,8 @@ void Controller::takeTurn(std::istream &in)
                 else
                 {
                     cstate->canRoll = false;
+                    model->playerProceed(curPlayerName, d1 + d2);
                 }
-                // notify view to display the dice number
-                model->playerProceed(curPlayerName, d1 + d2);
             }
             else
             {
@@ -80,6 +80,10 @@ void Controller::takeTurn(std::istream &in)
         }
         else if (command == "next")
         {
+            if (cstate->canRoll) {
+                model->show("You must first roll!");
+                continue;
+            }
             std::string nextPlayer = model->nextPlayerName(curPlayerName);
             if (nextPlayer != curPlayerName)
             {

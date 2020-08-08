@@ -195,6 +195,8 @@ void Model::getInfo(std::shared_ptr<Square> s)
         std::string fee;
         if (b->getName() == "PAC" || b->getName() == "CIF")
         {
+            if (board->numNeighbourOwned(b->getName()) == 0)
+                fee = "Zero (currently owned by Bank)";
             if (board->numNeighbourOwned(b->getName()) == 1)
                 fee = "four times dice";
             if (board->numNeighbourOwned(b->getName()) == 2)
@@ -203,6 +205,8 @@ void Model::getInfo(std::shared_ptr<Square> s)
         if (b->getName() == "MKV" || b->getName() == "UWP" || b->getName() == "V1" || b->getName() == "REV")
         {
             int numOwned = board->numNeighbourOwned(b->getName());
+            if (numOwned == 0)
+                fee = "Zero (currently owned by Bank)";
             if (numOwned == 1)
                 fee = "25";
             else if (numOwned == 2)
@@ -212,9 +216,10 @@ void Model::getInfo(std::shared_ptr<Square> s)
             else
                 fee = "200";
         }
-        mout << b->getName() << "'s Owner - " << board->getOwner(ab->getName()) << std::endl;
+        std::shared_ptr<Player> p = board->getOwner(b->getName());
+        mout << b->getName() << "'s Owner - " << (p.get() == nullptr ? "BANK" : p->getName()) << std::endl;
         mout << "Current Rent - " << fee << std::endl;
-        mout << "Monopoly block: ";
+        // mout << "Monopoly block: ";
         // output all names of the block
         // output a list of numbers
     }
@@ -234,7 +239,6 @@ void Model::playerProceed(const std::string &pn, int steps)
     if (p->getIsJailed())
     {
         strategies[board->getSquareLocation("DC Tims Line")]->acceptVisitor(p, board, min, mout);
-        view->drawBoard();
     }
     else
     {
@@ -249,7 +253,7 @@ void Model::playerProceed(const std::string &pn, int steps)
         {
             strategies[p->getPosition()]->acceptVisitor(p, board, min, mout);
         }
-        view->drawBoard();
+
         while (prevPos != p->getPosition() && !(p->getIsJailed()))
         {
             strategies[board->getSquareLocation("COLLECT OSAP")]->acceptVisitor(p, board, min, mout);
@@ -262,7 +266,7 @@ void Model::playerProceed(const std::string &pn, int steps)
             {
                 strategies[p->getPosition()]->acceptVisitor(p, board, min, mout);
             }
-            view->drawBoard();
+
         }
     }
 }
@@ -271,8 +275,8 @@ void Model::gotoTims(const std::string &pn)
 {
     allPlayers[pn]->setIsJailed(true);
     allPlayers[pn]->setNumJailed(0);
-    strategies[board->getSquareLocation("DC Times Line")]->acceptVisitor(allPlayers[pn], board, min, mout);
-    view->drawBoard();
+    allPlayers[pn]->setPosition(board->getSquareLocation("DC Tims Line"));
+
 }
 
 void Model::show(const std::string &message)
@@ -451,7 +455,7 @@ void Model::improve(const std::string &pn, const std::string &property, bool act
         // see if debt can be paid
         payDebt(allPlayers[pn]);
     }
-    view->drawBoard();
+
 }
 
 void Model::mortgage(const std::string &pn, const std::string &property, bool action)
@@ -577,7 +581,7 @@ bool Model::bankrupt(const std::string &pn)
         allPlayers[pn]->dropOut();
         allPlayers.erase(pn);
         playerOrder.erase(std::remove(playerOrder.begin(), playerOrder.end(), pn), playerOrder.end());
-        view->drawBoard();
+
         return true;
     }
     else
@@ -660,7 +664,7 @@ void Model::auctionPlayer(const std::string &pn)
             board->setOwner(b->getName(), bank);
         }
     }
-    view->drawBoard();
+
 }
 
 void Model::sellBuilding(std::string pn, std::string bn)
@@ -788,7 +792,7 @@ void Model::auctionBuilding(const std::string &bn)
         std::shared_ptr<Player> bank;
         board->setOwner(b->getName(), bank);
     }
-    view->drawBoard();
+
 }
 
 void Model::getInfo()
@@ -809,11 +813,12 @@ void Model::getInfo(const std::string &pn)
          << " Debt - " << p->getDebt() << (p->getDebt() > 0 ? " toward " + p->getDebtOwner() : "")
          << " Jailed - " << std::boolalpha << p->getIsJailed() << (p->getIsJailed() ? (" for " + std::to_string(p->getNumJailed()) + " turns") : "")
          << " Cups - " << p->getNumCups() << std::endl;
-    mout << "All Assets: " << std::endl;
+    auto all = board->getAssets(pn);
+    if (all.size() != 0) mout << "All Assets: " << std::endl;
     for (auto &s : board->getAssets(pn))
     {
         mout << "\t";
-        getInfo(s);
+        mout << s->getInfo() << std::endl;
     }
 }
 
