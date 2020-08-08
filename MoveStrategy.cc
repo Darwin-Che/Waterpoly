@@ -7,7 +7,7 @@ MoveStrategy::MoveStrategy(int moveAmount)
 // Player will move an amount equal to the private field moveAmount
 void MoveStrategy::acceptVisitor(std::shared_ptr<Player> player,
         std::shared_ptr<Board> board, std::istream& in, std::ostream& out) {
-    int newPosition = player->getPosition() + moveAmount;
+    int newPosition = player->getPosition() + moveAmount + board->getTotalSquareNum();
     newPosition = newPosition % board->getTotalSquareNum();
     player->setPosition(newPosition);
     std::string squareName = board->getSquare(newPosition)->getName();
