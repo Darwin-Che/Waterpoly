@@ -90,9 +90,37 @@ void TextView::Block::setContent(const int & imp,std::string & name){
 }
 
 // add a player's symbol to the block
-void TextView::Block::setPlayer(const char & symbol){
+void TextView::Block::addPlayer(const char & symbol){
+    playerSymbols.push_back(symbol);
     content[blockH-1][playerNum] = symbol;
     playerNum++;
+}
+
+// add a player's symbol to the block
+void TextView::Block::removePlayer(const char & symbol){
+    if (find(playerSymbols.begin(), playerSymbols.end(), symbol) != playerSymbols.end()){
+        playerSymbols.erase(symbol);
+        for (int i=0; i<blockW){
+            content[blockH-1][i] = ' ';
+        }
+        playerNum--;
+        for (int i=0; i<playerNum; i++){
+            content[blockH-1][i] = playerSymbols[i];
+        }
+    }
+    
+}
+
+// change the number of improvements
+void TextView::Block::changeImprovement(int newimprovement){
+    for(int i=0; i<blockW ; i++){
+        content[0][i]=' ';
+    }
+    if (newimprovement>=0){
+        for(int i=0; i<newimprovement ; i++){
+            content[0][i]='I';
+        }
+    }
 }
 
 // get the i-th line of the block
@@ -128,23 +156,41 @@ TextView::TextView(int height, int width):View(height,width){
     for (int i=1 ; i< actualH-1; i++){
         Blocks[i][actualW-2]->setRightLine();
     }
+    initialized = false;
+}
+
+void TextView::movePlayer(char player, int newlocation){
+    int oldposition = players[player];
+    vector<int> old2D = get2Dlocation(oldposition);
+    vector<int> new2D = get2Dlocation(newlocation);
+    Blocks[old2D[0]][old2D[1]]->removePlayer(player);
+    Blocks[new2D[0]][new2D[1]]->addPlayer(player);
+}
+
+void TextView::changeImprovement(int location, int newimprovement) {
+    int loc2D = get2Dlocation(location);
+    Blocks[loc2D[0]][loc2D[1]]->changeImprovement(int newimprovement);
 }
 
 // update the blocks
-void TextView::updateBlocks(){
-    for (auto it:players){ // update the players
-        vector<int> position = get2Dlocation(it.second);
-        Blocks[position[0]][position[1]]->setPlayer(it.first);
-    }
+void TextView::initializeBlocks(){
     for (int i=0; i<2*(width+height); i++){ // update the squares
         vector<int> position = get2Dlocation(i);
         Blocks[position[0]][position[1]]->setContent(improvements[i],squareName[i]);
     }
+    for (auto it:players){ // update the players
+        vector<int> position = get2Dlocation(it.second);
+        Blocks[position[0]][position[1]]->addPlayer(it.first);
+    }
 }
 
 // draw the view
-void TextView::drawBoard(){
-    updateBlocks();
+void TextView::initializeBoard(){
+    if (!initialized){
+        // if the first time to draw a boardx
+        initializeBlocks();
+        initialized = true;
+    }
 
     // draw an overline
     for (int i=0; i<=actualW*(gridW+1); i++){

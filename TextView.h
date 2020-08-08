@@ -5,15 +5,16 @@
 
 class TextView: public View{
     int gridH, gridW;
+    bool initialized;
 
     // the string representation of each square
     class Block{
         // dimensions of the block
         int blockH, blockW;
-        // number of improvements, -1 stand for non-academic building
-        int improvement;
         // number of players in the block
         int playerNum;
+        // the char vector that stores each player on this block
+        vector<char> playerSymbols;
         // the string vector that stores each blockline's information
         std::vector<std::string> content;
         // helper function: minimum
@@ -27,7 +28,9 @@ class TextView: public View{
         // fill in Square information 
         void setContent(const int & imp,std::string & name);
         // add a player's symbol to the block
-        void setPlayer(const char & symbol);
+        void addPlayer(const char & symbol);
+        // remove a player's symbol from the block
+        void removePlayer(const char & symbol);
         // get the i-th line of the block
         std::string getLine(const int & i);
         // get the height of the block
@@ -38,17 +41,24 @@ class TextView: public View{
         void setUnderLine();
         // draw a line in the rightmost column of the block
         void setRightLine();
+        // change the number of improvements
+        void changeImprovement(int newimprovement);
     };
     // 2d vector storing blocks
     // each block represents a square
     std::vector<std::vector<std::shared_ptr<Block> > > Blocks;
     // update the blocks
-    void updateBlocks();
+    void initializeBlocks();
+
+    virtual void movePlayer(char player, int newlocation) ;
+
+    virtual void changeImprovement(int location, int newimprovement) ;
+
+    // draw the view
+    virtual void drawBoard();
   public:
     // constructor
     TextView(int height, int widths);
-    // draw the view
-    virtual void drawBoard();
 };
 
 #endif
