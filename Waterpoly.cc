@@ -1,3 +1,4 @@
+
 #include "Controller.h"
 #include "Model.h"
 #include "Board.h"
@@ -76,8 +77,14 @@ int main(int argc, char *argv[])
         {
             auto square = make_shared<Square>(name, squareNum, description);
             board.push_back(square);
+<<<<<<< HEAD
             view->addSquare(name,-1);
             if (name == "SLC"){
+=======
+            view->addSquare(name, -1);
+            if (name == "SLC")
+            {
+>>>>>>> 27ffb3b7f01c30a56e38796742ef6b8aeb782318
                 strategies.push_back(make_shared<SLCStrategy>());
             }
             else if (name == "COLLECT OSAP")
@@ -127,7 +134,11 @@ int main(int argc, char *argv[])
             else
             {
                 monopolyBlock[blockName].push_back(gym);
+<<<<<<< HEAD
             } 
+=======
+            }
+>>>>>>> 27ffb3b7f01c30a56e38796742ef6b8aeb782318
             view->addSquare(name,-1);
             strategies.push_back(make_shared<GymStrategy>());
         }
@@ -149,7 +160,11 @@ int main(int argc, char *argv[])
             else
             {
                 monopolyBlock[blockName].push_back(residence);
+<<<<<<< HEAD
             } 
+=======
+            }
+>>>>>>> 27ffb3b7f01c30a56e38796742ef6b8aeb782318
             view->addSquare(name,-1);
             strategies.push_back(make_shared<ResidenceStrategy>());
         }

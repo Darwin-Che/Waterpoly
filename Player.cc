@@ -2,11 +2,12 @@
 
 // constructors
 Player::Player(char symbol, const std::string& name):symbol(symbol), name(name) {
+    money = 1500;
     position = 0;
     oldPosition = 0;
     numCups = 0;
-    numJailed = 0;
     isJailed = false;
+    numJailed = 0;
     debt = 0;
     debtOwner = "";
     isBankrupt = false;

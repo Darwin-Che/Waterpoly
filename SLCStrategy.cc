@@ -40,7 +40,7 @@ void SLCStrategy::acceptVisitor(std::shared_ptr<Player> player,
     int randomResult = rand() % 24;
     strategies[randomResult]->acceptVisitor(player, board, in, out);
     if (randomResult == 22) // Go To DC Tims Line is selected
-        player->setIsJailed() = true;
+        player->setIsJailed(true);
     strategies.pop_back();
     strategies.pop_back();
 }
