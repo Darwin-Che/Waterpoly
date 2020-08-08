@@ -102,15 +102,16 @@ void TextView::Block::removePlayer(const char & symbol){
     cout << "removing "<< symbol<<endl;
     auto index = find(playerSymbols.begin(), playerSymbols.end(), symbol);
     if (index != playerSymbols.end()){
-        cout << "old players:";
+        cout << "old players: ";
         for (int i=0; i<playerSymbols.size(); i++){
             cout<< playerSymbols[i]<<" ";
         }
         playerSymbols.erase(index);
-        cout << ",new players:";
+        cout << ",new players: ";
         for (int i=0; i<playerSymbols.size(); i++){
             cout<< playerSymbols[i]<<" ";
         }
+        cout << endl;
         for (int i=0; i<blockW; i++){
             content[blockH-1][i] = ' ';
         }
