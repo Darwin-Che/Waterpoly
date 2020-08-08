@@ -166,10 +166,24 @@ void Controller::takeTurn(std::istream &in)
         }
         else if (command == "bankrupt")
         {
-            std::string nextName = model->nextPlayerName(curPlayerName);
-            bool success = model->bankrupt(curPlayerName);
+            std::string nextName = model->nextPlayerName(curPlayerName, true);
+            std::string doubleKill{""};
+            std::cout << nextName;
+            bool success = model->bankrupt(curPlayerName, doubleKill);
             if (success)
-                curPlayerName = nextName;
+            {
+                if (doubleKill == "")
+                {
+                    curPlayerName = nextName;
+                    cstate->canRoll = true;
+                    cstate->numDoubleRoll = 0;
+                }
+                else
+                {
+                    curPlayerName = doubleKill;
+                    cstate->canRoll = false;
+                }
+            }
             model->show("Current Active Player: " + curPlayerName);
         }
         else if (command == "assets")

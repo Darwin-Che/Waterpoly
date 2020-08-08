@@ -79,7 +79,7 @@ public:
     void show(const std::string &message);
 
     // check if the player does not own any money
-    std::string nextPlayerName(const std::string &pn);
+    std::string nextPlayerName(const std::string &pn, bool force = false);
 
     // playername1 give playername2 property, and get price back
     // noexception, but need to check if the action can be done (bankruptcy)
@@ -101,7 +101,7 @@ public:
     // 1. player property and debt; 2. allPlayer vector
     // if no, return false
     // strong exception guarentee
-    bool bankrupt(const std::string &pn);
+    bool bankrupt(const std::string &pn, std::string &doubleKill);
 
     void auctionPlayer(const std::string &pn);
 

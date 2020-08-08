@@ -1,0 +1,28 @@
+6
+1 11
+2 22
+3 33
+4 44
+5 55
+6 66
+roll 3 3
+yes
+roll 1 1
+yes
+roll 0 1
+yes
+next
+roll 0 1
+yes
+trade 11 1460 ECH
+yes
+next
+trade 11 1500 HH
+yes
+mortgage HH
+trade 11 60 PAS
+yes
+roll 2 4
+assests
+bankrupt
+

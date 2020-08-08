@@ -163,6 +163,11 @@ std::pair<std::string, int> Model::auctionHelper()
                 i = 0;
             }
         }
+        if (allPlayers[playerOrder[i]]->getIsBankrupt())
+        {
+            ++i;
+            continue;
+        }
         std::string pyn = playerOrder[i];
         if (pyn == maxOfferer)
         {
@@ -321,12 +326,12 @@ void Model::show(const std::string &message)
     mout << message << std::endl;
 }
 
-std::string Model::nextPlayerName(const std::string &pn)
+std::string Model::nextPlayerName(const std::string &pn, bool force)
 {
     if (!existPlayer(pn))
         return pn;
 
-    if (allPlayers[pn]->getDebt() == 0)
+    if (allPlayers[pn]->getDebt() == 0 || force)
     {
         std::vector<std::string>::iterator it = std::find(playerOrder.begin(), playerOrder.end(), pn);
         if (it != playerOrder.end())
@@ -593,7 +598,8 @@ void Model::mortgage(const std::string &pn, const std::string &property, bool ac
         return;
     }
 
-    if (!squareTradable(board->getSquareBuilding(property))) return;
+    if (!squareTradable(board->getSquareBuilding(property)))
+        return;
 
     // improve
     if (action)
@@ -643,13 +649,15 @@ void Model::mortgage(const std::string &pn, const std::string &property, bool ac
     }
 }
 
-bool Model::bankrupt(const std::string &pn)
+bool Model::bankrupt(const std::string &pn, std::string &doubleKill)
 {
     if (!existPlayer(pn))
         return false;
     if (allPlayers[pn]->getDebt() > 0)
     {
+        std::string pyn;
         show("You are able to bankrupt, preparing to drop out!");
+        allPlayers[pn]->dropOut();
         if (allPlayers[pn]->getDebtOwner() == "BANK")
         {
             show("Your properties are being auctioned!");
@@ -658,7 +666,7 @@ bool Model::bankrupt(const std::string &pn)
         else
         {
             show("Your properties are being transfered to Debtor: " + allPlayers[pn]->getDebtOwner());
-            std::string pyn = allPlayers[pn]->getDebtOwner();
+            pyn = allPlayers[pn]->getDebtOwner();
             // transfer money
             allPlayers[pyn]->setMoney(allPlayers[pyn]->getMoney() + allPlayers[pn]->getMoney());
             allPlayers[pn]->setMoney(0);
@@ -668,7 +676,8 @@ bool Model::bankrupt(const std::string &pn)
                 std::shared_ptr<Building> b = std::dynamic_pointer_cast<Building>(s);
                 if (b.get() == nullptr)
                     std::cerr << "This should never happen: a player owns a nonpropery";
-                std::shared_ptr<AcademicBuilding> ab = std::dynamic_pointer_cast<AcademicBuilding>(s);
+
+                board->setOwner(b->getName(), allPlayers[pyn]);
 
                 if (b->getIsMortgaged())
                 {
@@ -687,25 +696,30 @@ bool Model::bankrupt(const std::string &pn)
                         else
                         {
                             if (ans == "yes")
+                            {
                                 deductMoney(allPlayers[pyn], b->getPurchaseCost() * 0.6, "BANK");
+                                b->setIsMortgaged(false);
+                                break;
+                            }
                             else if (ans == "no")
+                            {
                                 deductMoney(allPlayers[pyn], b->getPurchaseCost() * 0.1, "BANK");
+                                break;
+                            }
                             else
                                 show("Your command is invalid! Please put in \"yes\" or \"no\": ");
                         }
                     }
                 }
-                if (ab.get() != nullptr)
-                {
-                    ab->setImprovementLevel(0);
-                }
                 board->setOwner(b->getName(), allPlayers[pyn]);
             }
         }
 
-        allPlayers[pn]->dropOut();
         allPlayers.erase(pn);
         playerOrder.erase(std::remove(playerOrder.begin(), playerOrder.end(), pn), playerOrder.end());
+
+        if (pyn != "" && allPlayers[pyn]->getDebt() > 0)
+            doubleKill = pyn;
 
         return true;
     }
@@ -739,37 +753,8 @@ void Model::auctionPlayer(const std::string &pn)
             std::shared_ptr<Building> b = std::dynamic_pointer_cast<Building>(s);
             if (b.get() == nullptr)
                 std::cerr << "This should never happen: a player owns a nonpropery";
-            std::shared_ptr<AcademicBuilding> ab = std::dynamic_pointer_cast<AcademicBuilding>(s);
+            b->setIsMortgaged(false);
 
-            if (b->getIsMortgaged())
-            {
-                show("Player " + maxOfferer + " would you like to unmortgage this property: " + b->getName() + "? ( yes/no )");
-                std::string ans;
-                while (true)
-                {
-                    if (!(min >> ans))
-                    {
-                        if (min.eof())
-                            break;
-                        min.clear();
-                        min.ignore();
-                        show("Your command is invalid! Please put in \"yes\" or \"no\": ");
-                    }
-                    else
-                    {
-                        if (ans == "yes")
-                            deductMoney(allPlayers[maxOfferer], b->getPurchaseCost() * 0.6, "BANK");
-                        else if (ans == "no")
-                            deductMoney(allPlayers[maxOfferer], b->getPurchaseCost() * 0.1, "BANK");
-                        else
-                            show("Your command is invalid! Please put in \"yes\" or \"no\": ");
-                    }
-                }
-            }
-            if (ab.get() != nullptr)
-            {
-                ab->setImprovementLevel(0);
-            }
             board->setOwner(b->getName(), allPlayers[maxOfferer]);
         }
     }
@@ -880,38 +865,6 @@ void Model::auctionBuilding(const std::string &bn)
     {
         // this one will deduct money, player is guarenteed to have enough money, for is checked at auction stage
         deductMoney(allPlayers[maxOfferer], maxOffer, "BANK");
-        // this one should never be called, but remains here if to expand the method's functionality in the future
-        if (b->getIsMortgaged())
-        {
-            show("Player " + maxOfferer + " would you like to unmortgage this property: " + b->getName() + "? ( yes/no )");
-            std::string ans;
-            while (true)
-            {
-                if (!(min >> ans))
-                {
-                    if (min.eof())
-                        break;
-                    min.clear();
-                    min.ignore();
-                    show("Your command is invalid! Please put in \"yes\" or \"no\": ");
-                }
-                else
-                {
-                    if (ans == "yes")
-                        deductMoney(allPlayers[maxOfferer], b->getPurchaseCost() * 0.6, "BANK");
-                    else if (ans == "no")
-                        deductMoney(allPlayers[maxOfferer], b->getPurchaseCost() * 0.1, "BANK");
-                    else
-                        show("Your command is invalid! Please put in \"yes\" or \"no\": ");
-                }
-            }
-        }
-        // another safty measure
-        std::shared_ptr<AcademicBuilding> ab = std::dynamic_pointer_cast<AcademicBuilding>(board->getSquareBuilding(bn));
-        if (ab.get() != nullptr)
-        {
-            ab->setImprovementLevel(0);
-        }
         board->setOwner(b->getName(), allPlayers[maxOfferer]);
     }
     else
