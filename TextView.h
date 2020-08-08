@@ -52,6 +52,8 @@ class TextView: public View{
 
     virtual void movePlayer(char player, int newlocation) ;
 
+    virtual void removePlayer(char player) ;
+
     virtual void changeImprovement(int location, int newimprovement) ;
   public:
     // constructor
