@@ -12,6 +12,14 @@
 #include <vector>
 #include <algorithm>
 
+bool Model::existPlayer(const std::string &pn)
+{
+    if (allPlayers[pn].get() == nullptr)
+        return true;
+    show(pn + " is not a playername!");
+    return false;
+}
+
 void Model::loadPlayer(std::vector<std::shared_ptr<Player>> playerList)
 {
     for (auto &p : playerList)
@@ -235,6 +243,9 @@ Model::Model(std::istream &tin, std::ostream &tout)
 
 void Model::playerProceed(const std::string &pn, int steps)
 {
+    if (!existPlayer(pn))
+        return;
+
     std::shared_ptr<Player> p = allPlayers[pn];
     if (p->getIsJailed())
     {
@@ -272,6 +283,9 @@ void Model::playerProceed(const std::string &pn, int steps)
 
 void Model::gotoTims(const std::string &pn)
 {
+    if (!existPlayer(pn))
+        return;
+
     allPlayers[pn]->setIsJailed(true);
     allPlayers[pn]->setNumJailed(0);
     allPlayers[pn]->setPosition(board->getSquareLocation("DC Tims Line"));
@@ -284,6 +298,9 @@ void Model::show(const std::string &message)
 
 std::string Model::nextPlayerName(const std::string &pn)
 {
+    if (!existPlayer(pn))
+        return;
+
     if (allPlayers[pn]->getDebt() == 0)
     {
         std::vector<std::string>::iterator it = std::find(playerOrder.begin(), playerOrder.end(), pn);
@@ -310,6 +327,9 @@ std::string Model::nextPlayerName(const std::string &pn)
 
 bool Model::askTrade(const std::string &pn)
 {
+    if (!existPlayer(pn))
+        return;
+
     show("Do you want to trade? " + pn);
     std::string ans;
     while (true)
@@ -338,6 +358,11 @@ bool Model::askTrade(const std::string &pn)
 
 void Model::trade(const std::string &pn1, const std::string &pn2, const std::string &property, int price, bool receiver)
 {
+    if (!existPlayer(pn1))
+        return;
+    if (!existPlayer(pn2))
+        return;
+
     std::shared_ptr<Square> s = board->getSquareBuilding(property);
 
     // checking process
@@ -382,6 +407,11 @@ void Model::trade(const std::string &pn1, const std::string &pn2, const std::str
 
 void Model::trade(const std::string &pn1, const std::string &pn2, const std::string &property1, const std::string &property2)
 {
+    if (!existPlayer(pn1))
+        return;
+    if (!existPlayer(pn2))
+        return;
+
     std::shared_ptr<Square> s1 = board->getSquareBuilding(property1);
     std::shared_ptr<Square> s2 = board->getSquareBuilding(property2);
 
@@ -437,6 +467,8 @@ void Model::trade(const std::string &pn1, const std::string &pn2, const std::str
 
 void Model::improve(const std::string &pn, const std::string &property, bool action)
 {
+    if (!existPlayer(pn))
+        return;
     std::shared_ptr<Square> s = board->getSquareBuilding(property);
     std::shared_ptr<AcademicBuilding> sAcademic = std::dynamic_pointer_cast<AcademicBuilding>(s);
     // check valid
@@ -505,6 +537,8 @@ void Model::improve(const std::string &pn, const std::string &property, bool act
 
 void Model::mortgage(const std::string &pn, const std::string &property, bool action)
 {
+    if (!existPlayer(pn))
+        return;
     std::shared_ptr<Square> s = board->getSquareBuilding(property);
     std::shared_ptr<Building> b = std::dynamic_pointer_cast<Building>(s);
     // check valid
@@ -529,7 +563,13 @@ void Model::mortgage(const std::string &pn, const std::string &property, bool ac
         // check status
         if (b->getIsMortgaged())
         {
-            show(property + "'s is already mortgaged!");
+            show(property + " is already mortgaged!");
+            return;
+        }
+        std::shared_ptr<AcademicBuilding> ab = std::dynamic_pointer_cast<AcademicBuilding>(s);
+        if (ab->getImprovementLevel() != 0)
+        {
+            show("You must first sell all improvement on this building!");
             return;
         }
         int refund = b->getPurchaseCost() * 0.5;
@@ -549,7 +589,7 @@ void Model::mortgage(const std::string &pn, const std::string &property, bool ac
         // check improvement is at maximum
         if (!b->getIsMortgaged())
         {
-            show(property + "'s improvement level is already unmortgaged!");
+            show(property + " is already unmortgaged!");
             return;
         }
         int cost = b->getPurchaseCost() * 0.6;
@@ -567,6 +607,8 @@ void Model::mortgage(const std::string &pn, const std::string &property, bool ac
 
 bool Model::bankrupt(const std::string &pn)
 {
+    if (!existPlayer(pn))
+        return;
     if (allPlayers[pn]->getDebt() > 0)
     {
         show("You are able to bankrupt, preparing to drop out!");
@@ -638,6 +680,8 @@ bool Model::bankrupt(const std::string &pn)
 
 void Model::auctionPlayer(const std::string &pn)
 {
+    if (!existPlayer(pn))
+        return;
     show("Auction Start! Bid for Player " + pn);
     show("These are all assets under auction: ");
     std::shared_ptr<Player> p = allPlayers[pn];
@@ -713,6 +757,8 @@ void Model::auctionPlayer(const std::string &pn)
 
 void Model::sellBuilding(std::string pn, std::string bn)
 {
+    if (!existPlayer(pn))
+        return;
     std::shared_ptr<Building> b = std::dynamic_pointer_cast<Building>(board->getSquareBuilding(bn));
     // check valid
     bool checkProperty = (b.get() != nullptr);

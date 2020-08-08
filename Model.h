@@ -24,6 +24,8 @@ class Model
     std::map<std::string, std::shared_ptr<Player>> allPlayers;
     std::vector<std::string> playerOrder;
 
+    bool existPlayer(const std::string & pn);
+
     // check if the square is a building and is un mortgaged and does not have improvement
     // return true is so, falso otherwise
     bool squareTradable(std::shared_ptr<Square> s);
