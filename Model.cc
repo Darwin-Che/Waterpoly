@@ -20,6 +20,14 @@ bool Model::existPlayer(const std::string &pn)
     return false;
 }
 
+bool Model::existBuilding(const std::string &bn)
+{
+    if (board->getSquareBuilding(bn).get() == nullptr)
+        return true;
+    show(bn + " is not a buildingname!");
+    return false;
+}
+
 void Model::loadPlayer(std::vector<std::shared_ptr<Player>> playerList)
 {
     for (auto &p : playerList)
@@ -299,7 +307,7 @@ void Model::show(const std::string &message)
 std::string Model::nextPlayerName(const std::string &pn)
 {
     if (!existPlayer(pn))
-        return;
+        return pn;
 
     if (allPlayers[pn]->getDebt() == 0)
     {
@@ -328,7 +336,7 @@ std::string Model::nextPlayerName(const std::string &pn)
 bool Model::askTrade(const std::string &pn)
 {
     if (!existPlayer(pn))
-        return;
+        return false;
 
     show("Do you want to trade? " + pn);
     std::string ans;
@@ -361,6 +369,8 @@ void Model::trade(const std::string &pn1, const std::string &pn2, const std::str
     if (!existPlayer(pn1))
         return;
     if (!existPlayer(pn2))
+        return;
+    if (!existBuilding(property))
         return;
 
     std::shared_ptr<Square> s = board->getSquareBuilding(property);
@@ -411,7 +421,10 @@ void Model::trade(const std::string &pn1, const std::string &pn2, const std::str
         return;
     if (!existPlayer(pn2))
         return;
-
+    if (!existBuilding(property1))
+        return;
+    if (!existBuilding(property2))
+        return;
     std::shared_ptr<Square> s1 = board->getSquareBuilding(property1);
     std::shared_ptr<Square> s2 = board->getSquareBuilding(property2);
 
@@ -468,6 +481,9 @@ void Model::trade(const std::string &pn1, const std::string &pn2, const std::str
 void Model::improve(const std::string &pn, const std::string &property, bool action)
 {
     if (!existPlayer(pn))
+        return;
+
+    if (!existBuilding(property))
         return;
     std::shared_ptr<Square> s = board->getSquareBuilding(property);
     std::shared_ptr<AcademicBuilding> sAcademic = std::dynamic_pointer_cast<AcademicBuilding>(s);
@@ -539,6 +555,8 @@ void Model::mortgage(const std::string &pn, const std::string &property, bool ac
 {
     if (!existPlayer(pn))
         return;
+    if (!existBuilding(property))
+        return;
     std::shared_ptr<Square> s = board->getSquareBuilding(property);
     std::shared_ptr<Building> b = std::dynamic_pointer_cast<Building>(s);
     // check valid
@@ -608,7 +626,7 @@ void Model::mortgage(const std::string &pn, const std::string &property, bool ac
 bool Model::bankrupt(const std::string &pn)
 {
     if (!existPlayer(pn))
-        return;
+        return false;
     if (allPlayers[pn]->getDebt() > 0)
     {
         show("You are able to bankrupt, preparing to drop out!");
@@ -682,6 +700,7 @@ void Model::auctionPlayer(const std::string &pn)
 {
     if (!existPlayer(pn))
         return;
+
     show("Auction Start! Bid for Player " + pn);
     show("These are all assets under auction: ");
     std::shared_ptr<Player> p = allPlayers[pn];
@@ -755,9 +774,11 @@ void Model::auctionPlayer(const std::string &pn)
     }
 }
 
-void Model::sellBuilding(std::string pn, std::string bn)
+void Model::sellBuilding(const std::string &pn, const std::string &bn)
 {
     if (!existPlayer(pn))
+        return;
+    if (!existBuilding(bn))
         return;
     std::shared_ptr<Building> b = std::dynamic_pointer_cast<Building>(board->getSquareBuilding(bn));
     // check valid
@@ -815,6 +836,8 @@ void Model::sellBuilding(std::string pn, std::string bn)
 
 void Model::auctionBuilding(const std::string &bn)
 {
+    if (!existBuilding(bn))
+        return;
     std::shared_ptr<Building> b = std::dynamic_pointer_cast<Building>(board->getSquareBuilding(bn));
     // check valid
     bool checkProperty = (b.get() != nullptr);
@@ -894,6 +917,8 @@ void Model::getInfo()
 
 void Model::getInfo(const std::string &pn)
 {
+    if (!existPlayer(pn))
+        return;
     std::shared_ptr<Player> p = allPlayers[pn];
     std::shared_ptr<Square> s = board->getSquare(p->getPosition());
     mout << "Player " << pn << " (" << p->getSymbol() << ") "

@@ -25,6 +25,7 @@ class Model
     std::vector<std::string> playerOrder;
 
     bool existPlayer(const std::string & pn);
+    bool existBuilding(const std::string &bn);
 
     // check if the square is a building and is un mortgaged and does not have improvement
     // return true is so, falso otherwise
@@ -46,7 +47,7 @@ class Model
     void getInfo(std::shared_ptr<Square> s);
 
     // wrapper around auction building
-    void sellBuilding(std::string pn, std::string bn);
+    void sellBuilding(const std::string &pn, const std::string &bn);
 
     bool askTrade(const std::string &pn);
 
