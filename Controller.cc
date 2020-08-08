@@ -33,21 +33,21 @@ void Controller::takeTurn(std::istream &in)
     {
         if (command == "roll")
         {
+            int d1; // the first dice number
+            int d2; // the second dice number
+            if (cstate->testingMode_roll)
+            {
+                // because is in testing mode, omit error checking
+                in >> d1;
+                in >> d2;
+            }
+            else
+            {
+                d1 = rand() % 6 + 1;
+                d2 = rand() % 6 + 1;
+            }
             if (cstate->canRoll)
             {
-                int d1; // the first dice number
-                int d2; // the second dice number
-                if (cstate->testingMode_roll)
-                {
-                    // because is in testing mode, omit error checking
-                    in >> d1;
-                    in >> d2;
-                }
-                else
-                {
-                    d1 = rand() % 6 + 1;
-                    d2 = rand() % 6 + 1;
-                }
                 model->show("Player " + curPlayerName + "rolls :" + std::to_string(d1) + " and " + std::to_string(d2) + ". ");
                 if (d1 == d2)
                 {
@@ -80,7 +80,8 @@ void Controller::takeTurn(std::istream &in)
         }
         else if (command == "next")
         {
-            if (cstate->canRoll) {
+            if (cstate->canRoll)
+            {
                 model->show("You must first roll!");
                 continue;
             }
