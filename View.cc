@@ -3,7 +3,7 @@
 #include "AcademicBuilding.h"
 
 //constructor
-View::View(int height,int width):height(height), width(width) {
+View::View(int height,int width):height(height), width(width){
     actualH=height+1;
     actualW=width+1;
 }

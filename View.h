@@ -3,6 +3,8 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <iostream>
+#include <fstream>
 #include "Observer.h"
 
 class View: public Observer{

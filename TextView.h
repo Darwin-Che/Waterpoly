@@ -55,7 +55,7 @@ class TextView: public View{
     virtual void changeImprovement(int location, int newimprovement) ;
   public:
     // constructor
-    TextView(int height, int widths);
+    TextView(int height, int width);
     // draw the view
     virtual void drawBoard();
 };

@@ -99,8 +99,10 @@ void TextView::Block::addPlayer(const char & symbol){
 
 // add a player's symbol to the block
 void TextView::Block::removePlayer(const char & symbol){
+    cout << "removing "<< symbol<<endl;
     auto index = find(playerSymbols.begin(), playerSymbols.end(), symbol);
     if (index != playerSymbols.end()){
+        cout << "find!"<<endl;
         playerSymbols.erase(index);
         for (int i=0; i<blockW; i++){
             content[blockH-1][i] = ' ';
@@ -163,6 +165,7 @@ TextView::TextView(int height, int width):View(height,width){
 
 void TextView::movePlayer(char player, int newlocation){
     int oldposition = players[player];
+    cout << player <<" from "<<oldposition << " to "<< newlocation<<endl;
     vector<int> old2D = get2Dlocation(oldposition);
     vector<int> new2D = get2Dlocation(newlocation);
     Blocks[old2D[0]][old2D[1]]->removePlayer(player);
