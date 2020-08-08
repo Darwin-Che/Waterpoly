@@ -98,9 +98,10 @@ void TextView::Block::addPlayer(const char & symbol){
 
 // add a player's symbol to the block
 void TextView::Block::removePlayer(const char & symbol){
-    if (find(playerSymbols.begin(), playerSymbols.end(), symbol) != playerSymbols.end()){
-        playerSymbols.erase(symbol);
-        for (int i=0; i<blockW){
+    auto index = find(playerSymbols.begin(), playerSymbols.end(), symbol);
+    if (index != playerSymbols.end()){
+        playerSymbols.erase(index);
+        for (int i=0; i<blockW; i++){
             content[blockH-1][i] = ' ';
         }
         playerNum--;
@@ -168,8 +169,8 @@ void TextView::movePlayer(char player, int newlocation){
 }
 
 void TextView::changeImprovement(int location, int newimprovement) {
-    int loc2D = get2Dlocation(location);
-    Blocks[loc2D[0]][loc2D[1]]->changeImprovement(int newimprovement);
+    vector<int> loc2D = get2Dlocation(location);
+    Blocks[loc2D[0]][loc2D[1]]->changeImprovement(newimprovement);
 }
 
 // update the blocks
@@ -185,7 +186,7 @@ void TextView::initializeBlocks(){
 }
 
 // draw the view
-void TextView::initializeBoard(){
+void TextView::drawBoard(){
     if (!initialized){
         // if the first time to draw a boardx
         initializeBlocks();

@@ -48,7 +48,7 @@ int main(){
         if ( command == "square"){
             auto square = make_shared<Square>(name,squareNum,description);
             board.push_back(square);
-            view->addSquare(name);
+            view->addSquare(name,-1);
             if (name == "SLC"){
                 strategies.push_back(make_shared<SLCStrategy>());
             }
@@ -90,7 +90,7 @@ int main(){
             else{
                 monopolyBlock[blockName].push_back(gym);
             } 
-            view->addSquare(name);
+            view->addSquare(name,-1);
             strategies.push_back(make_shared<GymStrategy>());
         }
         else if(command == "residence"){
@@ -109,7 +109,7 @@ int main(){
             else{
                 monopolyBlock[blockName].push_back(residence);
             } 
-            view->addSquare(name);
+            view->addSquare(name,-1);
             strategies.push_back(make_shared<ResidenceStrategy>());
         }
         else if(command == "academicbuilding"){
@@ -144,8 +144,7 @@ int main(){
                 monopolyBlock[blockName].push_back(acbuilding);
             } 
             acbuilding->attach(view);
-            view->addSquare(name);
-            acbuilding->notifyObservers();
+            view->addSquare(name,0);
             strategies.push_back(make_shared<AcademicBuildingStrategy>());
         }
          ownershipList.push_back(shared_ptr<Player>());

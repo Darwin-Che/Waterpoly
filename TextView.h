@@ -14,7 +14,7 @@ class TextView: public View{
         // number of players in the block
         int playerNum;
         // the char vector that stores each player on this block
-        vector<char> playerSymbols;
+        std::vector<char> playerSymbols;
         // the string vector that stores each blockline's information
         std::vector<std::string> content;
         // helper function: minimum
