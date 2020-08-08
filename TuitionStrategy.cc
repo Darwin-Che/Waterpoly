@@ -23,7 +23,7 @@ void TuitionStrategy::acceptVisitor(std::shared_ptr<Player> player,
     }
 
     // The work will be done by MoneyStrategy to avoid duplicate code
-    MoneyStrategy strat(payment);
+    MoneyStrategy strat(-payment);
     strat.acceptVisitor(player, board, in, out);
 }
 

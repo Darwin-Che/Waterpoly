@@ -1,7 +1,7 @@
 10
 10
 square
-Collect OSAP
+COLLECT OSAP
 Receive $200 when passing over or landing on
 academicbuilding
 AL
@@ -33,7 +33,7 @@ Arts1
 320
 450
 square
-Tuition
+TUITION
 Pay $300 or 10% of total networth
 residence
 MKV
@@ -54,7 +54,7 @@ Arts2
 400
 550
 square
-Needles Hall
+NEEDLES HALL
 Gain or lose a random amount of money
 academicbuilding
 PAS
@@ -193,7 +193,7 @@ Env
 875
 1050
 square
-Needles Hall
+NEEDLES HALL
 Gain or lose a random amount of money
 academicbuilding
 EV2
@@ -271,7 +271,7 @@ Sci1
 1025
 1200
 square
-Go To Tims
+GO TO TIMS
 Sent to DC Tims Line
 academicbuilding
 EIT
@@ -321,7 +321,7 @@ Pay rent to the owner
 Residence
 200
 square
-Needles Hall
+NEEDLES HALL
 Gain or lose a random amount of money
 academicbuilding
 MC
@@ -337,7 +337,7 @@ Math
 1300
 1500
 square
-Coop Fee
+COOP FEE
 Pay $150 coop fee
 academicbuilding
 DC

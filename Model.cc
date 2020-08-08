@@ -183,9 +183,10 @@ void Model::getInfo(std::shared_ptr<Square> s)
         int fee = ab->getImprovementFee();
         if (board->inMonopoly(ab->getName()) && ab->getImprovementLevel() == 0)
             fee = fee * 2;
-        mout << ab->getName() << "'s Owner - " << board->getOwner(ab->getName()) << std::endl;
+        std::shared_ptr<Player> p = board->getOwner(ab->getName());
+        mout << ab->getName() << "'s Owner - " << (p.get() == nullptr ? "BANK" : p->getName()) << std::endl;
         mout << "Current Rent - " << fee << std::endl;
-        mout << "Monopoly block: ";
+        // mout << "Monopoly block: ";
         // output all names of the block
         // output a list of numbers
     }
@@ -232,7 +233,7 @@ void Model::playerProceed(const std::string &pn, int steps)
     std::shared_ptr<Player> p = allPlayers[pn];
     if (p->getIsJailed())
     {
-        strategies[board->getSquareLocation("DC Times Line")]->acceptVisitor(p, board, min, mout);
+        strategies[board->getSquareLocation("DC Tims Line")]->acceptVisitor(p, board, min, mout);
         view->drawBoard();
     }
     else
@@ -240,13 +241,27 @@ void Model::playerProceed(const std::string &pn, int steps)
         p->setPosition((p->getPosition() + steps) % board->getTotalSquareNum());
         strategies[board->getSquareLocation("COLLECT OSAP")]->acceptVisitor(p, board, min, mout);
         int prevPos = p->getPosition();
-        strategies[p->getPosition()]->acceptVisitor(p, board, min, mout);
+        if (board->getOwner(board->getSquare(p->getPosition())->getName()).get() == nullptr && std::dynamic_pointer_cast<Building>(board->getSquare(p->getPosition())).get() != nullptr)
+        {
+            sellBuilding(pn, board->getSquare(p->getPosition())->getName());
+        }
+        else
+        {
+            strategies[p->getPosition()]->acceptVisitor(p, board, min, mout);
+        }
         view->drawBoard();
         while (prevPos != p->getPosition() && !(p->getIsJailed()))
         {
             strategies[board->getSquareLocation("COLLECT OSAP")]->acceptVisitor(p, board, min, mout);
             prevPos = p->getPosition();
-            strategies[p->getPosition()]->acceptVisitor(p, board, min, mout);
+            if (board->getOwner(board->getSquare(p->getPosition())->getName()).get() == nullptr && std::dynamic_pointer_cast<Building>(board->getSquare(p->getPosition())).get() != nullptr)
+            {
+                sellBuilding(pn, board->getSquare(p->getPosition())->getName());
+            }
+            else
+            {
+                strategies[p->getPosition()]->acceptVisitor(p, board, min, mout);
+            }
             view->drawBoard();
         }
     }
@@ -382,6 +397,14 @@ void Model::improve(const std::string &pn, const std::string &property, bool act
         show(property + " is not an improvable Square!");
         return;
     }
+    // check owner
+    bool checkProperty_pn = (board->getOwner(property) == allPlayers[pn]);
+    // check building is owned by pn
+    if (!checkProperty_pn)
+    {
+        show(property + " is not even owned by you!");
+        return;
+    }
     // check building is in monopoly
     if (!(board->inMonopoly(property)))
     {
@@ -441,6 +464,14 @@ void Model::mortgage(const std::string &pn, const std::string &property, bool ac
     if (!checkProperty)
     {
         show(property + " is not an ownable property!");
+        return;
+    }
+    // check owner
+    bool checkProperty_pn = (board->getOwner(property) == allPlayers[pn]);
+    // check building is owned by pn
+    if (!checkProperty_pn)
+    {
+        show(property + " is not even owned by you!");
         return;
     }
     // improve
@@ -569,6 +600,7 @@ void Model::auctionPlayer(const std::string &pn)
 
     if (maxOffer >= 0)
     {
+        deductMoney(allPlayers[maxOfferer], maxOffer, "BANK");
         // for all property
         for (auto &s : board->getAssets(pn))
         {
@@ -631,6 +663,62 @@ void Model::auctionPlayer(const std::string &pn)
     view->drawBoard();
 }
 
+void Model::sellBuilding(std::string pn, std::string bn)
+{
+    std::shared_ptr<Building> b = std::dynamic_pointer_cast<Building>(board->getSquareBuilding(bn));
+    // check valid
+    bool checkProperty = (b.get() != nullptr);
+    // check building is improvable
+    if (!checkProperty)
+    {
+        show(bn + " is not an ownable property!");
+        return;
+    }
+
+    getInfo(b);
+    show("Do you want to buy this Building?");
+    std::string ans;
+    while (true)
+    {
+        if (!(min >> ans))
+        {
+            if (min.eof())
+                break;
+            min.clear();
+            min.ignore();
+            show("Your command is invalid! Please put in yes/no:");
+        }
+        else
+        {
+            if (ans == "yes" || ans == "no")
+            {
+                break;
+            }
+            else
+            {
+                show("Your command is invalid! Please put in yes/no:");
+            }
+        }
+    }
+    if (ans == "yes")
+    {
+        if (allPlayers[pn]->getDebt() > 0 || b->getPurchaseCost() > allPlayers[pn]->getMoney())
+        {
+            show("You don't have that much money left! Will auction!");
+            auctionBuilding(b->getName());
+        }
+        else
+        {
+            allPlayers[pn]->setMoney(allPlayers[pn]->getMoney() - b->getPurchaseCost());
+            board->setOwner(b->getName(), allPlayers[pn]);
+        }
+    }
+    else
+    {
+        auctionBuilding(b->getName());
+    }
+}
+
 void Model::auctionBuilding(const std::string &bn)
 {
     std::shared_ptr<Building> b = std::dynamic_pointer_cast<Building>(board->getSquareBuilding(bn));
@@ -654,7 +742,7 @@ void Model::auctionBuilding(const std::string &bn)
     if (maxOffer >= 0)
     {
         // this one will deduct money, player is guarenteed to have enough money, for is checked at auction stage
-        deductMoney(allPlayers[maxOfferer], b->getPurchaseCost(), "BANK");
+        deductMoney(allPlayers[maxOfferer], maxOffer, "BANK");
         // this one should never be called, but remains here if to expand the method's functionality in the future
         if (b->getIsMortgaged())
         {

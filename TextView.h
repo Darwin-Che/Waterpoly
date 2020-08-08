@@ -53,12 +53,11 @@ class TextView: public View{
     virtual void movePlayer(char player, int newlocation) ;
 
     virtual void changeImprovement(int location, int newimprovement) ;
-
-    // draw the view
-    virtual void drawBoard();
   public:
     // constructor
     TextView(int height, int widths);
+    // draw the view
+    virtual void drawBoard();
 };
 
 #endif
