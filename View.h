@@ -26,6 +26,8 @@ class View: public Observer{
 
     virtual void movePlayer(char player, int newlocation) = 0;
 
+    virtual void removePlayer(char player) = 0;
+
     virtual void changeImprovement(int location, int newimprovement) = 0;
     
   public:

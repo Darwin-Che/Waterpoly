@@ -181,6 +181,14 @@ void TextView::movePlayer(char player, int newlocation){
     players[player]=newlocation;
 }
 
+void TextView::removePlayer(char player){
+    int position = players[player];
+    cout << player <<" remove from "<<position <<endl;
+    vector<int> loc2D = get2Dlocation(position);
+    Blocks[loc2D[0]][loc2D[1]]->removePlayer(player);
+    players.erase( player );
+}
+
 void TextView::changeImprovement(int location, int newimprovement) {
     vector<int> loc2D = get2Dlocation(location);
     Blocks[loc2D[0]][loc2D[1]]->changeImprovement(newimprovement);

@@ -49,7 +49,7 @@ void View::notify( Subject & whoNotified ){
         // If View is notified by a player
         if ( player->getIsBankrupt() ){
             // If the player bankrupt
-            players.erase( player->getSymbol() );
+            this->removePlayer( player->getSymbol());
         }
         else{
             // otherwise the player's position has changed
