@@ -578,7 +578,7 @@ void Model::mortgage(const std::string &pn, const std::string &property, bool ac
     std::shared_ptr<Building> b = std::dynamic_pointer_cast<Building>(s);
     // check valid
     bool checkProperty = (b.get() != nullptr);
-    // check building is improvable
+
     if (!checkProperty)
     {
         show(property + " is not an ownable property!");
@@ -592,6 +592,9 @@ void Model::mortgage(const std::string &pn, const std::string &property, bool ac
         show(property + " is not even owned by you!");
         return;
     }
+
+    if (!squareTradable(board->getSquareBuilding(property))) return;
+
     // improve
     if (action)
     {
