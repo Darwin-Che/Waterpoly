@@ -45,6 +45,9 @@ class Board {
     // find the square's location
     int getSquareLocation(std::string buildingname);
 
+    // return the entire monopoly block containing buildingname
+    std::vector<std::shared_ptr<Square>> getMonopoly(std::string buildingname);
+
     // check if the owner of the building owns the entire block
     bool inMonopoly(std::string buildingname);
 

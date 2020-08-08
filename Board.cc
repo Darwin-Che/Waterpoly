@@ -110,6 +110,15 @@ bool Board::inBlock(string building, vector<shared_ptr<Square>> block){
     return false;
 }
 
+std::vector<std::shared_ptr<Square>> Board::getMonopoly(std::string buildingname) {
+    for (auto monopoly : monopolyBlock) {
+        if (inBlock(buildingname, monopoly.second))
+            return monopoly.second;
+    }
+    std::vector<std::shared_ptr<Square>> empty;
+    return empty;
+}
+
 // check if the owner of the building owns the entire block
 bool Board::inMonopoly(std::string buildingname){
     for (auto monopoly : monopolyBlock){
