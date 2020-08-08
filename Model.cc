@@ -241,7 +241,7 @@ void Model::playerProceed(const std::string &pn, int steps)
         p->setPosition((p->getPosition() + steps) % board->getTotalSquareNum());
         strategies[board->getSquareLocation("COLLECT OSAP")]->acceptVisitor(p, board, min, mout);
         int prevPos = p->getPosition();
-        if (board->getOwner(board->getSquare(p->getPosition())->getName()).get() == nullptr || std::dynamic_pointer_cast<Building>(board->getSquare(p->getPosition())).get() == nullptr)
+        if (board->getOwner(board->getSquare(p->getPosition())->getName()).get() == nullptr && std::dynamic_pointer_cast<Building>(board->getSquare(p->getPosition())).get() != nullptr)
         {
             sellBuilding(pn, board->getSquare(p->getPosition())->getName());
         }
@@ -254,7 +254,7 @@ void Model::playerProceed(const std::string &pn, int steps)
         {
             strategies[board->getSquareLocation("COLLECT OSAP")]->acceptVisitor(p, board, min, mout);
             prevPos = p->getPosition();
-            if (board->getOwner(board->getSquare(p->getPosition())->getName()).get() == nullptr || std::dynamic_pointer_cast<Building>(board->getSquare(p->getPosition())).get() == nullptr)
+            if (board->getOwner(board->getSquare(p->getPosition())->getName()).get() == nullptr && std::dynamic_pointer_cast<Building>(board->getSquare(p->getPosition())).get() != nullptr)
             {
                 sellBuilding(pn, board->getSquare(p->getPosition())->getName());
             }
@@ -600,6 +600,7 @@ void Model::auctionPlayer(const std::string &pn)
 
     if (maxOffer >= 0)
     {
+        deductMoney(allPlayers[maxOfferer], maxOffer, "BANK");
         // for all property
         for (auto &s : board->getAssets(pn))
         {
@@ -741,7 +742,7 @@ void Model::auctionBuilding(const std::string &bn)
     if (maxOffer >= 0)
     {
         // this one will deduct money, player is guarenteed to have enough money, for is checked at auction stage
-        deductMoney(allPlayers[maxOfferer], b->getPurchaseCost(), "BANK");
+        deductMoney(allPlayers[maxOfferer], maxOffer, "BANK");
         // this one should never be called, but remains here if to expand the method's functionality in the future
         if (b->getIsMortgaged())
         {

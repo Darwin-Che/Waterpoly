@@ -85,6 +85,7 @@ void Controller::takeTurn(std::istream &in)
             {
                 cstate->canRoll = true;
                 cstate->numDoubleRoll = 0;
+                curPlayerName = nextPlayer;
             }
             model->show("Current Active Player: " + curPlayerName);
         }
