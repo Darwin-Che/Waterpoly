@@ -14,7 +14,7 @@
 
 bool Model::existPlayer(const std::string &pn)
 {
-    if (allPlayers[pn].get() == nullptr)
+    if (allPlayers[pn].get() != nullptr)
         return true;
     show(pn + " is not a playername!");
     return false;
@@ -22,7 +22,7 @@ bool Model::existPlayer(const std::string &pn)
 
 bool Model::existBuilding(const std::string &bn)
 {
-    if (board->getSquareBuilding(bn).get() == nullptr)
+    if (board->getSquareBuilding(bn).get() != nullptr)
         return true;
     show(bn + " is not a buildingname!");
     return false;
