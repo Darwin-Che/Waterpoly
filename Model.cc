@@ -699,15 +699,22 @@ void Model::sellBuilding(std::string pn, std::string bn)
             }
         }
     }
-    if (allPlayers[pn]->getDebt() > 0 || b->getPurchaseCost() > allPlayers[pn]->getMoney())
+    if (ans == "yes")
     {
-        show("You don't have that much money left! Will auction!");
-        auctionBuilding(b->getName());
+        if (allPlayers[pn]->getDebt() > 0 || b->getPurchaseCost() > allPlayers[pn]->getMoney())
+        {
+            show("You don't have that much money left! Will auction!");
+            auctionBuilding(b->getName());
+        }
+        else
+        {
+            allPlayers[pn]->setMoney(allPlayers[pn]->getMoney() - b->getPurchaseCost());
+            board->setOwner(b->getName(), allPlayers[pn]);
+        }
     }
     else
     {
-        allPlayers[pn]->setMoney(allPlayers[pn]->getMoney() - b->getPurchaseCost());
-        board->setOwner(b->getName(), allPlayers[pn]);        
+        auctionBuilding(b->getName());
     }
 }
 
