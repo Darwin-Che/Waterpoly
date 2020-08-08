@@ -310,7 +310,7 @@ std::string Model::nextPlayerName(const std::string &pn)
 
 bool Model::askTrade(const std::string &pn)
 {
-    show("Do you want to trade? " + (receiver ? pn1 : pn2));
+    show("Do you want to trade? " + pn);
     std::string ans;
     while (true)
     {
@@ -365,7 +365,7 @@ void Model::trade(const std::string &pn1, const std::string &pn2, const std::str
 
     // ask receiver
     bool result = askTrade(receiver ? pn1 : pn2);
-    if (ans == "yes")
+    if (result)
     {
         // trade
         allPlayers[pn1]->setMoney(allPlayers[pn1]->getMoney() + price);
@@ -421,7 +421,7 @@ void Model::trade(const std::string &pn1, const std::string &pn2, const std::str
 
     // ask receiver
     bool result = askTrade(pn2);
-    if (ans == "yes")
+    if (result)
     {
         // trade
         board->setOwner(property1, allPlayers[pn2]);
