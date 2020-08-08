@@ -248,7 +248,7 @@ int main(int argc, char *argv[])
         string name, symbol;
         cout << "(Player #" << (i + 1) << ") Please enter your symbol and name:" << endl;
         cin >> symbol >> name;
-        while(findPlayer( symbol , name , Players , out)){
+        while(findPlayer( symbol[0] , name , Players , out)){
             cout << "(Player #" << (i + 1) << ") Please enter your symbol and name:" << endl;
             cin >> symbol >> name;
         }
