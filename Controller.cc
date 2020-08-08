@@ -166,8 +166,8 @@ void Controller::takeTurn(std::istream &in)
         }
         else if (command == "bankrupt")
         {
-            bool success = model->bankrupt(curPlayerName);
             std::string nextName = model->nextPlayerName(curPlayerName);
+            bool success = model->bankrupt(curPlayerName);
             if (success)
                 curPlayerName = nextName;
             model->show("Current Active Player: " + curPlayerName);
