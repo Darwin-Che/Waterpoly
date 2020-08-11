@@ -20,16 +20,148 @@
 #include "NeedlesHallStrategy.h"
 #include <iostream>
 #include <fstream>
+#include <map>
+#include <algorithm>
+#include <vector>
+#include <stdexcept>
 
 using namespace std;
 
-bool findPlayer(char symbol, string name, vector<shared_ptr<Player>> Players,ostream &out){
-    for (auto p:Players){
-        if (p->getName() == name){
+// after Board is built and Model's Map is loaded
+// read in Player information and load Model->loadPlayer
+// read in Owner and building information to set corresponding information in board and building
+// return the name of starting player
+std::string loadFile(std::istream &loadfile, std::shared_ptr<Model> model, std::shared_ptr<Board> board, std::shared_ptr<View> view)
+{
+    /****************  Load Player Info ***************/
+
+    std::vector<std::shared_ptr<Player>> Players;
+    int playernum = 0;
+    int maxCups = 4;
+
+    if (!(loadfile >> playernum)) {
+        throw std::invalid_argument{ "Fail to read in Player Number!\n" };
+    }
+
+    std::string rest;
+    getline(loadfile, rest);
+
+    for (int i = 0; i < playernum; i++) {
+        std::string name{ "" }, symbol{ "" };
+        int numCups = -1, money = -1, position = -1;
+
+        // read in basic information
+        if (!(loadfile >> name >> symbol >> numCups >> money >> position)) {
+            throw std::invalid_argument{ "Fail to read in Player " + std::to_string(i) + " info!\n" };
+        }
+
+        // construct player
+        auto player = std::make_shared<Player>(symbol[0], name, position, numCups, money);
+        std::cout << player->getName() << player->getSymbol() << numCups << player->getMoney() << player->getPosition() << std::endl;
+
+        // check if on gotoTims
+        if (position == board->getSquareLocation("GO TO TIMS")) {
+            throw std::invalid_argument{ "A Player should not start on GO TO TIMS!\n" };
+        }
+
+        // check if in prison
+        if (position == board->getSquareLocation("DC Tims Line")) {
+            // if in prison
+            int intisInJail = 0;
+            // read in if isInJail 0/1
+            if (!(loadfile >> intisInJail)) {
+                throw std::invalid_argument{ "Fail to read in Player " + std::to_string(i) + " info!\n" };
+            }
+            // check if in Jail
+            if (intisInJail == 1) {
+                player->setIsJailed(true);
+                // read in turns in Jail
+                int numsInJail = 0;
+                if (!(loadfile >> numsInJail) || numsInJail < 0 || numsInJail > 2) {
+                    throw std::invalid_argument{ "Fail to read in Player " + std::to_string(i) + " info!\n" };
+                }
+                player->setNumJailed(numsInJail);
+            }
+        }
+        // player is successfully constructed
+        player->attach(view);
+        // view->addPlayer(symbol[0]);
+        Players.emplace_back(player);
+        getline(loadfile, rest);
+        std::cout << "Player " << name << " successfully loaded!" << std::endl;
+    }
+
+    // check totalNumCups
+    if (Player::getTotalNumCups() > maxCups) {
+        throw std::invalid_argument{ "Too many Tims Cups in game!\n" };
+    }
+
+    // Players are loaded, load in Model
+    std::cout << "Model loading players" << std::endl;
+    model->loadPlayer(Players);
+
+    /*************** Load Ownership ***************/
+
+    // read in building owner information
+    int i = 0;
+    while (true) {
+        std::string buildingName{ "" }, ownerName{ "" };
+        int imprLevel = 0;
+        if (!(loadfile >> buildingName >> ownerName >> imprLevel)) {
+            if (loadfile.eof()) return Players[0]->getName();
+            throw std::invalid_argument{ "Fail to read in Ownership information " + std::to_string(i) + "!\n" };
+        }
+
+        // check if building exists
+        std::shared_ptr<Square> s = board->getSquareBuilding(buildingName);
+        if (s.get() == nullptr) {
+            throw std::invalid_argument{ "No building named " + buildingName + "\n" };
+        }
+
+        if (ownerName != "BANK") {
+            // find player pointer
+            std::vector<std::shared_ptr<Player>>::iterator owner = std::find_if(Players.begin(), Players.end(), [ownerName](const std::shared_ptr<Player> tp) { return tp->getName() == ownerName;});
+
+            // check if exist player with that name
+            if (owner == Players.end()) {
+                throw std::invalid_argument{ "No player named " + ownerName + "\n" };
+            }
+
+            board->setOwner(buildingName, *owner);
+        }
+
+        // set improvementLevel
+        if (imprLevel == -1) {
+            std::shared_ptr<Building> b = std::dynamic_pointer_cast<Building>(s);
+            if (b.get() == nullptr) {
+                throw std::invalid_argument{ "You cannot mortgage a non property!\n" };
+            }
+            b->setIsMortgaged(true);
+        }
+        else if (imprLevel >= 1 && imprLevel <= 5) {
+            std::shared_ptr<AcademicBuilding> ab = std::dynamic_pointer_cast<AcademicBuilding>(s);
+            if (ab.get() == nullptr) {
+                throw std::invalid_argument{ "You cannot improve a non academic building!\n" };
+            }
+            ab->setImprovementLevel(imprLevel);
+        }
+        else if (imprLevel != 0) {
+            throw std::invalid_argument{ "Invalid improvement level!\n" };
+        }
+
+        getline(loadfile, rest);
+        ++i;
+    }
+    return Players[0]->getName();
+}
+
+bool findPlayer(char symbol, string name, vector<shared_ptr<Player>> Players, ostream &out) {
+    for (auto p:Players) {
+        if (p->getName() == name) {
             out << "The name " << name << " already exists" << endl;
             return true;
         }
-        else if (p->getSymbol() == symbol){
+        else if (p->getSymbol() == symbol) {
             out << "The symbol " << symbol << " already exists" << endl;
             return true;
         }
@@ -39,7 +171,7 @@ bool findPlayer(char symbol, string name, vector<shared_ptr<Player>> Players,ost
 
 int main(int argc, char *argv[])
 {
-    std::string loadfilename;
+    std::string loadfilename{ "" };
     bool testing = false;
     int argct = 1;
     while (argct < argc)
@@ -64,7 +196,7 @@ int main(int argc, char *argv[])
         argct++;
     }
 
-    std::ifstream infile{"initial_information.txt"};
+    std::ifstream infile{ "initial_information.txt" };
     int boardH;
     int boardW;
     infile >> boardH;
@@ -143,7 +275,7 @@ int main(int argc, char *argv[])
             {
                 monopolyBlock[blockName].push_back(gym);
             }
-            view->addSquare(name,-1);
+            view->addSquare(name, -1);
             strategies.push_back(make_shared<GymStrategy>());
         }
         else if (command == "residence")
@@ -165,7 +297,7 @@ int main(int argc, char *argv[])
             {
                 monopolyBlock[blockName].push_back(residence);
             }
-            view->addSquare(name,-1);
+            view->addSquare(name, -1);
             strategies.push_back(make_shared<ResidenceStrategy>());
         }
         else if (command == "academicbuilding")
@@ -204,7 +336,7 @@ int main(int argc, char *argv[])
                 monopolyBlock[blockName].push_back(acbuilding);
             }
             acbuilding->attach(view);
-            view->addSquare(name,0);
+            view->addSquare(name, 0);
             strategies.push_back(make_shared<AcademicBuildingStrategy>());
         }
         ownershipList.push_back(shared_ptr<Player>());
@@ -226,45 +358,64 @@ int main(int argc, char *argv[])
         cout << endl;
     }
 
-    std::vector<shared_ptr<Player>> Players;
-    int playernum = 0;
+    /*************** initiate board and model ****************/
+
     istream &in = cin;
     ostream &out = cout;
-
-    while (playernum < 6 || playernum > 8)
-    {
-        cout << "Please choose enter the number of players (6~8):" << endl;
-        if (!(in >> playernum))
-        {
-            if (in.eof())
-                break;
-            in.clear();
-            in.ignore();
-        }
-    }
-
-    for (int i = 0; i < playernum; i++)
-    {
-        string name, symbol;
-        cout << "(Player #" << (i + 1) << ") Please enter your symbol and name:" << endl;
-        cin >> symbol >> name;
-        while(findPlayer( symbol[0] , name , Players , out)){
-            cout << "(Player #" << (i + 1) << ") Please enter your symbol and name:" << endl;
-            cin >> symbol >> name;
-        }
-        auto player = make_shared<Player>(symbol[0], name);
-        player->attach(view);
-        view->addPlayer(symbol[0]);
-        Players.push_back(player);
-        getline(cin, name);
-    }
-
     auto boardMap = make_shared<Board>(ownershipList, board, monopolyBlock);
     auto model = make_shared<Model>(in, out);
-    model->loadPlayer(Players);
     model->loadMap(boardMap, strategies);
     model->setView(view);
-    Controller game{model, Players[0]->getName(), testing};
+    std::string startName = "";
+
+    /************** branch on whether load file ***************/
+
+    if (loadfilename == "") {
+        // no load file
+        std::vector<shared_ptr<Player>> Players;
+        int playernum = 0;
+
+        while (playernum < 6 || playernum > 8)
+        {
+            cout << "Please choose enter the number of players (6~8):" << endl;
+            if (!(in >> playernum))
+            {
+                if (in.eof())
+                    break;
+                in.clear();
+                in.ignore();
+            }
+        }
+
+        for (int i = 0; i < playernum; i++)
+        {
+            string name, symbol;
+            cout << "(Player #" << (i + 1) << ") Please enter your symbol and name:" << endl;
+            cin >> symbol >> name;
+            while (findPlayer(symbol[0], name, Players, out)) {
+                cout << "(Player #" << (i + 1) << ") Please enter your symbol and name:" << endl;
+                cin >> symbol >> name;
+            }
+            auto player = make_shared<Player>(symbol[0], name);
+            player->attach(view);
+            view->addPlayer(symbol[0]);
+            Players.push_back(player);
+            getline(cin, name);
+        }
+        startName = Players[0]->getName();
+        model->loadPlayer(Players);
+    }
+    else
+    {
+        // have load file
+        std::ifstream infile{ loadfilename };
+        startName = loadFile(infile, model, boardMap, view);
+    }
+
+    Controller game{ model, startName, testing };
     view->drawBoard();
     game.takeTurn(in);
+
 }
+
+
