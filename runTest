@@ -1,3 +1,7 @@
 load=test/step2/step2-1.load
 in=test/step2/step2-1.in
 ./watopoly -testing -load ${load} < ${in}
+
+load=test/step2/step2-1.save
+in=test/step2/step2-2.in
+./watopoly -testing -load ${load} < ${in}

@@ -9,11 +9,11 @@ Step 2:
     +- pay rent for academic buildings
     - pay rent for Gym
     - pay rent for Residence
-    - Goose Nesting
+    +- Goose Nesting
     - Tuition
     - Coop Fee
-    - SLC 
-    - Needles Hall
+    - SLC : need testing mode
+    - Needles Hall : same as above
     - Roll Cup
 
     - goto Tims ( Collect OSAP goto prison, cannot roll immediately )

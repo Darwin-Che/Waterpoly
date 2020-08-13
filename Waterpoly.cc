@@ -85,7 +85,7 @@ std::string loadFile(std::istream &loadfile, std::shared_ptr<Model> model, std::
         }
         // player is successfully constructed
         player->attach(view);
-        // view->addPlayer(symbol[0]);
+        view->addPlayer(symbol[0]);
         Players.emplace_back(player);
         getline(loadfile, rest);
         std::cout << "Player " << name << " successfully loaded!" << std::endl;
