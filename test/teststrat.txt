@@ -6,7 +6,7 @@ Step 1:
 Step 2: 
     test Strategies without bankrupcy
     - Collect OSAP
-    - pay rent for academic buildings
+    +- pay rent for academic buildings
     - pay rent for Gym
     - pay rent for Residence
     - Goose Nesting

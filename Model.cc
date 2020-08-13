@@ -910,12 +910,13 @@ void Model::getInfo(const std::string &pn)
     }
 }
 
-void Model::save(std::ostream &out)
+void Model::save(std::ostream &out, std::string pn)
 {
     out << playerOrder.size() << std::endl;
-    for (auto &pn : playerOrder)
+    std::vector<std::string>::iterator i = std::find(playerOrder.begin(), playerOrder.end(), pn);
+    while (true)
     {
-        std::shared_ptr<Player> p = allPlayers[pn];
+        std::shared_ptr<Player> p = allPlayers[*i];
         out << p->getName() << " " << p->getSymbol() << " " << p->getNumCups() << " " << p->getMoney() << " " << p->getPosition();
         if (p->getPosition() == board->getSquareLocation("DC Tims Line"))
         {
@@ -924,6 +925,9 @@ void Model::save(std::ostream &out)
                 out << p->getNumJailed();
         }
         out << std::endl;
+        i++;
+        if (i == playerOrder.end()) i = playerOrder.begin();
+        if (*i == pn) break;
     }
     out << board->saveInfo();
 }

@@ -25,4 +25,5 @@ roll 2 2
 yes
 all
 roll 2 3
-save test/step2/step2.save
+
+save test/step2/step2-1.save

@@ -199,7 +199,7 @@ void Controller::takeTurn(std::istream &in)
             std::string arg;
             in >> arg;
             std::ofstream outfile{arg};
-            model->save(outfile);
+            model->save(outfile, curPlayerName);
         }
         else
         {

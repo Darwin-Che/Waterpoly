@@ -116,7 +116,7 @@ public:
     // save the game progress to out, in the pnorder's order
     // pnorder is a list of player names
     // strong exception guarentee: could throw if ostream cannot be written
-    void save(std::ostream &out);
+    void save(std::ostream &out, std::string pn);
 };
 
 #endif
