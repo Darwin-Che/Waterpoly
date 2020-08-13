@@ -7,6 +7,9 @@
 #include <fstream>
 #include "Observer.h"
 
+// State of the cell i.e. either dead or alive.
+enum class Type { nonBuilding, nonAcademic, academic, levelOne, levelTwo, levelThree };
+
 class View: public Observer{
   protected:
     //board size

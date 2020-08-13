@@ -2,7 +2,7 @@
 #include "window.h"
 
 using namespace std;
-
+/*
 int main() {
   Xwindow w(800,800);
 
@@ -25,3 +25,4 @@ int main() {
   char c;
   cin >> c;
 }
+*/
