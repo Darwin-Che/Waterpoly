@@ -5,18 +5,20 @@ Step 1:
     
 Step 2: 
     test Strategies without bankrupcy
-    - Collect OSAP
+    -- Collect OSAP
+        step on it : collect twice
     +- pay rent for academic buildings
-    - pay rent for Gym
-    - pay rent for Residence
+    +- pay rent for Gym
+    +- pay rent for Residence
     +- Goose Nesting
-    - Tuition
-    - Coop Fee
+    +- Tuition
+    +- Coop Fee
     - SLC : need testing mode
     - Needles Hall : same as above
-    - Roll Cup
+    - Roll Cup : same as above
 
     - goto Tims ( Collect OSAP goto prison, cannot roll immediately )
+        has bug
     - Waiting in Tims Line
 
 Step 3:
