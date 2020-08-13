@@ -1,3 +1,1 @@
-load=test/step4/cannotAfter.load
-in=test/step4/cannotAfter.in
-./watopoly -testing -load ${load} < ${in}
+./watopoly -testing -load "${1}.load" < "${1}.in"
