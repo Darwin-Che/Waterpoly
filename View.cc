@@ -31,8 +31,8 @@ std::vector<int> View::get2Dlocation(int location){
 }
 
 // init the players at location 0 
-void View::addPlayer(const char & ID){
-    players[ID]=0;
+void View::addPlayer(const char & ID, const int & position){
+    players[ID]=position;
 } 
 
 // add a square

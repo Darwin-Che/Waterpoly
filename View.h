@@ -34,7 +34,7 @@ class View: public Observer{
     //constructor
     View(int height, int width); 
     // add a player
-    void addPlayer(const char & ID);
+    void addPlayer(const char & ID, const int & position);
     // add a square 
     void addSquare(const std::string & name, int improvement);
     // When notified by a Subject
