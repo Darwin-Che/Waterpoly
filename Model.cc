@@ -143,10 +143,11 @@ std::pair<std::string, int> Model::auctionHelper()
     std::string maxOfferer;
     int maxOffer = -1;
     int i = 0;
+    std::vector<std::string> copyPlayerOrder{playerOrder};
 
     while (true)
     {
-        if (i == playerOrder.size())
+        if (i == copyPlayerOrder.size())
         {
             if (maxOffer == -1)
             {
@@ -158,19 +159,19 @@ std::pair<std::string, int> Model::auctionHelper()
                 i = 0;
             }
         }
-        if (allPlayers[playerOrder[i]]->getIsBankrupt())
+        if (allPlayers[copyPlayerOrder[i]]->getIsBankrupt())
         {
             ++i;
             continue;
         }
-        std::string pyn = playerOrder[i];
+        std::string pyn = copyPlayerOrder[i];
         if (pyn == maxOfferer)
         {
             show("The bid ends with max offer of " + std::to_string(maxOffer) + " from " + maxOfferer);
             break;
         }
         show("Current bidding Player: " + pyn + " with highest offer: " + std::to_string(maxOffer) + " from " + maxOfferer);
-        show("How much would you offer? ( input \"-1\" if you decide to skip ) ");
+        show("How much would you offer? ( input \"-1\" if you decide to withdraw ) ");
         int offer;
         while (true)
         {
@@ -193,6 +194,11 @@ std::pair<std::string, int> Model::auctionHelper()
                     break;
                 }
             }
+        }
+        if (offer < 0)
+        {
+            copyPlayerOrder.erase(copyPlayerOrder.begin() + i);
+            --i;
         }
         if (offer > maxOffer)
         {
@@ -907,7 +913,8 @@ void Model::getInfo(const std::string &pn)
 
 void Model::save(std::ostream &out, std::string pn)
 {
-    if (allPlayers[pn]->getDebt() > 0) {
+    if (allPlayers[pn]->getDebt() > 0)
+    {
         show("You must pay off debt before save the game!");
         return;
     }
@@ -925,8 +932,10 @@ void Model::save(std::ostream &out, std::string pn)
         }
         out << std::endl;
         i++;
-        if (i == playerOrder.end()) i = playerOrder.begin();
-        if (*i == pn) break;
+        if (i == playerOrder.end())
+            i = playerOrder.begin();
+        if (*i == pn)
+            break;
     }
     out << board->saveInfo();
 }
