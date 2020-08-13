@@ -159,10 +159,10 @@ std::string Board::saveInfo(){
             info = info + it->getName() + " ";
             auto owner = getOwner(it->getName());
             if (owner != nullptr){
-                info = info + owner->getName() + squareinfo + "\n";
+                info = info + owner->getName() + " " + squareinfo + "\n";
             }
             else{
-                info = info + "BANK" + squareinfo + "\n";
+                info = info + "BANK " + squareinfo + "\n";
             }
         }
     }
