@@ -7,9 +7,6 @@
 #include <fstream>
 #include "Observer.h"
 
-// State of the cell i.e. either dead or alive.
-enum class Type { nonBuilding, nonAcademic, academic, levelOne, levelTwo, levelThree };
-
 class View: public Observer{
   protected:
     //board size
@@ -36,6 +33,8 @@ class View: public Observer{
   public:
     //constructor
     View(int height, int width); 
+    // Type and improvement level of the building
+    enum Type { nonBuilding=0, nonAcademic, academic, lv1, lv2, lv3, lv4, lv5, maxLv=lv5 };
     // add a player
     void addPlayer(const char & ID, const int & position);
     // add a square 
