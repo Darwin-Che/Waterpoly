@@ -12,6 +12,10 @@
 #include <vector>
 #include <algorithm>
 
+bool Model::playerJailed(const std::string &pn) {
+    return allPlayers[pn]->getIsJailed();
+}
+
 bool Model::existPlayer(const std::string &pn)
 {
     if (allPlayers[pn].get() != nullptr)

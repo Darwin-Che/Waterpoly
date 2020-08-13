@@ -65,6 +65,8 @@ public:
 
     /************** Methods called by Controller **************/
 
+    bool playerJailed(const std::string &pn);
+
     // call corresponding strategy
     bool playerProceed(const std::string &pn, int steps);
 

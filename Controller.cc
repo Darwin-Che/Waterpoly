@@ -46,37 +46,47 @@ void Controller::takeTurn(std::istream &in)
                 d1 = rand() % 6 + 1;
                 d2 = rand() % 6 + 1;
             }
-            if (cstate->canRoll)
+
+            if (model->playerJailed(curPlayerName) && cstate->canRoll)
             {
-                model->show("Player " + curPlayerName + "rolls :" + std::to_string(d1) + " and " + std::to_string(d2) + ". ");
-                if (d1 == d2)
+                model->show("You are in Jail currently, so please listen to the prison officials!");
+                cstate->canRoll = false;
+                model->playerProceed(curPlayerName, 0);
+            }
+            else
+            {
+                if (cstate->canRoll)
                 {
-                    model->show("This is a double! ");
-                    model->show("You have already rolled " + std::to_string(cstate->numDoubleRoll + 1) + " doubles!.");
-                    // prevent roll double three times
-                    if (cstate->numDoubleRoll < 2)
+                    model->show("Player " + curPlayerName + "rolls :" + std::to_string(d1) + " and " + std::to_string(d2) + ". ");
+                    if (d1 == d2)
                     {
-                        cstate->numDoubleRoll++;
-                        bool toJail = model->playerProceed(curPlayerName, d1 + d2);
-                        cstate->canRoll = !toJail;
+                        model->show("This is a double! ");
+                        model->show("You have already rolled " + std::to_string(cstate->numDoubleRoll + 1) + " doubles!.");
+                        // prevent roll double three times
+                        if (cstate->numDoubleRoll < 2)
+                        {
+                            cstate->numDoubleRoll++;
+                            bool toJail = model->playerProceed(curPlayerName, d1 + d2);
+                            cstate->canRoll = !toJail;
+                        }
+                        else
+                        {
+                            cstate->numDoubleRoll++;
+                            cstate->canRoll = false;
+                            // need to call models method to go to Times line directly
+                            model->gotoTims(curPlayerName);
+                        }
                     }
                     else
                     {
-                        cstate->numDoubleRoll++;
                         cstate->canRoll = false;
-                        // need to call models method to go to Times line directly
-                        model->gotoTims(curPlayerName);
+                        model->playerProceed(curPlayerName, d1 + d2);
                     }
                 }
                 else
                 {
-                    cstate->canRoll = false;
-                    model->playerProceed(curPlayerName, d1 + d2);
+                    model->show("You are not permitted to roll!");
                 }
-            }
-            else
-            {
-                model->show("You are not permitted to roll!");
             }
         }
         else if (command == "next")
