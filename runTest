@@ -1,3 +1,3 @@
-load=test/step2/Timstest/Rolltest.load
-in=test/step2/Timstest/Rolltest.in
+load=test/step4/rent.load
+in=test/step4/rent.in
 ./watopoly -testing -load ${load} < ${in}
