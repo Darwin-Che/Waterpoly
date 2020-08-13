@@ -1,3 +1,1 @@
-load=test/step4/rent.load
-in=test/step4/rent.in
-./watopoly -testing -load ${load} < ${in}
+./watopoly -testing -load "${1}.load" < "${1}.in"
