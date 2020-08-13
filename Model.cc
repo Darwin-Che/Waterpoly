@@ -55,11 +55,6 @@ void Model::clearMap()
     strategies.clear();
 }
 
-void Model::setView(std::shared_ptr<View> t_view)
-{
-    view = t_view;
-}
-
 void Model::payDebt(std::shared_ptr<Player> p1)
 {
     if (p1->getDebt() > 0 && p1->canPayDebt())
