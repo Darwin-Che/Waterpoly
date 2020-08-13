@@ -11,8 +11,6 @@ class GraphicsView: public View{
     int windowSize;
     // the grahic window
     Xwindow win;
-    // a vector of blocks
-    std::vector<std::shared_ptr<Block>> blocks;
     // stores the information of each square on the board
     class Block{
       public:
@@ -21,7 +19,7 @@ class GraphicsView: public View{
         // dimensions of the block
         int blockH, blockW;
         // the char vector that stores each player on this block
-        std::vector<char> playerSymbols;
+        std::string playerSymbols;
         // the string vector that stores each block's name
         std::vector<std::string> nameString;
         // improvement leve
@@ -29,14 +27,20 @@ class GraphicsView: public View{
         // constructor
         Block(int x, int y, int h, int w, int improvement, std::string name);
     };
-    
+    // a vector of blocks
+    std::vector<std::shared_ptr<Block>> blocks;
+
     virtual void movePlayer(char player, int newlocation) ;
 
     virtual void removePlayer(char player) ;
 
     virtual void changeImprovement(int location, int newimprovement) ;
 
-    void drawBlock(Block b);
+    // draw the Block b
+    void drawBlock(std::shared_ptr<Block> b);
+
+    // initialize the blocks
+    void initializeBlocks();
 
   public:
     // constructor
@@ -45,5 +49,5 @@ class GraphicsView: public View{
     virtual void drawBoard();
 };
 
-#endif>
+#endif
 

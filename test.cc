@@ -1,9 +1,45 @@
 #include <iostream>
-#include "window.h"
-
+#include <sstream>
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <vector>
+//#include "window.h"
+/*
 using namespace std;
 
 int main() {
+  int blockW = 62;
+  string name = "Hello 12345676543212345 helo h h h";
+  istringstream strm{name};
+  string word;
+  vector<string> parse;
+  vector<string> nameString;
+  while (strm>>word){
+      if (word.size() * 5 > blockW){
+          parse.push_back( word.substr(0, blockW/5) );
+      }
+      else{
+          parse.push_back( word );
+      }
+      
+  }
+  string namepart="";
+  for (auto it: parse){
+      if ( (namepart.size() +it.size()) * 5 > blockW ){
+          nameString.push_back(namepart);
+          namepart = it;
+      }
+      else{
+          namepart += it+" ";
+      }
+  }
+  if (namepart.size() > 0){
+      nameString.push_back(namepart);
+  }
+  for (auto it:nameString){
+    cout << it << endl;
+  }
   int d = 700;
   Xwindow w(d,d);
 
@@ -30,4 +66,5 @@ int main() {
   char c;
   cin >> c;
 }
+*/
 

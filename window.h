@@ -12,18 +12,21 @@ class Xwindow {
   unsigned long colours[10];
 
  public:
-  Xwindow(int width=500, int height=500);  // Constructor; displays the window.
+  Xwindow(int width=700, int height=700);  // Constructor; displays the window.
   ~Xwindow();                              // Destructor; destroys the window.
   Xwindow(const Xwindow&) = delete;
   Xwindow &operator=(const Xwindow&) = delete;
 
-  enum {White=0, Black, Red, Green, Blue, Aqua, HotPink}; // Available colours.
+  enum {White=0, Black, lightGray, Green, Blue, Aqua, HotPink}; // Available colours.
 
   // fills a rectangle
   void fillRectangle(int x, int y, int width, int height, int colour=Black);
 
   // Draws a rectangle
   void drawRectangle(int x, int y, int width, int height, int colour=Black);
+
+  // Draws a line
+  void drawLine(int x1, int y1, int x2, int y2, int colour);
 
   // Draws a string
   void drawString(int x, int y, std::string msg);

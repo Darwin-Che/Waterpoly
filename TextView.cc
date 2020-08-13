@@ -178,6 +178,10 @@ void TextView::movePlayer(char player, int newlocation){
     Blocks[old2D[0]][old2D[1]]->removePlayer(player);
     Blocks[new2D[0]][new2D[1]]->addPlayer(player);
     players[player]=newlocation;
+    
+    if (initialized){
+        this->drawBoard();
+    }
 }
 
 void TextView::removePlayer(char player){
@@ -186,15 +190,23 @@ void TextView::removePlayer(char player){
     vector<int> loc2D = get2Dlocation(position);
     Blocks[loc2D[0]][loc2D[1]]->removePlayer(player);
     players.erase( player );
+
+    if (initialized){
+        this->drawBoard();
+    }
 }
 
 void TextView::changeImprovement(int location, int newimprovement) {
     vector<int> loc2D = get2Dlocation(location);
     Blocks[loc2D[0]][loc2D[1]]->changeImprovement(academic+newimprovement);
     improvements[location] = academic+newimprovement;
+
+    if (initialized){
+        this->drawBoard();
+    }
 }
 
-// update the blocks
+// initialize the blocks
 void TextView::initializeBlocks(){
     for (int i=0; i<2*(width+height); i++){ // update the squares
         vector<int> position = get2Dlocation(i);

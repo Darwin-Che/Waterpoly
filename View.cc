@@ -59,11 +59,8 @@ void View::notify( Subject & whoNotified ){
         }
     }
     else if( acbuilding != nullptr ){
-        // If the view is notified by a academic building
+        // If the view is notified by an academic building
         this->changeImprovement(acbuilding->getLocation(), acbuilding->getImprovementLevel());
-    }
-    if (initialized){
-        this->drawBoard();
     }
 }
 

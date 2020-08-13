@@ -46,7 +46,7 @@ class TextView: public View{
     // 2d vector storing blocks
     // each block represents a square
     std::vector<std::vector<std::shared_ptr<Block> > > Blocks;
-    // update the blocks
+    // initialize the blocks
     void initializeBlocks();
 
     virtual void movePlayer(char player, int newlocation) ;
