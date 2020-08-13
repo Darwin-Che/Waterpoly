@@ -2,6 +2,7 @@
 #include "Model.h"
 #include "Board.h"
 #include "TextView.h"
+#include "GraphicView.h"
 #include "Player.h"
 #include "Square.h"
 #include "AcademicBuilding.h"
@@ -204,6 +205,7 @@ int main(int argc, char *argv[])
     std::string throwaway;
     getline(infile, throwaway);
     auto view = make_shared<TextView>(boardH, boardW);
+    auto graphview = make_shared<GraphicsView>(boardH, boardW);
 
     std::vector<std::shared_ptr<Square>> board;
     std::map<std::string, std::vector<std::shared_ptr<Square>>> monopolyBlock;
@@ -223,6 +225,7 @@ int main(int argc, char *argv[])
             auto square = make_shared<Square>(name, squareNum, description);
             board.push_back(square);
             view->addSquare(name, View::nonBuilding);
+            graphview->addSquare(name, View::nonBuilding);
             if (name == "SLC")
             {
                 strategies.push_back(make_shared<SLCStrategy>());
@@ -276,6 +279,7 @@ int main(int argc, char *argv[])
                 monopolyBlock[blockName].push_back(gym);
             }
             view->addSquare(name, View::nonAcademic);
+            graphview->addSquare(name, View::nonAcademic);
             strategies.push_back(make_shared<GymStrategy>());
         }
         else if (command == "residence")
@@ -298,6 +302,7 @@ int main(int argc, char *argv[])
                 monopolyBlock[blockName].push_back(residence);
             }
             view->addSquare(name, View::nonAcademic);
+            graphview->addSquare(name, View::nonAcademic);
             strategies.push_back(make_shared<ResidenceStrategy>());
         }
         else if (command == "academicbuilding")
@@ -336,7 +341,9 @@ int main(int argc, char *argv[])
                 monopolyBlock[blockName].push_back(acbuilding);
             }
             acbuilding->attach(view);
+            acbuilding->attach(graphview);
             view->addSquare(name, View::academic);
+            graphview->addSquare(name, View::academic);
             strategies.push_back(make_shared<AcademicBuildingStrategy>());
         }
         ownershipList.push_back(shared_ptr<Player>());
@@ -398,6 +405,8 @@ int main(int argc, char *argv[])
             auto player = make_shared<Player>(symbol[0], name);
             player->attach(view);
             view->addPlayer(symbol[0],0);
+            player->attach(graphview);
+            graphview->addPlayer(symbol[0],0);
             Players.push_back(player);
             getline(cin, name);
         }
@@ -413,6 +422,7 @@ int main(int argc, char *argv[])
 
     Controller game{ model, startName, testing };
     view->drawBoard();
+    graphview->drawBoard();
     game.takeTurn(in);
 
 }

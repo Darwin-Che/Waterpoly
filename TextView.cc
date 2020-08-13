@@ -99,19 +99,19 @@ void TextView::Block::addPlayer(const char & symbol){
 
 // add a player's symbol to the block
 void TextView::Block::removePlayer(const char & symbol){
-    cout << "removing "<< symbol<<endl;
+    //cout << "removing "<< symbol<<endl;
     auto index = find(playerSymbols.begin(), playerSymbols.end(), symbol);
     if (index != playerSymbols.end()){
-        cout << "old players: ";
+        /*cout << "old players: ";
         for (int i=0; i<playerSymbols.size(); i++){
             cout<< playerSymbols[i]<<" ";
-        }
+        }*/
         playerSymbols.erase(index);
-        cout << ",new players: ";
+        /*cout << ",new players: ";
         for (int i=0; i<playerSymbols.size(); i++){
             cout<< playerSymbols[i]<<" ";
         }
-        cout << endl;
+        cout << endl;*/
         for (int i=0; i<blockW; i++){
             content[blockH-1][i] = ' ';
         }
@@ -172,7 +172,7 @@ TextView::TextView(int height, int width):View(height,width){
 
 void TextView::movePlayer(char player, int newlocation){
     int oldposition = players[player];
-    cout << player <<" from "<<oldposition << " to "<< newlocation<<endl;
+    //cout << player <<" from "<<oldposition << " to "<< newlocation<<endl;
     vector<int> old2D = get2Dlocation(oldposition);
     vector<int> new2D = get2Dlocation(newlocation);
     Blocks[old2D[0]][old2D[1]]->removePlayer(player);
@@ -186,7 +186,7 @@ void TextView::movePlayer(char player, int newlocation){
 
 void TextView::removePlayer(char player){
     int position = players[player];
-    cout << player <<" remove from "<<position <<endl;
+    //cout << player <<" remove from "<<position <<endl;
     vector<int> loc2D = get2Dlocation(position);
     Blocks[loc2D[0]][loc2D[1]]->removePlayer(player);
     players.erase( player );
