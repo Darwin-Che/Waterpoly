@@ -128,7 +128,7 @@ void TextView::Block::changeImprovement(int newimprovement){
     for(int i=0; i<blockW ; i++){
         content[0][i]=' ';
     }
-    if (newimprovement>=0){
+    if (newimprovement >= academic){
         for(int i=academic; i<newimprovement ; i++){
             content[0][i-academic]='I';
         }
