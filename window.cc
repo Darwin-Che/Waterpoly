@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include <vector>
 #include <unistd.h>
 #include "window.h"
 
@@ -31,10 +32,10 @@ Xwindow::Xwindow(int width, int height) {
   // Set up colours.
   XColor xcolour;
   Colormap cmap;
-  char color_vals[7][10]={"white", "black", "red", "green", "blue"};
+  char color_vals[10][20]={"white", "black", "red", "green", "blue", "aqua", "hot pink"};
 
   cmap=DefaultColormap(d,DefaultScreen(d));
-  for(int i=0; i < 5; ++i) {
+  for(int i=0; i < 7; ++i) {
       XParseColor(d,cmap,color_vals[i],&xcolour);
       XAllocColor(d,cmap,&xcolour);
       colours[i]=xcolour.pixel;
@@ -62,6 +63,12 @@ Xwindow::~Xwindow() {
 void Xwindow::fillRectangle(int x, int y, int width, int height, int colour) {
   XSetForeground(d, gc, colours[colour]);
   XFillRectangle(d, w, gc, x, y, width, height);
+  XSetForeground(d, gc, colours[Black]);
+}
+
+void Xwindow::drawRectangle(int x, int y, int width, int height, int colour) {
+  XSetForeground(d, gc, colours[colour]);
+  XDrawRectangle(d, w, gc, x, y, width, height);
   XSetForeground(d, gc, colours[Black]);
 }
 

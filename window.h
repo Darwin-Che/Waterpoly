@@ -17,10 +17,13 @@ class Xwindow {
   Xwindow(const Xwindow&) = delete;
   Xwindow &operator=(const Xwindow&) = delete;
 
-  enum {White=0, Black, Red, Green, Blue}; // Available colours.
+  enum {White=0, Black, Red, Green, Blue, Aqua, HotPink}; // Available colours.
+
+  // fills a rectangle
+  void fillRectangle(int x, int y, int width, int height, int colour=Black);
 
   // Draws a rectangle
-  void fillRectangle(int x, int y, int width, int height, int colour=Black);
+  void drawRectangle(int x, int y, int width, int height, int colour=Black);
 
   // Draws a string
   void drawString(int x, int y, std::string msg);
