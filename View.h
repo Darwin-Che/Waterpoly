@@ -13,6 +13,8 @@ class View: public Observer{
     int height, width;
     //actual size of the board, add 1 to height and width
     int actualH, actualW;
+    // stores the game's current state
+    bool initialized;
     // maps each player's ID to the player's current position
     std::map<char,int> players;
     // the string vector that stores each square's name

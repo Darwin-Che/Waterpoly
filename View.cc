@@ -6,6 +6,7 @@
 View::View(int height,int width):height(height), width(width){
     actualH=height+1;
     actualW=width+1;
+    initialized = false;
 }
 
 // take a 1-d location and calculate its 2-d position on the board
@@ -41,6 +42,7 @@ void View::addSquare(const std::string & name, int improvement){
     improvements.push_back(improvement);
 }
 
+
 // When notified. A View could only be notified by a player or an academic building
 void View::notify( Subject & whoNotified ){
     Player *player = dynamic_cast<Player *>( &whoNotified );
@@ -60,6 +62,8 @@ void View::notify( Subject & whoNotified ){
         // If the view is notified by a academic building
         this->changeImprovement(acbuilding->getLocation(), acbuilding->getImprovementLevel());
     }
-    this->drawBoard();
+    if (initialized){
+        this->drawBoard();
+    }
 }
 

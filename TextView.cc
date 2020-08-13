@@ -76,9 +76,9 @@ void TextView::Block::setRightLine(){
 void TextView::Block::setContent(const int & imp,std::string & name){
     setUnderLine();
     setRightLine();
-    if(imp >= Type::academic){
-        for(int i=Type::academic; i<imp ; i++){
-            content[0][i-Type::academic]='I';
+    if(imp >= academic){
+        for(int i=academic; i<imp ; i++){
+            content[0][i-academic]='I';
         }
         for(int i=0; i<blockW ; i++){
             content[1][i]='-';
@@ -129,8 +129,8 @@ void TextView::Block::changeImprovement(int newimprovement){
         content[0][i]=' ';
     }
     if (newimprovement>=0){
-        for(int i=Type::academic; i<newimprovement ; i++){
-            content[0][i-Type::academic]='I';
+        for(int i=academic; i<newimprovement ; i++){
+            content[0][i-academic]='I';
         }
     }
 }
@@ -168,7 +168,6 @@ TextView::TextView(int height, int width):View(height,width){
     for (int i=1 ; i< actualH-1; i++){
         Blocks[i][actualW-2]->setRightLine();
     }
-    initialized = false;
 }
 
 void TextView::movePlayer(char player, int newlocation){

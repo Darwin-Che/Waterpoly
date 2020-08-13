@@ -5,7 +5,6 @@
 
 class TextView: public View{
     int gridH, gridW;
-    bool initialized;
 
     // the string representation of each square
     class Block{
