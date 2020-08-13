@@ -1,26 +1,30 @@
-4
-p1 1 2 0 0
+8
+p1 1 2 1500 0
 p2 2 1 1500 0
 p3 3 0 1500 0
 p4 4 0 1500 0 
-AL   p1 -1
-ML   p2 0
-MKV  p3 0
-ECH  p4 0
-PAS  p2 5
-HH   p2 5
-RCH  p2 5
-PAC  p4 -1
+p5 5 0 1500 0
+p6 6 0 1500 0
+p7 7 0 1500 0
+p8 8 0 1500 0
+AL   p1 3
+ML   p1 5
+MKV  p1 0
+ECH  p1 -1
+PAS  p1 3
+HH   p1 3
+RCH  p1 0
+PAC  p1 -1
 DWE  BANK 0
-CPH  p1 0
+CPH  BANK 0
 UWP  p3 0
-LHI  p1 3
+LHI  BANK 0
 BMH  BANK 0
 OPT  BANK 0
 EV1  BANK 0
 EV2  BANK 0
 EV3  BANK 0
-V1   p1 0
+V1   p3 0
 PHYS BANK 0
 B1   BANK 0
 CIF  p4 0
@@ -29,5 +33,5 @@ EIT  BANK 0
 ESC  BANK 0
 C2   BANK 0
 REV  p3 0
-MC   BANK 0
-DC   p3 0
+MC   p2 0
+DC   p2 0

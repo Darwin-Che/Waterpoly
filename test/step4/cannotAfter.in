@@ -1,0 +1,12 @@
+roll 4 4
+unmortgage AL
+improve CPH buy
+improve LHI buy
+improve LHI sell
+mortgage CPH
+unmortgage CPH
+trade p3 100 REV
+trade p3 V1 UWP
+roll 1 2
+next
+

@@ -13,7 +13,7 @@ MKV  p1 0
 ECH  p1 -1
 PAS  p1 3
 HH   p1 3
-RCH  BANK 0
+RCH  p1 0
 PAC  p1 -1
 DWE  BANK 0
 CPH  BANK 0
@@ -33,5 +33,5 @@ EIT  BANK 0
 ESC  BANK 0
 C2   BANK 0
 REV  p3 0
-MC   BANK 0
-DC   p1 0
+MC   p2 4
+DC   p2 0

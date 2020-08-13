@@ -1,2 +1,7 @@
 trade p2 100 200
-trade p2 
+trade p2 RCH UWP
+trade p3 ECH 100
+trade p3 PAS 100
+trade p2 500 MC
+trade p2 500 DC
+trade p1 100 RCH
