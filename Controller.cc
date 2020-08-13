@@ -57,7 +57,8 @@ void Controller::takeTurn(std::istream &in)
                     if (cstate->numDoubleRoll < 2)
                     {
                         cstate->numDoubleRoll++;
-                        model->playerProceed(curPlayerName, d1 + d2);
+                        bool toJail = model->playerProceed(curPlayerName, d1 + d2);
+                        cstate->canRoll = !toJail;
                     }
                     else
                     {

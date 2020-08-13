@@ -5,7 +5,7 @@ Step 1:
     
 Step 2: 
     test Strategies without bankrupcy
-    -- Collect OSAP
+    +- Collect OSAP
         step on it : collect twice
     +- pay rent for academic buildings
     +- pay rent for Gym

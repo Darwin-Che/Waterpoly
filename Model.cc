@@ -272,12 +272,14 @@ Model::Model(std::istream &tin, std::ostream &tout)
 {
 }
 
-void Model::playerProceed(const std::string &pn, int steps)
+bool Model::playerProceed(const std::string &pn, int steps)
 {
     if (!existPlayer(pn))
-        return;
+        return false;
 
     std::shared_ptr<Player> p = allPlayers[pn];
+    bool prevJail = p->getIsJailed();
+    int prevPos = p->getPosition();
     if (p->getIsJailed())
     {
         strategies[board->getSquareLocation("DC Tims Line")]->acceptVisitor(p, board, min, mout);
@@ -285,8 +287,9 @@ void Model::playerProceed(const std::string &pn, int steps)
     else
     {
         p->setPosition((p->getPosition() + steps) % board->getTotalSquareNum());
-        strategies[board->getSquareLocation("COLLECT OSAP")]->acceptVisitor(p, board, min, mout);
-        int prevPos = p->getPosition();
+        prevPos = p->getPosition();
+        if (p->getPosition() != board->getSquareLocation("COLLECT OSAP"))
+            strategies[board->getSquareLocation("COLLECT OSAP")]->acceptVisitor(p, board, min, mout);
         if (board->getOwner(board->getSquare(p->getPosition())->getName()).get() == nullptr && std::dynamic_pointer_cast<Building>(board->getSquare(p->getPosition())).get() != nullptr)
         {
             sellBuilding(pn, board->getSquare(p->getPosition())->getName());
@@ -295,21 +298,22 @@ void Model::playerProceed(const std::string &pn, int steps)
         {
             strategies[p->getPosition()]->acceptVisitor(p, board, min, mout);
         }
-
-        while (prevPos != p->getPosition() && !(p->getIsJailed()))
-        {
+    }
+    while (prevPos != p->getPosition() && !(p->getIsJailed()))
+    {
+        prevPos = p->getPosition();
+        if (p->getPosition() != board->getSquareLocation("COLLECT OSAP"))
             strategies[board->getSquareLocation("COLLECT OSAP")]->acceptVisitor(p, board, min, mout);
-            prevPos = p->getPosition();
-            if (board->getOwner(board->getSquare(p->getPosition())->getName()).get() == nullptr && std::dynamic_pointer_cast<Building>(board->getSquare(p->getPosition())).get() != nullptr)
-            {
-                sellBuilding(pn, board->getSquare(p->getPosition())->getName());
-            }
-            else
-            {
-                strategies[p->getPosition()]->acceptVisitor(p, board, min, mout);
-            }
+        if (board->getOwner(board->getSquare(p->getPosition())->getName()).get() == nullptr && std::dynamic_pointer_cast<Building>(board->getSquare(p->getPosition())).get() != nullptr)
+        {
+            sellBuilding(pn, board->getSquare(p->getPosition())->getName());
+        }
+        else
+        {
+            strategies[p->getPosition()]->acceptVisitor(p, board, min, mout);
         }
     }
+    return allPlayers[pn]->getIsJailed() || prevJail;
 }
 
 void Model::gotoTims(const std::string &pn)

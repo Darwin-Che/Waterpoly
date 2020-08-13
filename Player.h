@@ -37,7 +37,7 @@ class Player: public Subject{
     static int getTotalNumCups();
 
     bool getIsJailed() const;
-    void setIsJailed(const bool & isJaied);
+    void setIsJailed(const bool & isJailed);
 
     int getNumJailed() const;
     void setNumJailed(const int & getNumJailed);

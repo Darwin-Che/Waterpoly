@@ -66,7 +66,7 @@ public:
     /************** Methods called by Controller **************/
 
     // call corresponding strategy
-    void playerProceed(const std::string &pn, int steps);
+    bool playerProceed(const std::string &pn, int steps);
 
     // directly gotoTims
     void gotoTims(const std::string &pn);

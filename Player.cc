@@ -76,7 +76,7 @@ bool Player::getIsJailed() const {
     return isJailed;
 }
 
-void Player::setIsJailed(const bool & isJaied) {
+void Player::setIsJailed(const bool & isJailed) {
     this->isJailed = isJailed;
 }
 
@@ -84,7 +84,7 @@ int Player::getNumJailed() const {
     return numJailed;
 }
 
-void Player::setNumJailed(const int & getNumJailed) {
+void Player::setNumJailed(const int & numJailed) {
     this->numJailed = numJailed;
 }
 
