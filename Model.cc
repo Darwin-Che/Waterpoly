@@ -55,11 +55,6 @@ void Model::clearMap()
     strategies.clear();
 }
 
-void Model::setView(std::shared_ptr<View> t_view)
-{
-    view = t_view;
-}
-
 void Model::payDebt(std::shared_ptr<Player> p1)
 {
     if (p1->getDebt() > 0 && p1->canPayDebt())
@@ -912,6 +907,10 @@ void Model::getInfo(const std::string &pn)
 
 void Model::save(std::ostream &out, std::string pn)
 {
+    if (allPlayers[pn]->getDebt() > 0) {
+        show("You must pay off debt before save the game!");
+        return;
+    }
     out << playerOrder.size() << std::endl;
     std::vector<std::string>::iterator i = std::find(playerOrder.begin(), playerOrder.end(), pn);
     while (true)

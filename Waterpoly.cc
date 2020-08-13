@@ -364,8 +364,6 @@ int main(int argc, char *argv[])
     ostream &out = cout;
     auto boardMap = make_shared<Board>(ownershipList, board, monopolyBlock);
     auto model = make_shared<Model>(in, out);
-    model->loadMap(boardMap, strategies);
-    model->setView(view);
     std::string startName = "";
 
     /************** branch on whether load file ***************/
