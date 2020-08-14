@@ -30,7 +30,7 @@ void Controller::takeTurn(std::istream &in)
             
             if (model->playerJailed(curPlayerName) && Dice::canRoll)
             {
-                model->show("You are in Jail currently, so please listen to the prison officials!");
+                model->show("You are in DC Tims Line currently, so please wait in line patiently!");
                 model->playerProceed(curPlayerName, 0);
             }
             else
@@ -56,7 +56,7 @@ void Controller::takeTurn(std::istream &in)
                         {
                             Dice::canRoll = false;
                             // need to call models method to go to Times line directly
-                            model->show("You consecutively rolled 3 doubles, sent to Jail!");
+                            model->show("You consecutively rolled 3 doubles, join the DC Tims Line!");
                             model->gotoTims(curPlayerName);
                         }
                     }
