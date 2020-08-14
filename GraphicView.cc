@@ -116,7 +116,7 @@ void GraphicsView::drawBlock(shared_ptr<Block> b){
     }
     
     for (int i=0; i<b->playerSymbols.size();i++){
-        win.fillRectangle(x+1+i*7,y+b->blockH-12,6,10,i);
+        //win.fillRectangle(x+1+i*7,y+b->blockH-12,6,10,i);
         win.drawString(x+2+i*7,y+b->blockH-2,string(1,b->playerSymbols[i]));
     }
     // draw the player symbols on this square

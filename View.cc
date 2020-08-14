@@ -1,7 +1,5 @@
 #include "View.h"
 #include "Subject.h"
-//#include "Player.h"
-//#include "AcademicBuilding.h"
 
 //constructor
 View::View(int height,int width):height(height), width(width){
@@ -58,22 +56,5 @@ void View::notify( Subject & whoNotified ){
     else if ( inf.type == InfoType::academic ){
         this->changeImprovement( inf.intVals[0], inf.intVals[1]);
     }
-    /*Player *player = dynamic_cast<Player *>( &whoNotified );
-    AcademicBuilding *acbuilding = dynamic_cast<AcademicBuilding *>( &whoNotified );
-    if ( player != nullptr ){
-        // If View is notified by a player
-        if ( player->getIsBankrupt() ){
-            // If the player bankrupt
-            this->removePlayer( player->getSymbol());
-        }
-        else{
-            // otherwise the player's position has changed
-            this->movePlayer( player->getSymbol() , player->getPosition() );
-        }
-    }
-    else if( acbuilding != nullptr ){
-        // If the view is notified by an academic building
-        this->changeImprovement(acbuilding->getLocation(), acbuilding->getImprovementLevel());
-    }*/
 }
 
