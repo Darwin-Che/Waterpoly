@@ -86,7 +86,7 @@ std::string loadFile(std::istream &loadfile, std::shared_ptr<Model> model, std::
             }
         }
         // player is successfully constructed
-        for (auto view : views){
+        for (auto view : views) {
             player->attach(view);
             view->addPlayer(symbol[0],position);
         }
@@ -142,8 +142,7 @@ std::string loadFile(std::istream &loadfile, std::shared_ptr<Model> model, std::
                 throw std::invalid_argument{ "You cannot mortgage a non property!\n" };
             }
             b->setIsMortgaged(true);
-        }
-        else if (imprLevel >= 1 && imprLevel <= 5) {
+        } else if (imprLevel >= 1 && imprLevel <= 5) {
             std::shared_ptr<AcademicBuilding> ab = std::dynamic_pointer_cast<AcademicBuilding>(s);
             if (ab.get() == nullptr) {
                 throw std::invalid_argument{ "You cannot improve a non academic building!\n" };
@@ -165,8 +164,7 @@ bool findPlayer(char symbol, string name, vector<shared_ptr<Player>> Players, os
         if (p->getName() == name) {
             out << "The name " << name << " already exists" << endl;
             return true;
-        }
-        else if (p->getSymbol() == symbol) {
+        } else if (p->getSymbol() == symbol) {
             out << "The symbol " << symbol << " already exists" << endl;
             return true;
         }
@@ -174,36 +172,27 @@ bool findPlayer(char symbol, string name, vector<shared_ptr<Player>> Players, os
     return false;
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     std::string loadfilename{ "" };
     bool testing = false;
     int argct = 1;
     bool vText = false;
     bool vGraph = false;
-    while (argct < argc)
-    {
-        if (std::string(argv[argct]) == "-load")
-        {
+    while (argct < argc) {
+        if (std::string(argv[argct]) == "-load") {
             argct++;
-            if (argct <= argc)
-            {
+            if (argct <= argc) {
                 loadfilename = std::string(argv[argct]);
-            }
-            else
-            {
+            } else {
                 std::cerr << "No filename after -load!" << std::endl;
                 throw std::logic_error("No filename after -load!");
             }
-        }
-        else if (std::string(argv[argct]) == "-testing")
+        } else if (std::string(argv[argct]) == "-testing")
         {
             testing = true;
-        }
-        else if (std::string(argv[argct]) == "-vText"){
+        } else if (std::string(argv[argct]) == "-vText"){
             vText = true;
-        }
-        else if (std::string(argv[argct]) == "-vGraph"){
+        } else if (std::string(argv[argct]) == "-vGraph"){
             vGraph = true;
         }
         argct++;
@@ -218,14 +207,14 @@ int main(int argc, char *argv[])
     std::string throwaway;
     getline(infile, throwaway);
 
-    if (!vText && !vGraph){
+    if (!vText && !vGraph) {
         vText = true;
     }
     vector<shared_ptr<View>> views;
-    if (vText){
+    if (vText) {
         views.push_back( make_shared<TextView>(boardH, boardW) );
     }
-    if (vGraph){
+    if (vGraph) {
         views.push_back(  make_shared<GraphicsView>(boardH, boardW) );
     }
 
@@ -238,52 +227,33 @@ int main(int argc, char *argv[])
     string name;
     string description;
     int squareNum = 0;
-    while (getline(infile, command))
-    {
+    while (getline(infile, command)) {
         getline(infile, name);
         getline(infile, description);
-        if (command == "square")
-        {
+        if (command == "square") {
             auto square = make_shared<Square>(name, squareNum, description);
             board.push_back(square);
-            for (auto v: views){
+            for (auto v: views) {
                 v->addSquare(name, View::nonBuilding);
             }
-            if (name == "SLC")
-            {
+            if (name == "SLC") {
                 strategies.push_back(make_shared<SLCStrategy>());
-            }
-            else if (name == "COLLECT OSAP")
-            {
+            } else if (name == "COLLECT OSAP") {
                 strategies.push_back(make_shared<CollectOSAPStrategy>());
-            }
-            else if (name == "GO TO TIMS")
-            {
+            } else if (name == "GO TO TIMS") {
                 strategies.push_back(make_shared<GoToTimsStrategy>());
-            }
-            else if (name == "DC Tims Line")
-            {
+            } else if (name == "DC Tims Line") {
                 strategies.push_back(make_shared<DCTimsLineStrategy>());
-            }
-            else if (name == "Goose Nesting")
-            {
+            } else if (name == "Goose Nesting") {
                 strategies.push_back(make_shared<GooseNestingStrategy>());
-            }
-            else if (name == "TUITION")
-            {
+            } else if (name == "TUITION") {
                 strategies.push_back(make_shared<TuitionStrategy>());
-            }
-            else if (name == "COOP FEE")
-            {
+            } else if (name == "COOP FEE") {
                 strategies.push_back(make_shared<CoopFeeStrategy>());
-            }
-            else if (name == "NEEDLES HALL")
-            {
+            } else if (name == "NEEDLES HALL") {
                 strategies.push_back(make_shared<NeedlesHallStrategy>());
             }
-        }
-        else if (command == "gym")
-        {
+        } else if (command == "gym") {
             string blockName;
             int purchaseCost;
             getline(infile, blockName);
@@ -291,23 +261,18 @@ int main(int argc, char *argv[])
             getline(infile, command);
             shared_ptr<Gym> gym = make_shared<Gym>(name, squareNum, description, purchaseCost, false);
             board.push_back(gym);
-            if (monopolyBlock.count(blockName) == 0)
-            {
+            if (monopolyBlock.count(blockName) == 0) {
                 std::vector<std::shared_ptr<Square>> block;
                 block.push_back(gym);
                 monopolyBlock[blockName] = block;
-            }
-            else
-            {
+            } else {
                 monopolyBlock[blockName].push_back(gym);
             }
-            for (auto v: views){
+            for (auto v: views) {
                 v->addSquare(name, View::nonAcademic);
             }
             strategies.push_back(make_shared<GymStrategy>());
-        }
-        else if (command == "residence")
-        {
+        } else if (command == "residence") {
             string blockName;
             int purchaseCost;
             getline(infile, blockName);
@@ -315,23 +280,18 @@ int main(int argc, char *argv[])
             getline(infile, command);
             shared_ptr<Residence> residence = make_shared<Residence>(name, squareNum, description, purchaseCost, false);
             board.push_back(residence);
-            if (monopolyBlock.count(blockName) == 0)
-            {
+            if (monopolyBlock.count(blockName) == 0) {
                 std::vector<std::shared_ptr<Square>> block;
                 block.push_back(residence);
                 monopolyBlock[blockName] = block;
-            }
-            else
-            {
+            } else {
                 monopolyBlock[blockName].push_back(residence);
             }
-            for (auto v: views){
+            for (auto v: views) {
                 v->addSquare(name, View::nonAcademic);
             }
             strategies.push_back(make_shared<ResidenceStrategy>());
-        }
-        else if (command == "academicbuilding")
-        {
+        } else if (command == "academicbuilding") {
             string blockName;
             int purchaseCost;
             int improvementCost;
@@ -345,8 +305,7 @@ int main(int argc, char *argv[])
             infile >> maximprovement;
             getline(infile, command);
 
-            for (int i = 0; i <= maximprovement; i++)
-            {
+            for (int i = 0; i <= maximprovement; i++) {
                 int fee;
                 infile >> fee;
                 getline(infile, command);
@@ -355,17 +314,14 @@ int main(int argc, char *argv[])
 
             auto acbuilding = make_shared<AcademicBuilding>(name, squareNum, description, purchaseCost, false, improvementCost, improvementfee);
             board.push_back(acbuilding);
-            if (monopolyBlock.count(blockName) == 0)
-            {
+            if (monopolyBlock.count(blockName) == 0) {
                 std::vector<std::shared_ptr<Square>> block;
                 block.push_back(acbuilding);
                 monopolyBlock[blockName] = block;
-            }
-            else
-            {
+            } else {
                 monopolyBlock[blockName].push_back(acbuilding);
             }
-            for (auto v: views){
+            for (auto v: views) {
                 acbuilding->attach(v);
                 v->addSquare(name, View::academic);
             }
@@ -375,16 +331,13 @@ int main(int argc, char *argv[])
         squareNum++;
     }
 
-    for (int i = 0; i < board.size(); i++)
-    {
+    for (int i = 0; i < board.size(); i++) {
         cout << i << " " << board[i]->getName() << endl;
     }
 
-    for (auto it : monopolyBlock)
-    {
+    for (auto it : monopolyBlock) {
         cout << it.first << ": ";
-        for (auto t : it.second)
-        {
+        for (auto t : it.second) {
             cout << t->getName() << " ";
         }
         cout << endl;
@@ -395,7 +348,7 @@ int main(int argc, char *argv[])
     istream &in = cin;
     ostream &out = cout;
     auto boardMap = make_shared<Board>(ownershipList, board, monopolyBlock);
-    auto model = make_shared<Model>(in, out);
+    auto model = make_shared<Model>(in, out, "Default");
     model->loadMap(boardMap, strategies);
     std::string startName = "";
 
@@ -406,11 +359,9 @@ int main(int argc, char *argv[])
         std::vector<shared_ptr<Player>> Players;
         int playernum = 0;
 
-        while (playernum < 6 || playernum > 8)
-        {
+        while (playernum < 6 || playernum > 8) {
             cout << "Please choose enter the number of players (6~8):" << endl;
-            if (!(in >> playernum))
-            {
+            if (!(in >> playernum)) {
                 if (in.eof())
                     break;
                 in.clear();
@@ -418,8 +369,7 @@ int main(int argc, char *argv[])
             }
         }
 
-        for (int i = 0; i < playernum; i++)
-        {
+        for (int i = 0; i < playernum; i++) {
             string name, symbol;
             cout << "(Player #" << (i + 1) << ") Please enter your symbol and name:" << endl;
             cin >> symbol >> name;
@@ -428,7 +378,7 @@ int main(int argc, char *argv[])
                 cin >> symbol >> name;
             }
             auto player = make_shared<Player>(symbol[0], name);
-            for (auto v: views){
+            for (auto v: views) {
                 player->attach(v);
                 v->addPlayer(symbol[0],0);
             };
@@ -437,9 +387,7 @@ int main(int argc, char *argv[])
         }
         startName = Players[0]->getName();
         model->loadPlayer(Players);
-    }
-    else
-    {
+    } else {
         // have load file
         std::ifstream infile{ loadfilename };
         startName = loadFile(infile, model, boardMap, views);
@@ -447,7 +395,7 @@ int main(int argc, char *argv[])
 
     Dice::init(testing);
     Controller game{ model, startName };
-    for (auto v: views){
+    for (auto v: views) {
         v->drawBoard();
     }
     game.takeTurn(in);

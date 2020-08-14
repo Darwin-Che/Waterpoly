@@ -6,60 +6,21 @@
 #include <map>
 #include <vector>
 #include <iostream>
-#include "Player.h"
 
 class View;
 class Board;
 class Player;
 class VisitStrategy;
 class Square;
+class ModelImplementation;
 
 class Model
 {
-    std::vector<std::shared_ptr<VisitStrategy>> strategies;
-    std::istream &min;
-    std::ostream &mout;
-    std::shared_ptr<Board> board;
-    std::map<std::string, std::shared_ptr<Player>> allPlayers;
-    std::vector<std::string> playerOrder;
-
-    // true if can afford
-    bool checkPlayerAfford(std::shared_ptr<Player> p, int price);
-
-    // true if owner
-    bool checkOwner(std::shared_ptr<Player> p, const std::string &bn);
-
-    void playerPayVisit(std::shared_ptr<Player> p);
-
-    bool existPlayer(const std::string &pn);
-    bool existBuilding(const std::string &bn);
-
-    // check if the square is a building and is un mortgaged and does not have improvement
-    // return true is so, falso otherwise
-    bool squareTradable(std::shared_ptr<Square> s);
-
-    // check if p1 is in debt and can pay debt, if so, paydebt to debtor, otherwise do nothing
-    void payDebt(std::shared_ptr<Player> p1);
-
-    // deduct money price from p:
-    // if p is not in debt, p can pay price, pay directly
-    // if p is not in debt, p cannot pay, add price to debt, take debtor
-    // if p is in debt, then debtor should be the same, and add debt up
-    bool deductMoney(std::shared_ptr<Player> p, int price, const std::string &debtor);
-
-    // deal with interaction loop with Players
-    std::pair<std::string, int> auctionHelper();
-
-    // wrapper around s's getInfo, add some current owner,rent information
-    void getInfo(std::shared_ptr<Square> s);
-
-    // wrapper around auction building
-    void sellBuilding(const std::string &pn, const std::string &bn);
-
-    bool askTrade(const std::string &pn);
+    // Bridge design pattern: pointer to implementation class
+    std::shared_ptr<ModelImplementation> pImpl;
 
 public:
-    Model(std::istream &tin, std::ostream &tout);
+    Model(std::istream &tin, std::ostream &tout, const std::string &version);
 
     /************** Methods called by Main **************/
 
