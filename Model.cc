@@ -36,6 +36,8 @@ bool Model::checkOwner(std::shared_ptr<Player> p, const std::string &bn)
 
 void Model::playerPayVisit(std::shared_ptr<Player> p)
 {
+    if (p->getPosition() != board->getSquareLocation("COLLECT OSAP"))
+        strategies[board->getSquareLocation("COLLECT OSAP")]->acceptVisitor(p, board, min, mout);
     // if this is a building need auction
     if (board->getOwner(board->getSquare(p->getPosition())->getName()).get() == nullptr && std::dynamic_pointer_cast<Building>(board->getSquare(p->getPosition())).get() != nullptr)
         sellBuilding(p->getName(), board->getSquare(p->getPosition())->getName());
@@ -328,7 +330,7 @@ bool Model::playerProceed(const std::string &pn, int steps)
     else
     {
         // not Jailed, then proceed according to steps
-        p->setPosition((p->getPosition() + steps) % board->getTotalSquareNum());
+        p->moveForward(steps, board->getTotalSquareNum());
         prevPos = p->getPosition();
 
         playerPayVisit(p);
@@ -349,10 +351,15 @@ void Model::gotoTims(const std::string &pn)
 {
     if (!existPlayer(pn))
         return;
-
+    
     allPlayers[pn]->setIsJailed(true);
     allPlayers[pn]->setNumJailed(0);
-    allPlayers[pn]->setPosition(board->getSquareLocation("DC Tims Line"));
+
+    int timsLocation = board->getSquareLocation("DC Tims Line");
+    int playerLocation = allPlayers[pn]->getPosition();
+    int totalSquares = board->getTotalSquareNum();
+    int moveAmount = (timsLocation - playerLocation + totalSquares) % totalSquares;
+    allPlayers[pn]->moveForward(moveAmount, totalSquares);
 }
 
 void Model::show(const std::string &message)
