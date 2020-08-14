@@ -23,9 +23,6 @@ class Model
     std::map<std::string, std::shared_ptr<Player>> allPlayers;
     std::vector<std::string> playerOrder;
 
-    // true if no debt
-    bool checkPlayerDebt(std::shared_ptr<Player> p);
-
     // true if can afford
     bool checkPlayerAfford(std::shared_ptr<Player> p, int price);
 
@@ -75,6 +72,9 @@ public:
     void clearMap();
 
     /************** Methods called by Controller **************/
+
+    // true if no debt
+    bool checkPlayerDebt(const std::string &pn);
 
     // return whether the player was Jailed at the start or end of function
     bool playerJailed(const std::string &pn);

@@ -23,6 +23,11 @@ void Controller::takeTurn(std::istream &in)
     {
         if (command == "roll")
         {
+            if (!model->checkPlayerDebt(curPlayerName)){
+                model->show("Please pay off debt before rolling!");
+                continue;
+            }
+            
             if (model->playerJailed(curPlayerName) && Dice::canRoll)
             {
                 model->show("You are in Jail currently, so please listen to the prison officials!");
@@ -169,6 +174,7 @@ void Controller::takeTurn(std::istream &in)
                     else
                     {
                         curPlayerName = doubleKill;
+                        Dice::clear();
                         Dice::canRoll = false;
                     }
                 }
