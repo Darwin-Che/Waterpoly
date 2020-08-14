@@ -9,7 +9,7 @@ class Xwindow {
   Window w;
   int s;
   GC gc;
-  unsigned long colours[10];
+  unsigned long colours[20];
   int width, height;
 
  public:
@@ -30,7 +30,7 @@ class Xwindow {
   void drawRectangle(int x, int y, int width, int height, int colour=Black);
 
   // Draws a line
-  void drawLine(int x1, int y1, int x2, int y2, int colour);
+  void drawLine(int x1, int y1, int x2, int y2, int colour = Black);
 
   // Draws a string
   void drawString(int x, int y, std::string msg);
