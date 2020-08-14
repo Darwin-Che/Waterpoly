@@ -16,7 +16,7 @@ posX(x), posY(y), blockH(h), blockW(w), improvement(improvement) {
 
     // check each word of the name of the square, and trim them to fit the display
     while (strm>>word){
-        if (word.size() * 5 > blockW){
+        if (word.size() * 6 > blockW){
             parse.push_back( word.substr(0, blockW/5) );
         }
         else{
@@ -27,7 +27,7 @@ posX(x), posY(y), blockH(h), blockW(w), improvement(improvement) {
     string namepart="";
     // arrange each word of the name of the square into lines
     for (auto it: parse){
-        if ( (namepart.size() +it.size()+1) * 5 > blockW ){
+        if ( (namepart.size() +it.size()) * 6 > blockW ){
             nameString.push_back(namepart);
             namepart = it;
         }
@@ -115,8 +115,12 @@ void GraphicsView::drawBlock(shared_ptr<Block> b){
         line += 12;
     }
     
+    for (int i=0; i<b->playerSymbols.size();i++){
+        win.fillRectangle(x+1+i*7,y+b->blockH-12,6,10,i);
+        win.drawString(x+2+i*7,y+b->blockH-2,string(1,b->playerSymbols[i]));
+    }
     // draw the player symbols on this square
-    win.drawString(x+2, y+b->blockH-2,b->playerSymbols);
+    //win.drawString(x+2, y+b->blockH-2,b->playerSymbols);
     win.drawRectangle(x,y,b->blockW,b->blockH,Xwindow::Black);
 }
 

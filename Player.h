@@ -55,6 +55,8 @@ class Player: public Subject{
 
     // notify Observers when the player bankrupt
     void dropOut();
+
+    virtual Info getSubjectInfo();
 };
 
 #endif

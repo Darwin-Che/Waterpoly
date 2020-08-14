@@ -54,3 +54,7 @@ std::string AcademicBuilding::saveInfo() const
     }
 
 }
+
+Info AcademicBuilding::getSubjectInfo(){
+    return Info{InfoType::academic,{},{getLocation(),improvementLevel},{},{}};
+}

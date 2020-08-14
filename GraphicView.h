@@ -9,6 +9,8 @@
 class GraphicsView: public View{
     // window size
     int windowSize;
+    // maps each player to a color
+    
     // the grahic window
     Xwindow win;
     // stores the information of each square on the board

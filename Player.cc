@@ -127,3 +127,7 @@ int Player::getTotalNumCups() {
     return totalNumCups;
 }
 
+Info Player::getSubjectInfo(){
+    return Info{InfoType::player,{isBankrupt},{position},{symbol},{}};
+}
+

@@ -1,6 +1,7 @@
 #include "View.h"
-#include "Player.h"
-#include "AcademicBuilding.h"
+#include "Subject.h"
+//#include "Player.h"
+//#include "AcademicBuilding.h"
 
 //constructor
 View::View(int height,int width):height(height), width(width){
@@ -45,7 +46,19 @@ void View::addSquare(const std::string & name, int improvement){
 
 // When notified. A View could only be notified by a player or an academic building
 void View::notify( Subject & whoNotified ){
-    Player *player = dynamic_cast<Player *>( &whoNotified );
+    Info inf = whoNotified.getSubjectInfo();
+    if( inf.type == InfoType::player ){
+        if( inf.boolVals[0] ){
+            this->removePlayer( inf.charVals[0]);
+        }
+        else {
+            this->movePlayer( inf.charVals[0] ,inf.intVals[0] );
+        }
+    }
+    else if ( inf.type == InfoType::academic ){
+        this->changeImprovement( inf.intVals[0], inf.intVals[1]);
+    }
+    /*Player *player = dynamic_cast<Player *>( &whoNotified );
     AcademicBuilding *acbuilding = dynamic_cast<AcademicBuilding *>( &whoNotified );
     if ( player != nullptr ){
         // If View is notified by a player
@@ -61,6 +74,6 @@ void View::notify( Subject & whoNotified ){
     else if( acbuilding != nullptr ){
         // If the view is notified by an academic building
         this->changeImprovement(acbuilding->getLocation(), acbuilding->getImprovementLevel());
-    }
+    }*/
 }
 

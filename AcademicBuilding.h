@@ -20,6 +20,7 @@ class AcademicBuilding : public Building, public Subject {
     virtual int calculateNetworth() const;
     virtual std::string getInfo() const;
     virtual std::string saveInfo() const;
+    virtual Info getSubjectInfo();
 };
 
 #endif
