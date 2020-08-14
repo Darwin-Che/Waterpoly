@@ -179,6 +179,8 @@ int main(int argc, char *argv[])
     std::string loadfilename{ "" };
     bool testing = false;
     int argct = 1;
+    bool vText = false;
+    bool vGraph = false;
     while (argct < argc)
     {
         if (std::string(argv[argct]) == "-load")
@@ -198,8 +200,15 @@ int main(int argc, char *argv[])
         {
             testing = true;
         }
+        else if (std::string(argv[argct]) == "-vText"){
+            vText = true;
+        }
+        else if (std::string(argv[argct]) == "-vGraph"){
+            vGraph = true;
+        }
         argct++;
     }
+
 
     std::ifstream infile{ "initial_information.txt" };
     int boardH;
@@ -208,8 +217,17 @@ int main(int argc, char *argv[])
     infile >> boardW;
     std::string throwaway;
     getline(infile, throwaway);
-    auto view = make_shared<TextView>(boardH, boardW);
-    auto graphview = make_shared<GraphicsView>(boardH, boardW);
+
+    if (!vText && !vGraph){
+        vText = true;
+    }
+    vector<shared_ptr<View>> views;
+    if (vText){
+        views.push_back( make_shared<TextView>(boardH, boardW) );
+    }
+    if (vGraph){
+        views.push_back(  make_shared<GraphicsView>(boardH, boardW) );
+    }
 
     std::vector<std::shared_ptr<Square>> board;
     std::map<std::string, std::vector<std::shared_ptr<Square>>> monopolyBlock;
@@ -228,8 +246,9 @@ int main(int argc, char *argv[])
         {
             auto square = make_shared<Square>(name, squareNum, description);
             board.push_back(square);
-            view->addSquare(name, View::nonBuilding);
-            graphview->addSquare(name, View::nonBuilding);
+            for (auto v: views){
+                v->addSquare(name, View::nonBuilding);
+            }
             if (name == "SLC")
             {
                 strategies.push_back(make_shared<SLCStrategy>());
@@ -282,8 +301,9 @@ int main(int argc, char *argv[])
             {
                 monopolyBlock[blockName].push_back(gym);
             }
-            view->addSquare(name, View::nonAcademic);
-            graphview->addSquare(name, View::nonAcademic);
+            for (auto v: views){
+                v->addSquare(name, View::nonAcademic);
+            }
             strategies.push_back(make_shared<GymStrategy>());
         }
         else if (command == "residence")
@@ -305,8 +325,9 @@ int main(int argc, char *argv[])
             {
                 monopolyBlock[blockName].push_back(residence);
             }
-            view->addSquare(name, View::nonAcademic);
-            graphview->addSquare(name, View::nonAcademic);
+            for (auto v: views){
+                v->addSquare(name, View::nonAcademic);
+            }
             strategies.push_back(make_shared<ResidenceStrategy>());
         }
         else if (command == "academicbuilding")
@@ -344,10 +365,10 @@ int main(int argc, char *argv[])
             {
                 monopolyBlock[blockName].push_back(acbuilding);
             }
-            acbuilding->attach(view);
-            acbuilding->attach(graphview);
-            view->addSquare(name, View::academic);
-            graphview->addSquare(name, View::academic);
+            for (auto v: views){
+                acbuilding->attach(v);
+                v->addSquare(name, View::academic);
+            }
             strategies.push_back(make_shared<AcademicBuildingStrategy>());
         }
         ownershipList.push_back(shared_ptr<Player>());
@@ -407,10 +428,10 @@ int main(int argc, char *argv[])
                 cin >> symbol >> name;
             }
             auto player = make_shared<Player>(symbol[0], name);
-            player->attach(view);
-            view->addPlayer(symbol[0],0);
-            player->attach(graphview);
-            graphview->addPlayer(symbol[0],0);
+            for (auto v: views){
+                player->attach(v);
+                v->addPlayer(symbol[0],0);
+            };
             Players.push_back(player);
             getline(cin, name);
         }
@@ -421,13 +442,14 @@ int main(int argc, char *argv[])
     {
         // have load file
         std::ifstream infile{ loadfilename };
-        startName = loadFile(infile, model, boardMap, vector<shared_ptr<View>>{view, graphview});
+        startName = loadFile(infile, model, boardMap, views);
     }
 
     Dice::init(testing);
     Controller game{ model, startName, testing };
-    view->drawBoard();
-    graphview->drawBoard();
+    for (auto v: views){
+        v->drawBoard();
+    }
     game.takeTurn(in);
 
 }
