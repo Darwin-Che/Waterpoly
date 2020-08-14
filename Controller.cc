@@ -10,19 +10,8 @@
 #include "Model.h"
 #include "Dice.h"
 
-struct cState
-{
-    int numDoubleRoll;
-    bool canRoll;
-    bool testingMode_roll;
-    cState(int t_numDoubleRoll, bool t_canRoll, bool t_testingMode_roll)
-        : numDoubleRoll{t_numDoubleRoll}, canRoll{t_canRoll}, testingMode_roll{t_testingMode_roll}
-    {
-    }
-};
-
-Controller::Controller(std::shared_ptr<Model> t_model, const std::string &startPlayerName, bool t_testingMode_roll)
-    : model{t_model}, cstate{std::make_shared<cState>(0, true, t_testingMode_roll)}, curPlayerName{startPlayerName}
+Controller::Controller(std::shared_ptr<Model> t_model, const std::string &startPlayerName)
+    : model{t_model}, curPlayerName{startPlayerName}
 {
     srand(time(NULL));
 }
@@ -34,20 +23,6 @@ void Controller::takeTurn(std::istream &in)
     {
         if (command == "roll")
         {
-            // int d1; // the first dice number
-            // int d2; // the second dice number
-            // if (cstate->testingMode_roll)
-            // {
-            //     // because is in testing mode, omit error checking
-            //     in >> d1;
-            //     in >> d2;
-            // }
-            // else
-            // {
-            //     d1 = rand() % 6 + 1;
-            //     d2 = rand() % 6 + 1;
-            // }
-
             if (model->playerJailed(curPlayerName) && Dice::canRoll)
             {
                 model->show("You are in Jail currently, so please listen to the prison officials!");
@@ -57,7 +32,7 @@ void Controller::takeTurn(std::istream &in)
             {
                 if (Dice::canRoll)
                 {
-                    std::pair<int,int> res = Dice::roll();
+                    std::pair<int, int> res = Dice::roll();
                     int d1 = res.first;
                     int d2 = res.second;
                     model->show("Player " + curPlayerName + "rolls :" + std::to_string(d1) + " and " + std::to_string(d2) + ". ");

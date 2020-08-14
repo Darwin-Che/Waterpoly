@@ -446,7 +446,7 @@ int main(int argc, char *argv[])
     }
 
     Dice::init(testing);
-    Controller game{ model, startName, testing };
+    Controller game{ model, startName };
     for (auto v: views){
         v->drawBoard();
     }

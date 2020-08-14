@@ -7,17 +7,13 @@
 #include <memory>
 #include "Model.h"
 
-
-class cState;
-
 class Controller
 {
     std::shared_ptr<Model> model;
-    std::shared_ptr<cState> cstate;
     std::string curPlayerName;
 
 public:
-    Controller(std::shared_ptr<Model> t_model, const std::string &startPlayerName, bool t_testingMode_roll);
+    Controller(std::shared_ptr<Model> t_model, const std::string &startPlayerName);
     void takeTurn(std::istream &in);
 };
 
