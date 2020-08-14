@@ -10,6 +10,7 @@ class Player: public Subject{
     int numCups;
     static int totalNumCups;
     bool isJailed;
+    bool canRoll;
     int numJailed;
     int debt;
     std::string debtOwner;

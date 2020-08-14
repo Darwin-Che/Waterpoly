@@ -7,7 +7,8 @@ DCTimsLineStrategy::DCTimsLineStrategy()
     : roll1(-1), roll2(-1) {}
 
 // Utility method: roll a dice
-int DCTimsLineStrategy::roll() {
+int DCTimsLineStrategy::roll()
+{
     int result = rand() % 6;
     if (result == 0)
         result = 6;
@@ -15,25 +16,35 @@ int DCTimsLineStrategy::roll() {
 }
 
 // Helper method: The player tries to roll doubles to leave Tims Line
-void DCTimsLineStrategy::rollDouble(std::shared_ptr<Player> player, std::ostream& out) {
+bool DCTimsLineStrategy::rollDouble(std::shared_ptr<Player> player, std::ostream &out)
+{
     roll1 = roll();
     roll2 = roll();
     out << "You rolled " << roll1 << " and " << roll2 << "." << std::endl;
-    if (roll1 == roll2) {
+    if (roll1 == roll2)
+    {
         player->setIsJailed(false);
         player->setNumJailed(0);
         out << "You rolled double! You can leave DC Tims Line now." << std::endl;
-    } else {
+        return true;
+    }
+    else
+    {
         player->setNumJailed(player->getNumJailed() + 1);
         out << "Sorry, you did not roll double. You are still stuck." << std::endl;
+        return false;
     }
 }
 
 // Helper method: The player pays $50 fee to leave Tims Line
-void DCTimsLineStrategy::payFee(std::shared_ptr<Player> player, std::ostream& out) {
-    if (player->getMoney() >= 50) {
+void DCTimsLineStrategy::payFee(std::shared_ptr<Player> player, std::ostream &out)
+{
+    if (player->getMoney() >= 50)
+    {
         player->setMoney(player->getMoney() - 50);
-    } else {
+    }
+    else
+    {
         player->setDebt(50);
         player->setDebtOwner("BANK");
     }
@@ -44,14 +55,18 @@ void DCTimsLineStrategy::payFee(std::shared_ptr<Player> player, std::ostream& ou
 }
 
 // Helper method: The player tries to spend Roll Up the Rim Cup to leave Tims Line
-void DCTimsLineStrategy::payCup(std::shared_ptr<Player> player, std::ostream& out) {
-    if (player->getNumCups() > 0) {
+void DCTimsLineStrategy::payCup(std::shared_ptr<Player> player, std::ostream &out)
+{
+    if (player->getNumCups() > 0)
+    {
         player->setNumCups(player->getNumCups() - 1);
         player->setIsJailed(false);
         player->setNumJailed(0);
         out << "You spent a Roll Up the Rim Cup to leave DC Tims Line. "
             << "Now you can move as usual." << std::endl;
-    } else {
+    }
+    else
+    {
         out << "Sorry. You do not have any Roll Up the Rim Cup left." << std::endl
             << "Please use a different command. Type either 1 or 2." << std::endl;
     }
@@ -59,9 +74,13 @@ void DCTimsLineStrategy::payCup(std::shared_ptr<Player> player, std::ostream& ou
 
 // The player attempts to leave Tims Line using one of three options
 void DCTimsLineStrategy::acceptVisitor(std::shared_ptr<Player> player,
-        std::shared_ptr<Board> board, std::istream& in, std::ostream& out) {
+                                       std::shared_ptr<Board> board, std::istream &in, std::ostream &out)
+{
+    bool useDouble = false;
+
     // Nothing happens if the player directly landed on Tims Line
-    if (player->getIsJailed() == false) {
+    if (player->getIsJailed() == false)
+    {
         out << "You directly landed on DC Tims line, so nothing happened." << std::endl;
         return;
     }
@@ -73,17 +92,23 @@ void DCTimsLineStrategy::acceptVisitor(std::shared_ptr<Player> player,
     bool finished = false;
 
     // Carry out the appropriate action based on the player's choice
-    while (finished == false) {
+    while (finished == false)
+    {
         std::string choice;
         while (choice != "1" && choice != "2" && choice != "3")
             in >> choice;
-        if (choice == "1") {
-            rollDouble(player, out);
+        if (choice == "1")
+        {
+            useDouble = rollDouble(player, out);
             finished = true;
-        } else if (choice == "2") {
+        }
+        else if (choice == "2")
+        {
             payFee(player, out);
             finished = true;
-        } else {
+        }
+        else
+        {
             payCup(player, out);
             if (player->getIsJailed() == false)
                 finished = true;
@@ -92,21 +117,27 @@ void DCTimsLineStrategy::acceptVisitor(std::shared_ptr<Player> player,
 
     // If the player has already rolled 3 times including this time,
     // then the player must leave using either option 2 or option 3
-    if (player->getNumJailed() == 3) {
+    if (player->getNumJailed() == 3)
+    {
+        useDouble = true;
         out << "This is your third turn of being stuck in DC Tims Line, "
             << "so you must leave now." << std::endl;
         out << "Type 2 if you want to pay $50, type 3 if you want to "
             << "spend a Roll Up the Rim Cup." << std::endl;
         finished = false;
 
-        while (finished == false) {
+        while (finished == false)
+        {
             std::string choice;
             while (choice != "2" && choice != "3")
                 in >> choice;
-            if (choice == "2") {
+            if (choice == "2")
+            {
                 payFee(player, out);
                 finished = true;
-            } else {
+            }
+            else
+            {
                 payCup(player, out);
                 if (player->getIsJailed() == false)
                     finished = true;
@@ -114,16 +145,21 @@ void DCTimsLineStrategy::acceptVisitor(std::shared_ptr<Player> player,
         }
     }
 
-    // If the player is no longer jailed, then the player can move
-    // the same amount as the sum of the dice from his/her last roll
-    if (player->getIsJailed() == false) {
-        if (roll1 == -1 && roll2 == -1) {
-            roll1 = roll();
-            roll2 = roll();
-            out << "You rolled " << roll1 << " and " << roll2 << "." << std::endl;
-        }
+    if (player->getIsJailed() == false && useDouble)
+    {
         MoveStrategy strat(roll1 + roll2);
         strat.acceptVisitor(player, board, in, out);
     }
-}
 
+    // If the player is no longer jailed, then the player can move
+    // the same amount as the sum of the dice from his/her last roll
+    // if (player->getIsJailed() == false) {
+    //     if (roll1 == -1 && roll2 == -1) {
+    //         roll1 = roll();
+    //         roll2 = roll();
+    //         out << "You rolled " << roll1 << " and " << roll2 << "." << std::endl;
+    //     }
+    //     MoveStrategy strat(roll1 + roll2);
+    //     strat.acceptVisitor(player, board, in, out);
+    // }
+}

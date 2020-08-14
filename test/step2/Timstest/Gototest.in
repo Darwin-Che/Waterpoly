@@ -1,7 +1,7 @@
 roll 5 5
 next
-roll 1 4
-yes
+roll 1 3
+2
 next 
 roll 4 6
 next
