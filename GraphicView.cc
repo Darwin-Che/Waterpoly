@@ -130,7 +130,7 @@ void GraphicsView::drawBoard(){
         initializeBlocks();
         initialized = true;
     }
-
+    win.mapXWindow();
     for (auto b : blocks){
         drawBlock(b);
     }

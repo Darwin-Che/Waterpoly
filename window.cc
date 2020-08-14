@@ -9,7 +9,7 @@
 
 using namespace std;
 
-Xwindow::Xwindow(int width, int height) {
+Xwindow::Xwindow(int width, int height):width(width), height(height) {
 
   d = XOpenDisplay(NULL);
   if (d == NULL) {
@@ -20,8 +20,17 @@ Xwindow::Xwindow(int width, int height) {
   w = XCreateSimpleWindow(d, RootWindow(d, s), 10, 10, width, height, 1,
                           BlackPixel(d, s), WhitePixel(d, s));
   XSelectInput(d, w, ExposureMask | KeyPressMask);
-  XMapRaised(d, w);
+  //XMapRaised(d, w);
 
+}
+
+Xwindow::~Xwindow() {
+  XFreeGC(d, gc);
+  XCloseDisplay(d);
+}
+
+void Xwindow::mapXWindow(){
+  XMapRaised(d, w);
   Pixmap pix = XCreatePixmap(d,w,width,
         height,DefaultDepth(d,DefaultScreen(d)));
   gc = XCreateGC(d, pix, 0,(XGCValues *)0);
@@ -53,11 +62,6 @@ Xwindow::Xwindow(int width, int height) {
   XSynchronize(d,True);
 
   usleep(1000);
-}
-
-Xwindow::~Xwindow() {
-  XFreeGC(d, gc);
-  XCloseDisplay(d);
 }
 
 void Xwindow::fillRectangle(int x, int y, int width, int height, int colour) {

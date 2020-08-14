@@ -32,7 +32,7 @@ using namespace std;
 // read in Player information and load Model->loadPlayer
 // read in Owner and building information to set corresponding information in board and building
 // return the name of starting player
-std::string loadFile(std::istream &loadfile, std::shared_ptr<Model> model, std::shared_ptr<Board> board, std::shared_ptr<View> view)
+std::string loadFile(std::istream &loadfile, std::shared_ptr<Model> model, std::shared_ptr<Board> board, std::vector<std::shared_ptr<View>> views)
 {
     /****************  Load Player Info ***************/
 
@@ -85,8 +85,11 @@ std::string loadFile(std::istream &loadfile, std::shared_ptr<Model> model, std::
             }
         }
         // player is successfully constructed
-        player->attach(view);
-        view->addPlayer(symbol[0],position);
+        for (auto view : views){
+            player->attach(view);
+            view->addPlayer(symbol[0],position);
+        }
+        
         Players.emplace_back(player);
         getline(loadfile, rest);
         std::cout << "Player " << name << " successfully loaded!" << std::endl;
@@ -417,7 +420,7 @@ int main(int argc, char *argv[])
     {
         // have load file
         std::ifstream infile{ loadfilename };
-        startName = loadFile(infile, model, boardMap, view);
+        startName = loadFile(infile, model, boardMap, vector<shared_ptr<View>>{view, graphview});
     }
 
     Controller game{ model, startName, testing };
