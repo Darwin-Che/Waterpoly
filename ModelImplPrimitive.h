@@ -5,13 +5,13 @@
 
 class ModelImplPrimitive : public ModelImplementation
 {
-    void playerPayVisit(std::shared_ptr<Player> p);
+    virtual void playerPayVisit(std::shared_ptr<Player> p);
 
     // deal with interaction loop with Players
-    std::pair<std::string, int> auctionHelper();
+    virtual std::pair<std::string, int> auctionHelper();
 
     // wrapper around auction building
-    void sellBuilding(const std::string &pn, const std::string &bn);
+    virtual void sellBuilding(const std::string &pn, const std::string &bn);
 
 public:
     ModelImplPrimitive(std::istream &tin, std::ostream &tout);
