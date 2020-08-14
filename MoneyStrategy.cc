@@ -20,4 +20,3 @@ void MoneyStrategy::acceptVisitor(std::shared_ptr<Player> player,
     else
         out << "You lost $" << -gainAmount << " dollars." << std::endl;
 }
-
