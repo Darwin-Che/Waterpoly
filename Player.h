@@ -6,7 +6,7 @@
 class Player: public Subject{
     char symbol;
     std::string name;
-    int money, position, oldPosition;
+    int money, position, lastMoveAmount;
     int numCups;
     static int totalNumCups;
     bool isJailed;
@@ -27,9 +27,9 @@ class Player: public Subject{
     void setMoney(const int & money);
 
     int getPosition() const;
-    void setPosition(const int & position);
+    void moveForward(const int & moveAmount, const int & totalSquares);
 
-    int getOldPosition() const;
+    int getLastMoveAmount() const;
 
     int getNumCups() const;
     void setNumCups(const int & numcups);

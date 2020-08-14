@@ -4,7 +4,7 @@
 Player::Player(char symbol, const std::string& name) :symbol(symbol), name(name) {
     money = 1500;
     position = 0;
-    oldPosition = 0;
+    lastMoveAmount = 0;
     numCups = 0;
     isJailed = false;
     numJailed = 0;
@@ -18,7 +18,7 @@ Player::Player(char symbol, const std::string& name, int position, int numCups, 
     this->numCups = numCups;
     totalNumCups += numCups;
     this->money = money;
-    oldPosition = position;
+    lastMoveAmount = 0;
 }
 
 Player::Player(char symbol, const std::string& name, int position, int numCups, int money, int numJailed) :symbol(symbol), name(name) {
@@ -26,7 +26,7 @@ Player::Player(char symbol, const std::string& name, int position, int numCups, 
     this->numCups = numCups;
     totalNumCups += numCups;
     this->money = money;
-    oldPosition = position;
+    lastMoveAmount = 0;
     this->numJailed = numJailed;
     isJailed = true;
 }
@@ -53,13 +53,14 @@ int Player::getPosition() const {
 }
 
 // When the position of a player is set, notify observers
-void Player::setPosition(const int & position) {
-    this->position = position;
+void Player::moveForward(const int & moveAmount, const int & totalSquares) {
+    position = (position + moveAmount + totalSquares) % totalSquares;
+    lastMoveAmount = moveAmount;
     notifyObservers();
 }
 
-int Player::getOldPosition() const {
-    return oldPosition;
+int Player::getLastMoveAmount() const {
+    return lastMoveAmount;
 }
 
 int Player::getNumCups() const {

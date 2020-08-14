@@ -32,6 +32,10 @@ void GymStrategy::acceptVisitor(std::shared_ptr<Player> player,
         int roll2 = rand() % 6;
         if (roll2 == 0)
             roll2 = 6;
+        out << "You will pay rent proportional to the dice roll. "
+            << "You rolled " << roll1 << " and " << roll2 << "." << std::endl;
+
+
         int numOwned = board->numNeighbourOwned(buildingName);
         int fee = 0;
         if (numOwned == 1)  // rent = 4 * sum of dice if owner controls one gym
