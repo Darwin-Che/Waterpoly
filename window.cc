@@ -20,6 +20,15 @@ Xwindow::Xwindow(int width, int height):width(width), height(height) {
   w = XCreateSimpleWindow(d, RootWindow(d, s), 10, 10, width, height, 1,
                           BlackPixel(d, s), WhitePixel(d, s));
   XSelectInput(d, w, ExposureMask | KeyPressMask);
+  //XMapWindow(d, w);
+}
+
+Xwindow::~Xwindow() {
+  XFreeGC(d, gc);
+  XCloseDisplay(d);
+}
+
+void Xwindow::mapXWindow(){
   XMapRaised(d, w);
   Pixmap pix = XCreatePixmap(d,w,width,
         height,DefaultDepth(d,DefaultScreen(d)));
@@ -52,16 +61,7 @@ Xwindow::Xwindow(int width, int height):width(width), height(height) {
   XSynchronize(d,True);
 
   usleep(1000);
-}
-
-Xwindow::~Xwindow() {
-  XFreeGC(d, gc);
-  XCloseDisplay(d);
-}
-
-void Xwindow::mapXWindow(){
-  //XMapRaised(d, w);
-  //XMapWindow(d,w);
+  
 }
 
 void Xwindow::fillRectangle(int x, int y, int width, int height, int colour) {
