@@ -9,6 +9,7 @@ class Building : public Square {
   public:
     Building(const std::string& name, int location, const std::string &t_description,
         int purchaseCost, bool isMortgaged);
+    virtual ~Building() = default;
     int getPurchaseCost() const;
     bool getIsMortgaged() const;
     void setIsMortgaged(bool isMortgaged);
