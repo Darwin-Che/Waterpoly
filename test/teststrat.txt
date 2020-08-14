@@ -17,9 +17,9 @@ Step 2:
     - Needles Hall : same as above
     - Roll Cup : same as above
 
-    - goto Tims ( Collect OSAP goto prison, cannot roll immediately )
+    +- goto Tims ( Collect OSAP goto prison, cannot roll immediately )
         has bug
-    - Waiting in Tims Line
+    +- Waiting in Tims Line
 
 Step 3:
     test game logic:

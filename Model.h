@@ -23,7 +23,18 @@ class Model
     std::map<std::string, std::shared_ptr<Player>> allPlayers;
     std::vector<std::string> playerOrder;
 
-    bool existPlayer(const std::string & pn);
+    // true if no debt
+    bool checkPlayerDebt(std::shared_ptr<Player> p);
+
+    // true if can afford
+    bool checkPlayerAfford(std::shared_ptr<Player> p, int price);
+
+    // true if owner
+    bool checkOwner(std::shared_ptr<Player> p, const std::string &bn);
+
+    void playerPayVisit(std::shared_ptr<Player> p);
+
+    bool existPlayer(const std::string &pn);
     bool existBuilding(const std::string &bn);
 
     // check if the square is a building and is un mortgaged and does not have improvement
@@ -65,6 +76,7 @@ public:
 
     /************** Methods called by Controller **************/
 
+    // return whether the player was Jailed at the start or end of function
     bool playerJailed(const std::string &pn);
 
     // call corresponding strategy
