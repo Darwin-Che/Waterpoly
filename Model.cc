@@ -1,4 +1,5 @@
 #include "Model.h"
+#include "ModelExcept.h"
 #include "View.h"
 #include "Player.h"
 #include "Square.h"
@@ -12,11 +13,11 @@
 #include <vector>
 #include <algorithm>
 
-bool Model::checkPlayerDebt(std::shared_ptr<Player> p)
+bool Model::checkPlayerDebt(const std::string &pn)
 {
-    if (p->getDebt() > 0)
-        show(p->getName() + " is in Debt!");
-    return p->getDebt() <= 0;
+    if (allPlayers[pn]->getDebt() > 0)
+        show(allPlayers[pn]->getName() + " is in Debt!");
+    return allPlayers[pn]->getDebt() <= 0;
 }
 
 bool Model::checkPlayerAfford(std::shared_ptr<Player> p, int price)
@@ -35,10 +36,6 @@ bool Model::checkOwner(std::shared_ptr<Player> p, const std::string &bn)
 
 void Model::playerPayVisit(std::shared_ptr<Player> p)
 {
-    // passing through OSAP
-    if (p->getPosition() != board->getSquareLocation("COLLECT OSAP"))
-        strategies[board->getSquareLocation("COLLECT OSAP")]->acceptVisitor(p, board, min, mout);
-
     // if this is a building need auction
     if (board->getOwner(board->getSquare(p->getPosition())->getName()).get() == nullptr && std::dynamic_pointer_cast<Building>(board->getSquare(p->getPosition())).get() != nullptr)
         sellBuilding(p->getName(), board->getSquare(p->getPosition())->getName());
@@ -229,17 +226,18 @@ std::pair<std::string, int> Model::auctionHelper()
             }
             else
             {
+                // withdraw
+                if (offer < 0)
+                {
+                    copyPlayerOrder.erase(copyPlayerOrder.begin() + i);
+                    --i;
+                    break;
+                }
                 if (allPlayers[pyn]->getDebt() > 0 || offer > allPlayers[pyn]->getMoney())
                     show("You don't have that much money left! Please enter again: ( input \"-1\" if you decide to skip ) ");
                 else
                     break;
             }
-        }
-        // withdraw
-        if (offer < 0)
-        {
-            copyPlayerOrder.erase(copyPlayerOrder.begin() + i);
-            --i;
         }
         // offer higher
         if (offer > maxOffer)
@@ -434,7 +432,7 @@ void Model::trade(const std::string &pn1, const std::string &pn2, const std::str
     std::shared_ptr<Square> s = board->getSquareBuilding(property);
 
     // checking process
-    if (!checkOwner(allPlayers[pn1], property) || !checkPlayerDebt(allPlayers[pn2]) || !checkPlayerAfford(allPlayers[pn2], price))
+    if (!checkOwner(allPlayers[pn1], property) || !checkPlayerDebt(pn2) || !checkPlayerAfford(allPlayers[pn2], price))
         return;
 
     if (!squareTradable(s))
@@ -472,7 +470,7 @@ void Model::trade(const std::string &pn1, const std::string &pn2, const std::str
     std::shared_ptr<Square> s2 = board->getSquareBuilding(property2);
 
     // checking process
-    if (!checkOwner(allPlayers[pn1], property1) || !checkOwner(allPlayers[pn2], property2) || !checkPlayerDebt(allPlayers[pn1]) || !checkPlayerDebt(allPlayers[pn2]))
+    if (!checkOwner(allPlayers[pn1], property1) || !checkOwner(allPlayers[pn2], property2) || !checkPlayerDebt(pn1) || !checkPlayerDebt(pn2))
         return;
 
     if (!squareTradable(s1))
@@ -527,7 +525,7 @@ void Model::improve(const std::string &pn, const std::string &property, bool act
     if (action)
     {
         // check if player is in debt
-        if (!checkPlayerDebt(allPlayers[pn]))
+        if (!checkPlayerDebt(pn))
             return;
         // check improvement is at maximum
         if (sAcademic->getImprovementLevel() > 4)
@@ -611,7 +609,7 @@ void Model::mortgage(const std::string &pn, const std::string &property, bool ac
     else
     {
         // check if player is in debt
-        if (!checkPlayerDebt(allPlayers[pn]))
+        if (!checkPlayerDebt(pn))
             return;
         // check improvement is at maximum
         if (!b->getIsMortgaged())
@@ -700,6 +698,9 @@ bool Model::bankrupt(const std::string &pn, std::string &doubleKill)
 
         allPlayers.erase(pn);
         playerOrder.erase(std::remove(playerOrder.begin(), playerOrder.end(), pn), playerOrder.end());
+
+        if (playerOrder.size() == 1)
+            throw ModelExcept{"Congratulations! " + playerOrder[0] + " has won!"};
 
         if (pyn != "" && allPlayers[pyn]->getDebt() > 0)
             doubleKill = pyn;

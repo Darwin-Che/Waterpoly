@@ -6,7 +6,7 @@
 #include <cstdlib>
 #include <ctime>
 #include "Controller.h"
-#include "ModelFail.h"
+#include "ModelExcept.h"
 #include "Model.h"
 #include "Dice.h"
 
@@ -23,6 +23,11 @@ void Controller::takeTurn(std::istream &in)
     {
         if (command == "roll")
         {
+            if (!model->checkPlayerDebt(curPlayerName)){
+                model->show("Please pay off debt before rolling!");
+                continue;
+            }
+            
             if (model->playerJailed(curPlayerName) && Dice::canRoll)
             {
                 model->show("You are in Jail currently, so please listen to the prison officials!");
@@ -156,19 +161,28 @@ void Controller::takeTurn(std::istream &in)
             std::string nextName = model->nextPlayerName(curPlayerName, true);
             std::string doubleKill{""};
             std::cout << nextName;
-            bool success = model->bankrupt(curPlayerName, doubleKill);
-            if (success)
+            try
             {
-                if (doubleKill == "")
+                bool success = model->bankrupt(curPlayerName, doubleKill);
+                if (success)
                 {
-                    curPlayerName = nextName;
-                    Dice::clear();
+                    if (doubleKill == "")
+                    {
+                        curPlayerName = nextName;
+                        Dice::clear();
+                    }
+                    else
+                    {
+                        curPlayerName = doubleKill;
+                        Dice::clear();
+                        Dice::canRoll = false;
+                    }
                 }
-                else
-                {
-                    curPlayerName = doubleKill;
-                    Dice::canRoll = false;
-                }
+            }
+            catch (ModelExcept &e)
+            {
+                std::cout << e.getmessage() << std::endl;
+                return;
             }
             model->show("Current Active Player: " + curPlayerName);
         }

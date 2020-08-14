@@ -39,6 +39,7 @@ Step 4:
     test bankrupcy status cannot 
     - trade / improve / mortgage with money
     - next
+    - roll
     test game status after dropout ( players, board, view ) 
     - debtor's money
     - debtor's property (monopoly, improvement, mortgage status)
