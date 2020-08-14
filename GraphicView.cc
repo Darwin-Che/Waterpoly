@@ -125,12 +125,12 @@ void GraphicsView::initializeBlocks(){
 
 // draw the view
 void GraphicsView::drawBoard(){
+    win.mapXWindow();
     if (!initialized){
         // if the first time to draw a boardx
         initializeBlocks();
         initialized = true;
     }
-    win.mapXWindow();
     for (auto b : blocks){
         drawBlock(b);
     }
