@@ -151,12 +151,21 @@ void DCTimsLineStrategy::acceptVisitor(std::shared_ptr<Player> player,
     {
         if (roll1 == -1 && roll2 == -1)
         {
-            std::pair<int, int> res = Dice::roll();
-            roll1 = res.first;
-            roll2 = res.second;
-            out << "You rolled " << roll1 << " and " << roll2 << "." << std::endl;
+            return;
+            // std::pair<int, int> res = Dice::roll();
+            // roll1 = res.first;
+            // roll2 = res.second;
+            // out << "You rolled " << roll1 << " and " << roll2 << "." << std::endl;
         }
-        MoveStrategy strat(roll1 + roll2);
-        strat.acceptVisitor(player, board, in, out);
+        if (player->getDebt() == 0)
+        {
+            MoveStrategy strat(roll1 + roll2);
+            strat.acceptVisitor(player, board, in, out);
+        }
+        else
+        {
+            out << "You are in debt, please pay off your debt so that you are allowed to leave prison." << std::endl;
+            Dice::storage++;
+        }
     }
 }
