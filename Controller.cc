@@ -50,8 +50,8 @@ void Controller::takeTurn(std::istream &in)
             if (model->playerJailed(curPlayerName) && cstate->canRoll)
             {
                 model->show("You are in Jail currently, so please listen to the prison officials!");
-                cstate->canRoll = false;
                 model->playerProceed(curPlayerName, 0);
+                cstate->canRoll = !model->playerJailed(curPlayerName);
             }
             else
             {
