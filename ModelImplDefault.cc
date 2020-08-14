@@ -58,6 +58,17 @@ bool ModelImplDefault::squareTradable(std::shared_ptr<Square> s)
     return true;
 }
 
+bool ModelImplDefault::getMonopolyMortgage(std::shared_ptr<Square> s){
+    auto neighbours = board->getMonopoly(s->getName());
+    for( auto nSquare: neighbours){
+        auto building = std::dynamic_pointer_cast<Building>(nSquare);
+        if( building->getIsMortgaged()){
+            return true;
+        }
+    }
+    return false;
+}
+
 ModelImplDefault::ModelImplDefault(std::istream &tin, std::ostream &tout)
     : ModelImplPrimitive(tin, tout)
 {
@@ -207,6 +218,11 @@ void ModelImplDefault::improve(const std::string &pn, const std::string &propert
             show(property + "'s improvement level is already at maximum!");
             return;
         }
+        // check if the the building is mortgaged
+        if (getMonopolyMortgage(sAcademic)){
+            show(property + "is mortgaged, you cannot improve a mortgaged building!");
+            return;
+        }
         int cost = sAcademic->getImprovementCost();
         // check if player can afford
         if (!checkPlayerAfford(allPlayers[pn], cost))
@@ -215,6 +231,8 @@ void ModelImplDefault::improve(const std::string &pn, const std::string &propert
         // execute change
         sAcademic->setImprovementLevel(sAcademic->getImprovementLevel() + 1);
         allPlayers[pn]->setMoney(allPlayers[pn]->getMoney() - cost);
+        show(property + "'s improvement level successfully increases to "
+        +std::to_string(sAcademic->getImprovementLevel())+".");
     }
     else
     {
@@ -228,6 +246,8 @@ void ModelImplDefault::improve(const std::string &pn, const std::string &propert
         // execute change
         sAcademic->setImprovementLevel(sAcademic->getImprovementLevel() - 1);
         allPlayers[pn]->setMoney(allPlayers[pn]->getMoney() + refund);
+        show(property + "'s improvement level successfully decreases to "
+        +std::to_string(sAcademic->getImprovementLevel())+".");
         // see if debt can be paid
         payDebt(allPlayers[pn]);
     }
@@ -268,7 +288,7 @@ void ModelImplDefault::mortgage(const std::string &pn, const std::string &proper
             return;
         }
         std::shared_ptr<AcademicBuilding> ab = std::dynamic_pointer_cast<AcademicBuilding>(s);
-        if (ab->getImprovementLevel() != 0)
+        if ( ab!=nullptr && ab->getImprovementLevel() != 0)
         {
             show("You must first sell all improvement on this building!");
             return;

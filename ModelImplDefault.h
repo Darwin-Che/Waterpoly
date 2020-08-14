@@ -8,6 +8,9 @@ class ModelImplDefault : public ModelImplPrimitive
     // check if the square is a building and is un mortgaged and does not have improvement
     // return true is so, falso otherwise
     bool squareTradable(std::shared_ptr<Square> s);
+
+    // true if any buildings in the monopoly is mortgaged
+    bool getMonopolyMortgage(std::shared_ptr<Square> s);
     
     bool askTrade(const std::string &pn);
 

@@ -65,7 +65,7 @@ std::pair<std::string, int> ModelImplPrimitive::auctionHelper() {
                 show("Your command is invalid! Please put in an integer: ");
             } else {
                 // withdraw
-                if (offer < 0) {
+                if (offer <= maxOffer) {
                     copyPlayerOrder.erase(copyPlayerOrder.begin() + i);
                     --i;
                     break;
@@ -218,6 +218,13 @@ void ModelImplPrimitive::auctionPlayer(const std::string &pn) {
     if (!existPlayer(pn))
         return;
 
+    for (auto &s : board->getAssets(pn)) {
+        std::shared_ptr<Building> b = std::dynamic_pointer_cast<Building>(s);
+        if (b.get() == nullptr)
+            std::cerr << "This should never happen: a player owns a nonpropery";
+        b->setIsMortgaged(false);
+    }
+
     show("Auction Start! Bid for Player " + pn);
     show("These are all assets under auction: ");
     std::shared_ptr<Player> p = allPlayers[pn];
@@ -234,7 +241,6 @@ void ModelImplPrimitive::auctionPlayer(const std::string &pn) {
             std::shared_ptr<Building> b = std::dynamic_pointer_cast<Building>(s);
             if (b.get() == nullptr)
                 std::cerr << "This should never happen: a player owns a nonpropery";
-            b->setIsMortgaged(false);
 
             board->setOwner(b->getName(), allPlayers[maxOfferer]);
         }
