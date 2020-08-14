@@ -10,7 +10,7 @@ class ModelImplHouseRules : public ModelImplDefault
 
 protected:
     virtual void applyStrategy(std::shared_ptr<Player> p) override;
-    virtual bool squareImprovable(const std::string &pn, const std::string &property) override;
+    virtual bool squareImprovable(const std::string &pn, const std::string &property, bool action) override;
     
 public:
     // Option 1, 2 and 3 are the 3 house rules mentioned in watopoly.pdf

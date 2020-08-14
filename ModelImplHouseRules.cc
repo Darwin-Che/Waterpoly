@@ -46,22 +46,31 @@ void ModelImplHouseRules::applyStrategy(std::shared_ptr<Player> p) {
     }
 }
 
-bool ModelImplHouseRules::squareImprovable(const std::string &pn, const std::string &property) {
+bool ModelImplHouseRules::squareImprovable(const std::string &pn,
+        const std::string &property, bool action) {
     std::shared_ptr<Square> s = board->getSquareBuilding(property);
-    bool result = ModelImplDefault::squareImprovable(pn, property);
+    bool result = ModelImplDefault::squareImprovable(pn, property, action);
     if (result == false) return false;
 
     std::shared_ptr<AcademicBuilding> ptr = std::dynamic_pointer_cast<AcademicBuilding>(s);
     std::vector<std::shared_ptr<Square>> monopoly = board->getMonopoly(ptr->getName());
     int curLevel = ptr->getImprovementLevel();
-    
+   
     for (auto neighbour : monopoly) {
         std::shared_ptr<AcademicBuilding> nbPtr =
             std::dynamic_pointer_cast<AcademicBuilding>(neighbour);
         int nbLevel = nbPtr->getImprovementLevel();
-        if (nbLevel != curLevel && nbLevel != curLevel + 1) {
-            show("Improvement failed. Due to the even build rule, the improvement levels of all buildings in your monopoly can only be differ by 1.");
-            return false;
+
+        if (action) { // player wants to buy improvement
+            if (nbLevel != curLevel && nbLevel != curLevel + 1) {
+                show("Improvement purchase failed due to the even build rule. Please improve other buildings in your monopoly first.");
+                return false;
+            }
+        } else {  // player wants to sell improvement
+            if (nbLevel != curLevel && nbLevel != curLevel - 1) {
+                show("Improvement sell failed due to the even build rule. Please sell improvements in other buildings of your monopoly first.");
+                return false;
+            }
         }
     }
     return true;

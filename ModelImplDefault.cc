@@ -180,7 +180,7 @@ void ModelImplDefault::trade(const std::string &pn1, const std::string &pn2, con
     }
 }
 
-bool ModelImplDefault::squareImprovable(const std::string &pn, const std::string &property) {
+bool ModelImplDefault::squareImprovable(const std::string &pn, const std::string &property, bool action) {
     std::shared_ptr<Square> s = board->getSquareBuilding(property);
     std::shared_ptr<AcademicBuilding> sAcademic = std::dynamic_pointer_cast<AcademicBuilding>(s);
     // check valid
@@ -193,39 +193,26 @@ bool ModelImplDefault::squareImprovable(const std::string &pn, const std::string
     }
     if (!checkOwner(allPlayers[pn], property))
         return false;
-
     // check building is in monopoly
     if (!(board->inMonopoly(property)))
     {
         show(property + "'s Monopoly block is not entirely owned by you!");
         return false;
     }
-    return true;
-}
 
-void ModelImplDefault::improve(const std::string &pn, const std::string &property, bool action)
-{
-    if (!existPlayer(pn))
-        return;
-    if (!existBuilding(property))
-        return;
-    if (!squareImprovable(pn, property))
-        return;
-
-    std::shared_ptr<Square> s = board->getSquareBuilding(property);
-    std::shared_ptr<AcademicBuilding> sAcademic = std::dynamic_pointer_cast<AcademicBuilding>(s);
-    // improve
-    if (action)
-    {
+    if (action) { // if the players wants to buy improvement
         // check if player is in debt
-        if (!checkPlayerDebt(pn))
-            return;
+        if (!checkPlayerDebt(pn)) {
+            show("You are in debt! Deal with your debt first.");
+            return false;
+        }
         // check improvement is at maximum
         if (sAcademic->getImprovementLevel() > 4)
         {
             show(property + "'s improvement level is already at maximum!");
-            return;
+            return false;
         }
+
         // check if the the building is mortgaged
         std::string mortgagedNeighbour = getMonopolyMortgage(sAcademic);
         if ( mortgagedNeighbour != ""){
@@ -236,30 +223,50 @@ void ModelImplDefault::improve(const std::string &pn, const std::string &propert
                 show(mortgagedNeighbour + " is mortgaged, you cannot improve " + property + 
                 " since you own the Monopoly.");
             }
-            
-            return;
+            return false;
         }
-        int cost = sAcademic->getImprovementCost();
         // check if player can afford
-        if (!checkPlayerAfford(allPlayers[pn], cost))
-            return;
+        int cost = sAcademic->getImprovementCost();
+        if (!checkPlayerAfford(allPlayers[pn], cost)) {
+            show("You do not have enough money.");
+            return false;
+        }
 
-        // execute change
-        sAcademic->setImprovementLevel(sAcademic->getImprovementLevel() + 1);
-        allPlayers[pn]->setMoney(allPlayers[pn]->getMoney() - cost);
-        show(property + "'s improvement level successfully increases to "
-        +std::to_string(sAcademic->getImprovementLevel())+".");
-    }
-    else
-    {
+    } else {  // if the player wants to sell improvement
         // check improvement is at minimum
         if (sAcademic->getImprovementLevel() < 1)
         {
             show(property + "'s improvement level is already at minimum!");
-            return;
+            return false;
         }
+    }
+
+    return true;
+}
+
+void ModelImplDefault::improve(const std::string &pn, const std::string &property, bool action)
+{
+    if (!existPlayer(pn))
+        return;
+    if (!existBuilding(property))
+        return;
+    if (!squareImprovable(pn, property, action))
+        return;
+
+    std::shared_ptr<Square> s = board->getSquareBuilding(property);
+    std::shared_ptr<AcademicBuilding> sAcademic = std::dynamic_pointer_cast<AcademicBuilding>(s);
+    // improve
+    if (action) {
+        // execute the change
+        int cost = sAcademic->getImprovementCost();
+        sAcademic->setImprovementLevel(sAcademic->getImprovementLevel() + 1);
+        allPlayers[pn]->setMoney(allPlayers[pn]->getMoney() - cost);
+        show(property + "'s improvement level successfully increases to "
+        +std::to_string(sAcademic->getImprovementLevel())+".");
+
+    } else {
+        // execute the change
         int refund = sAcademic->getImprovementCost() / 2;
-        // execute change
         sAcademic->setImprovementLevel(sAcademic->getImprovementLevel() - 1);
         allPlayers[pn]->setMoney(allPlayers[pn]->getMoney() + refund);
         show(property + "'s improvement level successfully decreases to "

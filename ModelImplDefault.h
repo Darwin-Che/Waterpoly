@@ -10,7 +10,7 @@ protected:
     // return true is so, falso otherwise
     virtual bool squareTradable(std::shared_ptr<Square> s);
 
-    virtual bool squareImprovable(const std::string &pn, const std::string &property);
+    virtual bool squareImprovable(const std::string &pn, const std::string &property, bool action);
 
     // return a mortgaged building the monopoly of s
     virtual std::string getMonopolyMortgage(std::shared_ptr<Square> s);
