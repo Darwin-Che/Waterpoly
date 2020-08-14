@@ -64,9 +64,9 @@ void Controller::takeTurn(std::istream &in)
                     if (d1 == d2)
                     {
                         model->show("This is a double! ");
-                        model->show("You have already rolled " + std::to_string(Dice::numDoubles + 1) + " doubles!.");
+                        model->show("You have already rolled " + std::to_string(Dice::numDoubles) + " doubles!.");
                         // prevent roll double three times
-                        if (Dice::numDoubles < 2)
+                        if (Dice::numDoubles < 3)
                         {
                             bool toJail = model->playerProceed(curPlayerName, d1 + d2);
                             Dice::canRoll = !toJail;
@@ -75,6 +75,7 @@ void Controller::takeTurn(std::istream &in)
                         {
                             Dice::canRoll = false;
                             // need to call models method to go to Times line directly
+                            model->show("You consecutively rolled 3 doubles, sent to Jail!");
                             model->gotoTims(curPlayerName);
                         }
                     }
