@@ -41,7 +41,7 @@ void Model::playerPayVisit(std::shared_ptr<Player> p)
 
     // if this is a building need auction
     if (board->getOwner(board->getSquare(p->getPosition())->getName()).get() == nullptr && std::dynamic_pointer_cast<Building>(board->getSquare(p->getPosition())).get() != nullptr)
-        sellBuilding(pn, board->getSquare(p->getPosition())->getName());
+        sellBuilding(p->getName(), board->getSquare(p->getPosition())->getName());
     else
         strategies[p->getPosition()]->acceptVisitor(p, board, min, mout);
 }
@@ -435,9 +435,10 @@ void Model::trade(const std::string &pn1, const std::string &pn2, const std::str
 
     // checking process
     if (!checkOwner(allPlayers[pn1], property) || !checkPlayerDebt(allPlayers[pn2]) || !checkPlayerAfford(allPlayers[pn2], price))
-        return
+        return;
 
-            if (!squareTradable(s)) return;
+    if (!squareTradable(s))
+        return;
 
     // ask receiver
     bool result = askTrade(receiver ? pn1 : pn2);
