@@ -33,7 +33,7 @@ class GraphicsView: public View{
     // move a player to a new location
     virtual void movePlayer(char player, int newlocation);
     // remove a player from the board
-    virtual void removePlayer(char player) = 0;
+    virtual void removePlayer(char player);
     // change the improvement level of a block
     virtual void changeImprovement(int location, int newimprovement);
     // draw the Block b
