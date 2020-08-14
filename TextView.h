@@ -49,11 +49,12 @@ class TextView: public View{
     // initialize the blocks
     void initializeBlocks();
 
-    virtual void movePlayer(char player, int newlocation) ;
-
-    virtual void removePlayer(char player) ;
-
-    virtual void changeImprovement(int location, int newimprovement) ;
+    // move a player to a new location
+    virtual void movePlayer(char player, int newlocation);
+    // remove a player from the board
+    virtual void removePlayer(char player) = 0;
+    // change the improvement level of a block
+    virtual void changeImprovement(int location, int newimprovement);
   public:
     // constructor
     TextView(int height, int width);

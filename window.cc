@@ -28,6 +28,7 @@ Xwindow::~Xwindow() {
   XCloseDisplay(d);
 }
 
+// show the Xwindow
 void Xwindow::mapXWindow(){
   XMapRaised(d, w);
   Pixmap pix = XCreatePixmap(d,w,width,
@@ -64,24 +65,28 @@ void Xwindow::mapXWindow(){
   
 }
 
+// fills a rectangle
 void Xwindow::fillRectangle(int x, int y, int width, int height, int colour) {
   XSetForeground(d, gc, colours[colour]);
   XFillRectangle(d, w, gc, x, y, width, height);
   XSetForeground(d, gc, colours[Black]);
 }
 
+// draws a rectangle
 void Xwindow::drawRectangle(int x, int y, int width, int height, int colour) {
   XSetForeground(d, gc, colours[colour]);
   XDrawRectangle(d, w, gc, x, y, width, height);
   XSetForeground(d, gc, colours[Black]);
 }
 
+// draws a line
 void Xwindow::drawLine(int x1, int y1, int x2, int y2, int colour) {
   XSetForeground(d, gc, colours[colour]);
   XDrawLine(d, w, gc, x1, y1, x2, y2);
   XSetForeground(d, gc, colours[Black]);
 }
 
+// draws a string
 void Xwindow::drawString(int x, int y, string msg) {
   XDrawString(d, w, DefaultGC(d, s), x, y, msg.c_str(), msg.length());
 }

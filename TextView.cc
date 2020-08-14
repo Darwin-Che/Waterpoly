@@ -78,6 +78,7 @@ void TextView::Block::setContent(const int & imp,std::string & name){
     setRightLine();
     if(imp >= academic){
         for(int i=academic; i<imp ; i++){
+            // draw the improvement levels
             content[0][i-academic]='I';
         }
         for(int i=0; i<blockW ; i++){
@@ -97,21 +98,11 @@ void TextView::Block::addPlayer(const char & symbol){
     playerNum++;
 }
 
-// add a player's symbol to the block
+// remove a player from the board
 void TextView::Block::removePlayer(const char & symbol){
-    //cout << "removing "<< symbol<<endl;
     auto index = find(playerSymbols.begin(), playerSymbols.end(), symbol);
-    if (index != playerSymbols.end()){
-        /*cout << "old players: ";
-        for (int i=0; i<playerSymbols.size(); i++){
-            cout<< playerSymbols[i]<<" ";
-        }*/
+    if (index != playerSymbols.end()){ // if the symbol is found in this block
         playerSymbols.erase(index);
-        /*cout << ",new players: ";
-        for (int i=0; i<playerSymbols.size(); i++){
-            cout<< playerSymbols[i]<<" ";
-        }
-        cout << endl;*/
         for (int i=0; i<blockW; i++){
             content[blockH-1][i] = ' ';
         }
@@ -170,38 +161,45 @@ TextView::TextView(int height, int width):View(height,width){
     }
 }
 
+// move a player to a new location
 void TextView::movePlayer(char player, int newlocation){
     int oldposition = players[player];
-    //cout << player <<" from "<<oldposition << " to "<< newlocation<<endl;
     vector<int> old2D = get2Dlocation(oldposition);
     vector<int> new2D = get2Dlocation(newlocation);
     Blocks[old2D[0]][old2D[1]]->removePlayer(player);
     Blocks[new2D[0]][new2D[1]]->addPlayer(player);
     players[player]=newlocation;
     
+    // if the board finished initializing
     if (initialized){
+        // redraw the board
         this->drawBoard();
     }
 }
 
+// remove a player from the board
 void TextView::removePlayer(char player){
     int position = players[player];
-    //cout << player <<" remove from "<<position <<endl;
     vector<int> loc2D = get2Dlocation(position);
     Blocks[loc2D[0]][loc2D[1]]->removePlayer(player);
     players.erase( player );
 
+    // if the board finished initializing
     if (initialized){
+        // redraw the board
         this->drawBoard();
     }
 }
 
+// change the improvement level of a block
 void TextView::changeImprovement(int location, int newimprovement) {
     vector<int> loc2D = get2Dlocation(location);
     Blocks[loc2D[0]][loc2D[1]]->changeImprovement(academic+newimprovement);
     improvements[location] = academic+newimprovement;
 
+    // if the board finished initializing
     if (initialized){
+        // redraw the board
         this->drawBoard();
     }
 }

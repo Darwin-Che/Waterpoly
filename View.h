@@ -26,10 +26,11 @@ class View: public Observer{
     // take a 1-d location and calculate its 2-d position on the board
     std::vector<int> get2Dlocation(int location);
 
+    // move a player to a new location
     virtual void movePlayer(char player, int newlocation) = 0;
-
+    // remove a player from the board
     virtual void removePlayer(char player) = 0;
-
+    // change the improvement level of a block
     virtual void changeImprovement(int location, int newimprovement) = 0;
     
   public:

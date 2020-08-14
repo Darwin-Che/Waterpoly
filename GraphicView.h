@@ -30,15 +30,14 @@ class GraphicsView: public View{
     // a vector of blocks
     std::vector<std::shared_ptr<Block>> blocks;
 
-    virtual void movePlayer(char player, int newlocation) ;
-
-    virtual void removePlayer(char player) ;
-
-    virtual void changeImprovement(int location, int newimprovement) ;
-
+    // move a player to a new location
+    virtual void movePlayer(char player, int newlocation);
+    // remove a player from the board
+    virtual void removePlayer(char player) = 0;
+    // change the improvement level of a block
+    virtual void changeImprovement(int location, int newimprovement);
     // draw the Block b
     void drawBlock(std::shared_ptr<Block> b);
-
     // initialize the blocks
     void initializeBlocks();
 
