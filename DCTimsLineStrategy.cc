@@ -1,6 +1,8 @@
 #include "DCTimsLineStrategy.h"
 #include "MoveStrategy.h"
+#include "Dice.h"
 #include <cstdlib>
+#include <vector>
 
 // Constructor
 DCTimsLineStrategy::DCTimsLineStrategy()
@@ -16,23 +18,24 @@ int DCTimsLineStrategy::roll()
 }
 
 // Helper method: The player tries to roll doubles to leave Tims Line
-bool DCTimsLineStrategy::rollDouble(std::shared_ptr<Player> player, std::ostream &out)
+void DCTimsLineStrategy::rollDouble(std::shared_ptr<Player> player, std::ostream &out)
 {
-    roll1 = roll();
-    roll2 = roll();
+    std::pair<int, int> res = Dice::roll();
+    roll1 = res.first;
+    roll2 = res.second;
     out << "You rolled " << roll1 << " and " << roll2 << "." << std::endl;
     if (roll1 == roll2)
     {
         player->setIsJailed(false);
         player->setNumJailed(0);
+        Dice::canRoll = false;
         out << "You rolled double! You can leave DC Tims Line now." << std::endl;
-        return true;
     }
     else
     {
         player->setNumJailed(player->getNumJailed() + 1);
+        Dice::canRoll = false;
         out << "Sorry, you did not roll double. You are still stuck." << std::endl;
-        return false;
     }
 }
 
@@ -76,8 +79,6 @@ void DCTimsLineStrategy::payCup(std::shared_ptr<Player> player, std::ostream &ou
 void DCTimsLineStrategy::acceptVisitor(std::shared_ptr<Player> player,
                                        std::shared_ptr<Board> board, std::istream &in, std::ostream &out)
 {
-    bool useDouble = false;
-
     // Nothing happens if the player directly landed on Tims Line
     if (player->getIsJailed() == false)
     {
@@ -99,7 +100,7 @@ void DCTimsLineStrategy::acceptVisitor(std::shared_ptr<Player> player,
             in >> choice;
         if (choice == "1")
         {
-            useDouble = rollDouble(player, out);
+            rollDouble(player, out);
             finished = true;
         }
         else if (choice == "2")
@@ -119,7 +120,6 @@ void DCTimsLineStrategy::acceptVisitor(std::shared_ptr<Player> player,
     // then the player must leave using either option 2 or option 3
     if (player->getNumJailed() == 3)
     {
-        useDouble = true;
         out << "This is your third turn of being stuck in DC Tims Line, "
             << "so you must leave now." << std::endl;
         out << "Type 2 if you want to pay $50, type 3 if you want to "
@@ -145,21 +145,18 @@ void DCTimsLineStrategy::acceptVisitor(std::shared_ptr<Player> player,
         }
     }
 
-    if (player->getIsJailed() == false && useDouble)
+    // If the player is no longer jailed, then the player can move
+    // the same amount as the sum of the dice from his/her last roll
+    if (player->getIsJailed() == false)
     {
+        if (roll1 == -1 && roll2 == -1)
+        {
+            std::pair<int, int> res = Dice::roll();
+            roll1 = res.first;
+            roll2 = res.second;
+            out << "You rolled " << roll1 << " and " << roll2 << "." << std::endl;
+        }
         MoveStrategy strat(roll1 + roll2);
         strat.acceptVisitor(player, board, in, out);
     }
-
-    // If the player is no longer jailed, then the player can move
-    // the same amount as the sum of the dice from his/her last roll
-    // if (player->getIsJailed() == false) {
-    //     if (roll1 == -1 && roll2 == -1) {
-    //         roll1 = roll();
-    //         roll2 = roll();
-    //         out << "You rolled " << roll1 << " and " << roll2 << "." << std::endl;
-    //     }
-    //     MoveStrategy strat(roll1 + roll2);
-    //     strat.acceptVisitor(player, board, in, out);
-    // }
 }

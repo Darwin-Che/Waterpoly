@@ -6,7 +6,7 @@ class DCTimsLineStrategy : public VisitStrategy {
     // Private helper fields and methods
     int roll1, roll2;
     int roll();
-    bool rollDouble(std::shared_ptr<Player> player, std::ostream& out);
+    void rollDouble(std::shared_ptr<Player> player, std::ostream& out);
     void payFee(std::shared_ptr<Player> player, std::ostream& out);
     void payCup(std::shared_ptr<Player> player, std::ostream& out);
 

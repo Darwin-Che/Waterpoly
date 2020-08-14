@@ -8,6 +8,7 @@
 #include "Controller.h"
 #include "ModelFail.h"
 #include "Model.h"
+#include "Dice.h"
 
 struct cState
 {
@@ -33,53 +34,53 @@ void Controller::takeTurn(std::istream &in)
     {
         if (command == "roll")
         {
-            int d1; // the first dice number
-            int d2; // the second dice number
-            if (cstate->testingMode_roll)
-            {
-                // because is in testing mode, omit error checking
-                in >> d1;
-                in >> d2;
-            }
-            else
-            {
-                d1 = rand() % 6 + 1;
-                d2 = rand() % 6 + 1;
-            }
+            // int d1; // the first dice number
+            // int d2; // the second dice number
+            // if (cstate->testingMode_roll)
+            // {
+            //     // because is in testing mode, omit error checking
+            //     in >> d1;
+            //     in >> d2;
+            // }
+            // else
+            // {
+            //     d1 = rand() % 6 + 1;
+            //     d2 = rand() % 6 + 1;
+            // }
 
-            if (model->playerJailed(curPlayerName) && cstate->canRoll)
+            if (model->playerJailed(curPlayerName) && Dice::canRoll)
             {
                 model->show("You are in Jail currently, so please listen to the prison officials!");
                 model->playerProceed(curPlayerName, 0);
-                cstate->canRoll = !model->playerJailed(curPlayerName);
             }
             else
             {
-                if (cstate->canRoll)
+                if (Dice::canRoll)
                 {
+                    std::pair<int,int> res = Dice::roll();
+                    int d1 = res.first;
+                    int d2 = res.second;
                     model->show("Player " + curPlayerName + "rolls :" + std::to_string(d1) + " and " + std::to_string(d2) + ". ");
                     if (d1 == d2)
                     {
                         model->show("This is a double! ");
-                        model->show("You have already rolled " + std::to_string(cstate->numDoubleRoll + 1) + " doubles!.");
+                        model->show("You have already rolled " + std::to_string(Dice::numDoubles + 1) + " doubles!.");
                         // prevent roll double three times
-                        if (cstate->numDoubleRoll < 2)
+                        if (Dice::numDoubles < 2)
                         {
-                            cstate->numDoubleRoll++;
                             bool toJail = model->playerProceed(curPlayerName, d1 + d2);
-                            cstate->canRoll = !toJail;
+                            Dice::canRoll = !toJail;
                         }
                         else
                         {
-                            cstate->numDoubleRoll++;
-                            cstate->canRoll = false;
+                            Dice::canRoll = false;
                             // need to call models method to go to Times line directly
                             model->gotoTims(curPlayerName);
                         }
                     }
                     else
                     {
-                        cstate->canRoll = false;
+                        Dice::canRoll = false;
                         model->playerProceed(curPlayerName, d1 + d2);
                     }
                 }
@@ -91,7 +92,7 @@ void Controller::takeTurn(std::istream &in)
         }
         else if (command == "next")
         {
-            if (cstate->canRoll)
+            if (Dice::canRoll)
             {
                 model->show("You must first roll!");
                 continue;
@@ -99,8 +100,7 @@ void Controller::takeTurn(std::istream &in)
             std::string nextPlayer = model->nextPlayerName(curPlayerName);
             if (nextPlayer != curPlayerName)
             {
-                cstate->canRoll = true;
-                cstate->numDoubleRoll = 0;
+                Dice::clear();
                 curPlayerName = nextPlayer;
             }
             model->show("Current Active Player: " + curPlayerName);
@@ -186,13 +186,12 @@ void Controller::takeTurn(std::istream &in)
                 if (doubleKill == "")
                 {
                     curPlayerName = nextName;
-                    cstate->canRoll = true;
-                    cstate->numDoubleRoll = 0;
+                    Dice::clear();
                 }
                 else
                 {
                     curPlayerName = doubleKill;
-                    cstate->canRoll = false;
+                    Dice::canRoll = false;
                 }
             }
             model->show("Current Active Player: " + curPlayerName);

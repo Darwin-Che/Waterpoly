@@ -19,6 +19,7 @@
 #include "SLCStrategy.h"
 #include "TuitionStrategy.h"
 #include "NeedlesHallStrategy.h"
+#include "Dice.h"
 #include <iostream>
 #include <fstream>
 #include <map>
@@ -423,6 +424,7 @@ int main(int argc, char *argv[])
         startName = loadFile(infile, model, boardMap, vector<shared_ptr<View>>{view, graphview});
     }
 
+    Dice::init(testing);
     Controller game{ model, startName, testing };
     view->drawBoard();
     graphview->drawBoard();
