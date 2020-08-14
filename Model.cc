@@ -118,4 +118,3 @@ void Model::getInfo(const std::string &pn) {
 void Model::save(std::ostream &out, std::string pn) {
     pImpl->save(out, pn);
 }
-

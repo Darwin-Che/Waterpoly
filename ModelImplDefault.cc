@@ -58,15 +58,16 @@ bool ModelImplDefault::squareTradable(std::shared_ptr<Square> s)
     return true;
 }
 
-bool ModelImplDefault::getMonopolyMortgage(std::shared_ptr<Square> s){
+ // return a mortgaged building the monopoly of s
+std::string ModelImplDefault::getMonopolyMortgage(std::shared_ptr<Square> s){
     auto neighbours = board->getMonopoly(s->getName());
     for( auto nSquare: neighbours){
         auto building = std::dynamic_pointer_cast<Building>(nSquare);
         if( building->getIsMortgaged()){
-            return true;
+            return building->getName();
         }
     }
-    return false;
+    return "";
 }
 
 ModelImplDefault::ModelImplDefault(std::istream &tin, std::ostream &tout)
@@ -219,8 +220,16 @@ void ModelImplDefault::improve(const std::string &pn, const std::string &propert
             return;
         }
         // check if the the building is mortgaged
-        if (getMonopolyMortgage(sAcademic)){
-            show(property + "is mortgaged, you cannot improve a mortgaged building!");
+        std::string mortgagedNeighbour = getMonopolyMortgage(sAcademic);
+        if ( mortgagedNeighbour != ""){
+            if (mortgagedNeighbour == property){
+                show(property + "is mortgaged, you cannot improve a mortgaged building!");
+            }
+            else{
+                show(mortgagedNeighbour + " is mortgaged, you cannot improve " + property + 
+                " since you own the Monopoly.");
+            }
+            
             return;
         }
         int cost = sAcademic->getImprovementCost();
@@ -275,9 +284,7 @@ void ModelImplDefault::mortgage(const std::string &pn, const std::string &proper
     if (!checkOwner(allPlayers[pn], property))
         return;
 
-    if (!squareTradable(board->getSquareBuilding(property)))
-        return;
-
+    
     // improve
     if (action)
     {
@@ -293,11 +300,14 @@ void ModelImplDefault::mortgage(const std::string &pn, const std::string &proper
             show("You must first sell all improvement on this building!");
             return;
         }
+        if (!squareTradable(board->getSquareBuilding(property)))
+        return;
+        
         int refund = b->getPurchaseCost() * 0.5;
         // execute change
         b->setIsMortgaged(true);
         allPlayers[pn]->setMoney(allPlayers[pn]->getMoney() + refund);
-        show(property + "is successfully mortgaged.");
+        show(property + " is successfully mortgaged.");
         // see if debt can be paid
         payDebt(allPlayers[pn]);
     }
@@ -322,7 +332,7 @@ void ModelImplDefault::mortgage(const std::string &pn, const std::string &proper
         // execute change
         b->setIsMortgaged(false);
         allPlayers[pn]->setMoney(allPlayers[pn]->getMoney() - cost);
-        show(property + "is successfully unmortgaged.");
+        show(property + " is successfully unmortgaged.");
     }
 }
 
