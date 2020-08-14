@@ -5,6 +5,8 @@
 
 class ModelImplPrimitive : public ModelImplementation
 {
+protected:
+    virtual void applyStrategy(std::shared_ptr<Player> p);
     virtual void playerPayVisit(std::shared_ptr<Player> p);
 
     // deal with interaction loop with Players

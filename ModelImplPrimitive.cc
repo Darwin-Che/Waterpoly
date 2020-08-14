@@ -13,6 +13,10 @@
 #include <vector>
 #include <algorithm>
 
+void ModelImplPrimitive::applyStrategy(std::shared_ptr<Player> p) {
+    strategies[p->getPosition()]->acceptVisitor(p, board, min, mout);
+}
+
 void ModelImplPrimitive::playerPayVisit(std::shared_ptr<Player> p) {
     if (p->getPosition() != board->getSquareLocation("COLLECT OSAP"))
         strategies[board->getSquareLocation("COLLECT OSAP")]->acceptVisitor(p, board, min, mout);
@@ -20,7 +24,7 @@ void ModelImplPrimitive::playerPayVisit(std::shared_ptr<Player> p) {
     if (board->getOwner(board->getSquare(p->getPosition())->getName()).get() == nullptr && std::dynamic_pointer_cast<Building>(board->getSquare(p->getPosition())).get() != nullptr)
         sellBuilding(p->getName(), board->getSquare(p->getPosition())->getName());
     else
-        strategies[p->getPosition()]->acceptVisitor(p, board, min, mout);
+        this->applyStrategy(p);
 }
 
 std::pair<std::string, int> ModelImplPrimitive::auctionHelper() {

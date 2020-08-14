@@ -180,14 +180,7 @@ void ModelImplDefault::trade(const std::string &pn1, const std::string &pn2, con
     }
 }
 
-void ModelImplDefault::improve(const std::string &pn, const std::string &property, bool action)
-{
-    if (!existPlayer(pn))
-        return;
-
-    if (!existBuilding(property))
-        return;
-
+bool ModelImplDefault::squareImprovable(const std::string &pn, const std::string &property) {
     std::shared_ptr<Square> s = board->getSquareBuilding(property);
     std::shared_ptr<AcademicBuilding> sAcademic = std::dynamic_pointer_cast<AcademicBuilding>(s);
     // check valid
@@ -196,17 +189,31 @@ void ModelImplDefault::improve(const std::string &pn, const std::string &propert
     if (!checkProperty_Impr)
     {
         show(property + " is not an improvable Square!");
-        return;
+        return false;
     }
     if (!checkOwner(allPlayers[pn], property))
-        return;
+        return false;
 
     // check building is in monopoly
     if (!(board->inMonopoly(property)))
     {
         show(property + "'s Monopoly block is not entirely owned by you!");
-        return;
+        return false;
     }
+    return true;
+}
+
+void ModelImplDefault::improve(const std::string &pn, const std::string &property, bool action)
+{
+    if (!existPlayer(pn))
+        return;
+    if (!existBuilding(property))
+        return;
+    if (!squareImprovable(pn, property))
+        return;
+
+    std::shared_ptr<Square> s = board->getSquareBuilding(property);
+    std::shared_ptr<AcademicBuilding> sAcademic = std::dynamic_pointer_cast<AcademicBuilding>(s);
     // improve
     if (action)
     {

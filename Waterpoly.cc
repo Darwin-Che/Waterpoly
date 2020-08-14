@@ -178,6 +178,7 @@ int main(int argc, char *argv[]) {
     int argct = 1;
     bool vText = false;
     bool vGraph = false;
+    std::vector<int> houseRules;
     while (argct < argc) {
         if (std::string(argv[argct]) == "-load") {
             argct++;
@@ -194,10 +195,19 @@ int main(int argc, char *argv[]) {
             vText = true;
         } else if (std::string(argv[argct]) == "-vGraph"){
             vGraph = true;
+        } else if (std::string(argv[argct]).substr(0, 5) == "-rule") {
+            try {
+                std::string choice = std::string(argv[argct]).substr(5);
+                int choiceNum = std::stoi(choice);
+                if (choiceNum < 1 || choiceNum > 4) throw std::exception();
+                houseRules.emplace_back(choiceNum);
+            } catch (std::exception& e) {
+                std::cerr << "Command line argument is incorrectly specified." << std::endl;
+                return 1;
+            }
         }
         argct++;
     }
-
 
     std::ifstream infile{ "initial_information.txt" };
     int boardH;
@@ -348,7 +358,11 @@ int main(int argc, char *argv[]) {
     istream &in = cin;
     ostream &out = cout;
     auto boardMap = make_shared<Board>(ownershipList, board, monopolyBlock);
-    auto model = make_shared<Model>(in, out, "Default");
+    std::shared_ptr<Model> model;
+    if (houseRules.size() == 0)
+        model = make_shared<Model>(in, out, "Default", houseRules);
+    else
+        model = make_shared<Model>(in, out, "HouseRules", houseRules);
     model->loadMap(boardMap, strategies);
     std::string startName = "";
 

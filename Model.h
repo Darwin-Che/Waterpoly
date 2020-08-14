@@ -20,7 +20,8 @@ class Model
     std::shared_ptr<ModelImplementation> pImpl;
 
 public:
-    Model(std::istream &tin, std::ostream &tout, const std::string &version);
+    Model(std::istream &tin, std::ostream &tout, const std::string &version,
+            std::vector<int> houseRules);
 
     /************** Methods called by Main **************/
 

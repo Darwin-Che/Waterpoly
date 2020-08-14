@@ -1,12 +1,17 @@
 #include "Model.h"
 #include "ModelImplPrimitive.h"
 #include "ModelImplDefault.h"
+#include "ModelImplHouseRules.h"
 
-Model::Model(std::istream &tin, std::ostream &tout, const std::string &version) {
+Model::Model(std::istream &tin, std::ostream &tout,
+        const std::string &version, std::vector<int> houseRules) {
     if (version == "Primitive")
         pImpl = std::make_shared<ModelImplPrimitive>(tin, tout);
     else if (version == "Default")
         pImpl = std::make_shared<ModelImplDefault>(tin, tout);
+    else if (version == "HouseRules") {
+        pImpl = std::make_shared<ModelImplHouseRules>(tin, tout, houseRules);
+    }
 }
 
     /************** Methods called by Main **************/

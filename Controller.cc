@@ -40,7 +40,8 @@ void Controller::takeTurn(std::istream &in)
                     std::pair<int, int> res = Dice::roll();
                     int d1 = res.first;
                     int d2 = res.second;
-                    model->show("Player " + curPlayerName + "rolls :" + std::to_string(d1) + " and " + std::to_string(d2) + ". ");
+                    model->show("Player " + curPlayerName + " rolls: " + std::to_string(d1) + " and " + std::to_string(d2) + ". ");
+        
                     if (d1 == d2)
                     {
                         model->show("This is a double! ");

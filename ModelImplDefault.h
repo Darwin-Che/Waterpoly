@@ -5,14 +5,17 @@
 
 class ModelImplDefault : public ModelImplPrimitive
 {
+protected:
     // check if the square is a building and is un mortgaged and does not have improvement
     // return true is so, falso otherwise
-    bool squareTradable(std::shared_ptr<Square> s);
+    virtual bool squareTradable(std::shared_ptr<Square> s);
+
+    virtual bool squareImprovable(const std::string &pn, const std::string &property);
 
     // return a mortgaged building the monopoly of s
-    std::string getMonopolyMortgage(std::shared_ptr<Square> s);
+    virtual std::string getMonopolyMortgage(std::shared_ptr<Square> s);
     
-    bool askTrade(const std::string &pn);
+    virtual bool askTrade(const std::string &pn);
 
 public:
     ModelImplDefault(std::istream &tin, std::ostream &tout);
