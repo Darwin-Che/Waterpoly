@@ -158,7 +158,7 @@ void DCTimsLineStrategy::acceptVisitor(std::shared_ptr<Player> player,
         }
         else
         {
-            out << "You are in debt, please pay off your debt so that you are allowed to leave prison." << std::endl;
+            out << "You are in debt, please pay off your debt so that you are allowed to leave DC Tims Line." << std::endl;
             Dice::storage++;
             Dice::canRoll = true;
         }
@@ -184,7 +184,7 @@ void DCTimsLineStrategy::acceptVisitor(std::shared_ptr<Player> player,
         }
         else
         {
-            out << "You are in debt, please pay off your debt so that you are allowed to leave prison." << std::endl;
+            out << "You are in debt, please pay off your debt so that you are allowed to leave DC Tims Line." << std::endl;
             Dice::storage++;
             Dice::canRoll = true;
         }
