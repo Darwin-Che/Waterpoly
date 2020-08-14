@@ -6,7 +6,7 @@
 #include <cstdlib>
 #include <ctime>
 #include "Controller.h"
-#include "ModelFail.h"
+#include "ModelExcept.h"
 #include "Model.h"
 #include "Dice.h"
 
@@ -156,19 +156,27 @@ void Controller::takeTurn(std::istream &in)
             std::string nextName = model->nextPlayerName(curPlayerName, true);
             std::string doubleKill{""};
             std::cout << nextName;
-            bool success = model->bankrupt(curPlayerName, doubleKill);
-            if (success)
+            try
             {
-                if (doubleKill == "")
+                bool success = model->bankrupt(curPlayerName, doubleKill);
+                if (success)
                 {
-                    curPlayerName = nextName;
-                    Dice::clear();
+                    if (doubleKill == "")
+                    {
+                        curPlayerName = nextName;
+                        Dice::clear();
+                    }
+                    else
+                    {
+                        curPlayerName = doubleKill;
+                        Dice::canRoll = false;
+                    }
                 }
-                else
-                {
-                    curPlayerName = doubleKill;
-                    Dice::canRoll = false;
-                }
+            }
+            catch (ModelExcept &e)
+            {
+                std::cout << e.getmessage() << std::endl;
+                return;
             }
             model->show("Current Active Player: " + curPlayerName);
         }

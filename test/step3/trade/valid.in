@@ -1,3 +1,9 @@
 trade p3 RCH 300
+yes
 trade p2 200 MC
+yes
 trade p2 MKV DC
+yes
+trade p3 200 RCH 
+no
+all

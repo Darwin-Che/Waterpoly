@@ -1,4 +1,5 @@
 #include "Model.h"
+#include "ModelExcept.h"
 #include "View.h"
 #include "Player.h"
 #include "Square.h"
@@ -700,6 +701,8 @@ bool Model::bankrupt(const std::string &pn, std::string &doubleKill)
 
         allPlayers.erase(pn);
         playerOrder.erase(std::remove(playerOrder.begin(), playerOrder.end(), pn), playerOrder.end());
+
+        if (allPlayers.size() == 1) throw ModelExcept{"Congratulations! " + allPlayers[0]->getName() + " has won!"};
 
         if (pyn != "" && allPlayers[pyn]->getDebt() > 0)
             doubleKill = pyn;
