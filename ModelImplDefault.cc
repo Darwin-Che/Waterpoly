@@ -297,6 +297,7 @@ void ModelImplDefault::mortgage(const std::string &pn, const std::string &proper
         // execute change
         b->setIsMortgaged(true);
         allPlayers[pn]->setMoney(allPlayers[pn]->getMoney() + refund);
+        show(property + "is successfully mortgaged.");
         // see if debt can be paid
         payDebt(allPlayers[pn]);
     }
@@ -321,6 +322,7 @@ void ModelImplDefault::mortgage(const std::string &pn, const std::string &proper
         // execute change
         b->setIsMortgaged(false);
         allPlayers[pn]->setMoney(allPlayers[pn]->getMoney() - cost);
+        show(property + "is successfully unmortgaged.");
     }
 }
 
