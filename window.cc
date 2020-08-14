@@ -20,7 +20,17 @@ Xwindow::Xwindow(int width, int height):width(width), height(height) {
   w = XCreateSimpleWindow(d, RootWindow(d, s), 10, 10, width, height, 1,
                           BlackPixel(d, s), WhitePixel(d, s));
   XSelectInput(d, w, ExposureMask | KeyPressMask);
-  //XMapRaised(d, w);
+  //XMapWindow(d, w);
+}
+
+Xwindow::~Xwindow() {
+  XFreeGC(d, gc);
+  XCloseDisplay(d);
+}
+
+// show the Xwindow
+void Xwindow::mapXWindow(){
+  XMapRaised(d, w);
   Pixmap pix = XCreatePixmap(d,w,width,
         height,DefaultDepth(d,DefaultScreen(d)));
   gc = XCreateGC(d, pix, 0,(XGCValues *)0);
@@ -52,36 +62,31 @@ Xwindow::Xwindow(int width, int height):width(width), height(height) {
   XSynchronize(d,True);
 
   usleep(1000);
-
+  
 }
 
-Xwindow::~Xwindow() {
-  XFreeGC(d, gc);
-  XCloseDisplay(d);
-}
-
-void Xwindow::mapXWindow(){
-  XMapRaised(d, w);
-}
-
+// fills a rectangle
 void Xwindow::fillRectangle(int x, int y, int width, int height, int colour) {
   XSetForeground(d, gc, colours[colour]);
   XFillRectangle(d, w, gc, x, y, width, height);
   XSetForeground(d, gc, colours[Black]);
 }
 
+// draws a rectangle
 void Xwindow::drawRectangle(int x, int y, int width, int height, int colour) {
   XSetForeground(d, gc, colours[colour]);
   XDrawRectangle(d, w, gc, x, y, width, height);
   XSetForeground(d, gc, colours[Black]);
 }
 
+// draws a line
 void Xwindow::drawLine(int x1, int y1, int x2, int y2, int colour) {
   XSetForeground(d, gc, colours[colour]);
   XDrawLine(d, w, gc, x1, y1, x2, y2);
   XSetForeground(d, gc, colours[Black]);
 }
 
+// draws a string
 void Xwindow::drawString(int x, int y, string msg) {
   XDrawString(d, w, DefaultGC(d, s), x, y, msg.c_str(), msg.length());
 }
