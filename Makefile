@@ -12,8 +12,8 @@ $(EXEC): $(OBJECTS)
 #	strip ${EXEC}
 
 %.o: %.cc 
-	$(CXX) -c -o $@ $< $(CXXFLAGS) -lX11 -L/usr/X11/lib -I/usr/X11/include
-
+	$(CXX) -c -o $@ $< $(CXXFLAGS) 
+	
 -include ${DEPENDS}
 
 .PHONY: clean
