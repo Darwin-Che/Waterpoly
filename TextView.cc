@@ -180,7 +180,6 @@ void TextView::movePlayer(char player, int newlocation){
     int oldposition = players[player];
     vector<int> old2D = get2Dlocation(oldposition);
     vector<int> new2D = get2Dlocation(newlocation);
-    cout << player << ":" << oldposition << "," << newlocation << endl;
     Blocks[old2D[0]][old2D[1]]->removePlayer(player);
     Blocks[new2D[0]][new2D[1]]->addPlayer(player);
     players[player]=newlocation;

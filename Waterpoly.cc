@@ -60,8 +60,7 @@ std::string loadFile(std::istream &loadfile, std::shared_ptr<Model> model, std::
 
         // construct player
         auto player = std::make_shared<Player>(symbol[0], name, position, numCups, money);
-        std::cout << player->getName() << player->getSymbol() << numCups << player->getMoney() << player->getPosition() << std::endl;
-
+        
         // check if on gotoTims
         if (position == board->getSquareLocation("GO TO TIMS")) {
             throw std::invalid_argument{ "A Player should not start on GO TO TIMS!\n" };
@@ -352,19 +351,7 @@ int main(int argc, char *argv[]) {
         ownershipList.push_back(shared_ptr<Player>());
         squareNum++;
     }
-    /*
-    for (int i = 0; i < board.size(); i++) {
-        cout << i << " " << board[i]->getName() << endl;
-    }
-
-    for (auto it : monopolyBlock) {
-        cout << it.first << ": ";
-        for (auto t : it.second) {
-            cout << t->getName() << " ";
-        }
-        cout << endl;
-    }
-    */
+    
     /*************** initiate board and model ****************/
 
     istream &in = cin;
