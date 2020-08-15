@@ -42,7 +42,7 @@ class View: public Observer{
     // add a player
     void addPlayer(const char & ID, const int & position);
     // add a square 
-    void addSquare(const std::string & name, int improvement);
+    virtual void addSquare(const std::string & name, int improvement);
     // When notified by a Subject
     virtual void notify( Subject & whoNotified );
     // draw the view

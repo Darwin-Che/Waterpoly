@@ -1,4 +1,5 @@
 #include "Building.h"
+#include <iostream>
 
 Building::Building(const std::string& name, int location, const std::string &t_description,
     int purchaseCost, bool isMortgaged)
@@ -22,6 +23,7 @@ void Building::setIsMortgaged(bool isMortgaged) {
 
 char Building::setOwner(char o) {
     owner = o;
+    std::cout << getName() <<","<< o << std::endl;
     notifyObservers();
 }
 

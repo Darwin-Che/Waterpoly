@@ -57,7 +57,7 @@ void View::notify( Subject & whoNotified ){
         this->changeAcBuilding( inf.intVals[0], inf.intVals[1], inf.charVals[0]);
     }
     else if ( inf.type == InfoType::building ){
-        std::cout << "infotype:building" << std::endl;
+        std::cout << "infotype:building," <<inf.intVals[0]<< std::endl;
         this->changeBuilding( inf.intVals[0], inf.charVals[0] );
     }
 }

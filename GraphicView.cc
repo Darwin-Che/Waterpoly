@@ -46,6 +46,19 @@ GraphicsView::GraphicsView(int height, int width): View(height, width){
     playerColors[' '] = Xwindow::White;
 }
 
+// add a square 
+void GraphicsView::addSquare(const std::string & name, int improvement){
+    int i = squareName.size();
+    View::addSquare(name, improvement);
+    auto pos = get2Dlocation(i);
+    int posX = 700*pos[1]/actualW;
+    int posY = 700*pos[0]/actualH;
+    int w = 700*(pos[1]+1)/actualW - posX;
+    int h = 700*(pos[0]+1)/actualH - posY;
+    auto block = make_shared<Block>(posX,posY,h,w,improvement,name);
+    blocks.push_back(block);
+}
+
 // move a player to a new location
 void GraphicsView::movePlayer(char player, int newlocation){
     int oldposition = players[player];
@@ -148,16 +161,6 @@ void GraphicsView::drawBlock(shared_ptr<Block> b){
 
 // initialize the blocks
 void GraphicsView::initializeBlocks(){
-    // initialize the blocks using square informations
-    for (int i=0; i < squareName.size(); i++){
-        auto pos = get2Dlocation(i);
-        int posX = 700*pos[1]/actualW;
-        int posY = 700*pos[0]/actualH;
-        int w = 700*(pos[1]+1)/actualW - posX;
-        int h = 700*(pos[0]+1)/actualH - posY;
-        auto block = make_shared<Block>(posX,posY,h,w,improvements[i],squareName[i]);
-        blocks.push_back(block);
-    }
     // add the players to their block
     int i=0;
     for (auto p: players){
