@@ -20,11 +20,12 @@ void Controller::takeTurn(std::istream &in)
     {
         if (command == "roll")
         {
-            if (!model->checkPlayerDebt(curPlayerName)){
+            if (!model->checkPlayerDebt(curPlayerName))
+            {
                 model->show("Please pay off debt before rolling!");
                 continue;
             }
-            
+
             if (model->playerJailed(curPlayerName) && Dice::canRoll)
             {
                 model->show("You are in DC Tims Line currently, so please wait in line patiently!");
@@ -38,7 +39,7 @@ void Controller::takeTurn(std::istream &in)
                     int d1 = res.first;
                     int d2 = res.second;
                     model->show("Player " + curPlayerName + " rolls: " + std::to_string(d1) + " and " + std::to_string(d2) + ". ");
-        
+
                     if (d1 == d2)
                     {
                         model->show("This is a double! ");
@@ -179,9 +180,12 @@ void Controller::takeTurn(std::istream &in)
             catch (ModelExcept &e)
             {
                 std::cout << e.getmessage() << std::endl;
-                std::cout << "Press enter to exit. " << std::endl;
-                std::string lalalal;
-                std::cin >> lalalal;
+                std::cout << "Press space and enter to exit. " << std::endl;
+                std::string lalalal{""};
+                do
+                {
+                    std::getline(std::cin, lalalal);
+                } while (lalalal.length() == 0);
                 return;
             }
             model->show("Current Active Player: " + curPlayerName);
