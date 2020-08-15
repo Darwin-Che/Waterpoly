@@ -180,12 +180,10 @@ void Controller::takeTurn(std::istream &in)
             catch (ModelExcept &e)
             {
                 std::cout << e.getmessage() << std::endl;
-                std::cout << "Press space and enter to exit. " << std::endl;
+                std::cout << "Press enter to exit. " << std::endl;
                 std::string lalalal{""};
-                do
-                {
-                    std::getline(std::cin, lalalal);
-                } while (lalalal.length() == 0);
+                std::getline(std::cin, lalalal);
+                std::getline(std::cin, lalalal);
                 return;
             }
             model->show("Current Active Player: " + curPlayerName);
