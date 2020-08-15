@@ -126,7 +126,7 @@ bool ModelImplPrimitive::playerProceed(const std::string &pn, int steps)
     if (p->getIsJailed())
     {
         // if is Jailed, must be at DC Tims Line, visit directly
-        strategies[board->getSquareLocation("DC Tims Line")]->acceptVisitor(p, board, min, mout);
+        applyStrategy(p);
     }
     else
     {
