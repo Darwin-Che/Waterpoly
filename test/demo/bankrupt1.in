@@ -6,7 +6,8 @@ trade p2 100 ML
 unmortgage DC
 improve DC buy
 trade p2 DC 250
-improve MV sell
+yes
 mortgage MKV
 roll 2 4
 next
+all

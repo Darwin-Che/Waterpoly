@@ -158,7 +158,6 @@ void Controller::takeTurn(std::istream &in)
         {
             std::string nextName = model->nextPlayerName(curPlayerName, true);
             std::string doubleKill{""};
-            std::cout << nextName;
             try
             {
                 bool success = model->bankrupt(curPlayerName, doubleKill);
@@ -180,6 +179,9 @@ void Controller::takeTurn(std::istream &in)
             catch (ModelExcept &e)
             {
                 std::cout << e.getmessage() << std::endl;
+                std::cout << "Press enter to exit. " << std::endl;
+                std::string lalalal;
+                std::cin >> lalalal;
                 return;
             }
             model->show("Current Active Player: " + curPlayerName);

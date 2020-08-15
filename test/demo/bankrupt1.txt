@@ -5,7 +5,7 @@ p3 3 1 1500 0
 p4 4 1 1500 0  
 AL   p1 0
 ML   p2 0
-MKV  p3 0
+MKV  p1 0
 ECH  p3 1
 PAS  p3 2
 HH   p3 3
@@ -29,5 +29,5 @@ EIT  BANK 0
 ESC  BANK 0
 C2   BANK 0
 REV  p1 0
-MC   p1 2
+MC   p1 0
 DC   p1 0
