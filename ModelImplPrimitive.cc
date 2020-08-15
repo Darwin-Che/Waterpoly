@@ -189,6 +189,13 @@ bool ModelImplPrimitive::bankrupt(const std::string &pn, std::string &doubleKill
         std::string pyn;
         show("You are able to bankrupt, preparing to drop out!");
         allPlayers[pn]->dropOut();
+
+        if (playerOrder.size() == 2)
+        {
+            playerOrder.erase(std::remove(playerOrder.begin(), playerOrder.end(), pn), playerOrder.end());
+            throw ModelExcept{"Congratulations! " + playerOrder[0] + " has won!"};
+        }
+
         if (allPlayers[pn]->getDebtOwner() == "BANK")
         {
             show("Your properties are being auctioned!");
@@ -251,9 +258,6 @@ bool ModelImplPrimitive::bankrupt(const std::string &pn, std::string &doubleKill
 
         allPlayers.erase(pn);
         playerOrder.erase(std::remove(playerOrder.begin(), playerOrder.end(), pn), playerOrder.end());
-
-        if (playerOrder.size() == 1)
-            throw ModelExcept{"Congratulations! " + playerOrder[0] + " has won!"};
 
         if (pyn != "" && allPlayers[pyn]->getDebt() > 0)
             doubleKill = pyn;
