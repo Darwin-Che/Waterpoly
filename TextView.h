@@ -19,13 +19,13 @@ class TextView: public View{
         // helper function: minimum
         int min(int x, int y);
         // set the name of a block
-        void setName(std::string & name, int blockLine);
+        void setName(const std::string & name, int blockLine);
         
       public:
         // constructor
         Block(int h, int w);
         // fill in Square information 
-        void setContent(const int & imp,std::string & name);
+        void setContent(const int & imp,const std::string & name);
         // add a player's symbol to the block
         void addPlayer(const char & symbol);
         // remove a player's symbol from the block
@@ -46,8 +46,10 @@ class TextView: public View{
     // 2d vector storing blocks
     // each block represents a square
     std::vector<std::vector<std::shared_ptr<Block> > > Blocks;
-    // initialize the blocks
-    void initializeBlocks();
+    // add a player
+    virtual void addPlayer(const char & ID, const int & position);
+    // add a square 
+    virtual void addSquare(const std::string & name, int improvement);
 
     // move a player to a new location
     virtual void movePlayer(char player, int newlocation);

@@ -40,7 +40,7 @@ class View: public Observer{
     // Type and improvement level of the building
     enum Type { nonBuilding=0, nonAcademic, academic, lv1, lv2, lv3, lv4, lv5, maxLv=lv5 };
     // add a player
-    void addPlayer(const char & ID, const int & position);
+    virtual void addPlayer(const char & ID, const int & position);
     // add a square 
     virtual void addSquare(const std::string & name, int improvement);
     // When notified by a Subject

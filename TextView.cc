@@ -21,7 +21,7 @@ int TextView::Block::min(int a, int b){
 }
 
 // set the name of a block
-void TextView::Block::setName(std::string & name, int blockLine){
+void TextView::Block::setName(const std::string & name, int blockLine){
     istringstream strm{name};
     string word;
     int lineIndex=0;
@@ -73,7 +73,7 @@ void TextView::Block::setRightLine(){
 }
 
 // fill in Square information 
-void TextView::Block::setContent(const int & imp,std::string & name){
+void TextView::Block::setContent(const int & imp,const std::string & name){
     setUnderLine();
     setRightLine();
     if(imp >= academic){
@@ -161,6 +161,19 @@ TextView::TextView(int height, int width):View(height,width){
     }
 }
 
+// add a player
+void TextView::addPlayer(const char & ID, const int & position){
+    vector<int> pos = get2Dlocation(position);
+        Blocks[pos[0]][pos[1]]->addPlayer(ID);
+}
+// add a square 
+void TextView::addSquare(const std::string & name, int improvement){
+    int i = squareName.size();
+    View::addSquare(name, improvement);
+    vector<int> position = get2Dlocation(i);
+    Blocks[position[0]][position[1]]->setContent(improvement,name);
+}
+
 // move a player to a new location
 void TextView::movePlayer(char player, int newlocation){
     int oldposition = players[player];
@@ -207,26 +220,10 @@ void TextView::changeAcBuilding(int location, int newimprovement, char owner) {
 // change the owner of a block
 void TextView::changeBuilding(int location, char owner){}
 
-// initialize the blocks
-void TextView::initializeBlocks(){
-    for (int i=0; i<2*(width+height); i++){ // update the squares
-        vector<int> position = get2Dlocation(i);
-        Blocks[position[0]][position[1]]->setContent(improvements[i],squareName[i]);
-    }
-    for (auto it:players){ // update the players
-        vector<int> position = get2Dlocation(it.second);
-        Blocks[position[0]][position[1]]->addPlayer(it.first);
-    }
-}
-
 // draw the view
 void TextView::drawBoard(){
-    if (!initialized){
-        // if the first time to draw a boardx
-        initializeBlocks();
-        initialized = true;
-    }
-
+    initialized = true;
+    
     // draw an overline
     for (int i=0; i<=actualW*(gridW+1); i++){
         cout << "_";

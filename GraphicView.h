@@ -32,8 +32,11 @@ class GraphicsView: public View{
     };
     // a vector of blocks
     std::vector<std::shared_ptr<Block>> blocks;
+    // add a player
+    virtual void addPlayer(const char & ID, const int & position);
     // add a square 
     virtual void addSquare(const std::string & name, int improvement);
+
     // move a player to a new location
     virtual void movePlayer(char player, int newlocation);
     // remove a player from the board
@@ -46,9 +49,7 @@ class GraphicsView: public View{
     virtual void changeBuilding(int location, char owner);
     // draw the Block b
     void drawBlock(std::shared_ptr<Block> b);
-    // initialize the blocks
-    void initializeBlocks();
-
+ 
   public:
     // constructor
     GraphicsView(int height, int width);

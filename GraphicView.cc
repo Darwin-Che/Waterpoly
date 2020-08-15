@@ -46,6 +46,14 @@ GraphicsView::GraphicsView(int height, int width): View(height, width){
     playerColors[' '] = Xwindow::White;
 }
 
+// add a player
+void GraphicsView::addPlayer(const char & ID, const int & position){
+    int i = players.size();
+    View::addPlayer(ID,position);
+    blocks[position]->playerSymbols += ID;
+    playerColors[ID] = i+Xwindow::pColor;
+}
+
 // add a square 
 void GraphicsView::addSquare(const std::string & name, int improvement){
     int i = squareName.size();
@@ -159,22 +167,10 @@ void GraphicsView::drawBlock(shared_ptr<Block> b){
     win.drawRectangle(x,y,b->blockW,b->blockH,Xwindow::Black);
 }
 
-// initialize the blocks
-void GraphicsView::initializeBlocks(){
-    // add the players to their block
-    int i=0;
-    for (auto p: players){
-        blocks[p.second]->playerSymbols += p.first;
-        playerColors[p.first] = i+Xwindow::pColor;
-        i++;
-    }
-}
-
 // draw the view
 void GraphicsView::drawBoard(){
     if (!initialized){
         // if the first time to draw a boardx
-        initializeBlocks();
         win.mapXWindow();
         initialized = true;
     }
