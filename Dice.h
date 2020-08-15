@@ -16,6 +16,7 @@ public:
     static std::pair<int, int> roll();
     static void init(bool testing);
     static void clear();
+    static int cup();
 };
 
 #endif

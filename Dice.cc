@@ -20,7 +20,7 @@ std::pair<int, int> Dice::roll()
     }
     if (Dice::testing_mode)
     {
-        std::cout << "You are in testing mode. Please enter two dice results: " << std::endl;
+        std::cout << "You are in testing mode. Please enter two dice results - nonnegative please : " << std::endl;
         std::cin >> a >> b;
     }
     else
@@ -47,4 +47,16 @@ void Dice::init(bool testing)
 {
     Dice::clear();
     Dice::testing_mode = testing;
+}
+
+int Dice::cup()
+{
+    int ans = 0;
+    if (testing_mode) {
+        std::cout << "In testing mode, input 0 to get a cup, 1 give up cup" << std::endl;
+        std::cin >> ans;
+    } else {
+        ans = rand() % 100;
+    }
+    return ans;
 }

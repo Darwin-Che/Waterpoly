@@ -79,6 +79,7 @@ void DCTimsLineStrategy::payCup(std::shared_ptr<Player> player, std::ostream &ou
 void DCTimsLineStrategy::acceptVisitor(std::shared_ptr<Player> player,
                                        std::shared_ptr<Board> board, std::istream &in, std::ostream &out)
 {
+    roll1 = roll2 = -1;
     // Nothing happens if the player directly landed on Tims Line
     if (player->getIsJailed() == false)
     {
