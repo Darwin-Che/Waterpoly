@@ -375,8 +375,8 @@ int main(int argc, char *argv[]) {
         std::vector<shared_ptr<Player>> Players;
         int playernum = 0;
 
-        while (playernum < 6 || playernum > 8) {
-            cout << "Please choose enter the number of players (6~8):" << endl;
+        while (playernum < 2 || playernum > 8) {
+            cout << "Please choose enter the number of players (2~8):" << endl;
             if (!(in >> playernum)) {
                 if (in.eof())
                     break;
