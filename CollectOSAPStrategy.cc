@@ -12,28 +12,33 @@ void CollectOSAPStrategy::acceptVisitor(std::shared_ptr<Player> player,
     int moveAmount = player->getLastMoveAmount();
     int totalSquares = board->getTotalSquareNum();
     if (moveAmount == 0) return;
-    
-    if (moveAmount < totalSquares && playerLocation != OSAPLocation) {
-        if (moveAmount > 0) {
-            if (playerLocation < OSAPLocation) {
-                if (moveAmount < totalSquares - OSAPLocation + 1 + playerLocation) return;
-            } else if (playerLocation > OSAPLocation) {
-                if (moveAmount < playerLocation - OSAPLocation + 1) return;
-            }
-        } else if (moveAmount < 0) {
-            if (playerLocation < OSAPLocation) {
-                if (moveAmount < OSAPLocation + 1 - playerLocation) return;
-            } else if (playerLocation > OSAPLocation) {
-                if (moveAmount < totalSquares - playerLocation + OSAPLocation + 1) return;
-            }
+
+    // Check the number of times the player passed OSAP
+    int timesPassed = 0;
+    if (moveAmount > 0) {
+        for (int i = 0; i < moveAmount; ++i) {
+            if (playerLocation == OSAPLocation)
+                timesPassed++;
+            playerLocation--;
+            if (playerLocation == -1)
+                playerLocation += totalSquares;
+        }
+    } else if (moveAmount < 0) {
+        for (int i = 0; i < -moveAmount; ++i) {
+            if (playerLocation == OSAPLocation)
+                timesPassed++;
+            playerLocation++;
+            if (playerLocation == totalSquares)
+                playerLocation = 0;
         }
     }
- 
-    out << "You stepped on or over Collect OSAP square. "
-        << "You will receive $200." << std::endl;
-
-    // The work will be done by MoneyStrategy to avoid repeated code
-    MoneyStrategy strat(200);
-    strat.acceptVisitor(player, board, in, out);
+    
+    for (int i = 0; i < timesPassed; ++i) {
+        out << "You stepped on or over Collect OSAP square. "
+            << "You will receive $200." << std::endl;
+        // The work will be done by MoneyStrategy to avoid repeated code
+        MoneyStrategy strat(200);
+        strat.acceptVisitor(player, board, in, out);
+    }
 }
 
