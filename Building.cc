@@ -5,6 +5,7 @@ Building::Building(const std::string& name, int location, const std::string &t_d
     : Square(name, location, t_description), purchaseCost(purchaseCost),
     isMortgaged(isMortgaged) {
         description = "Building";
+        owner = ' ';
     }
 
 int Building::getPurchaseCost() const {
@@ -17,6 +18,11 @@ bool Building::getIsMortgaged() const {
 
 void Building::setIsMortgaged(bool isMortgaged) {
     this->isMortgaged = isMortgaged;
+}
+
+char Building::setOwner(char o) {
+    owner = o;
+    notifyObservers();
 }
 
 int Building::calculateNetworth() const {
@@ -32,4 +38,8 @@ std::string Building::saveInfo() const
 {
     if (getIsMortgaged()) return "-1";
     return "0";
+}
+
+Info Building::getSubjectInfo(){
+    return Info{InfoType::building,{},{getLocation()},{owner},{}};
 }

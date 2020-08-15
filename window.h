@@ -18,7 +18,8 @@ class Xwindow {
   Xwindow(const Xwindow&) = delete;
   Xwindow &operator=(const Xwindow&) = delete;
 
-  enum {White=0, Black, lightGray, Green, PowderBlue, Aqua, Orange}; // Available colours.
+  enum {White=0, Black, lightGray, BurlyWood,Indigo, pColor, OrangeRed=pColor, 
+        Orange, Yellow, LightSeaGreen, DeepSkyBlue ,PowderBlue, Violet, HotPink}; // Available colours.
 
   // show the Xwindow
   void mapXWindow();

@@ -57,6 +57,16 @@ void Board::setOwner(std::string buildingname, std::shared_ptr<Player> player){
     for (auto it : board){
         if(it->getName() == buildingname){
             ownershipList[i]=player;
+            auto build = dynamic_pointer_cast<Building>(it);
+            if ( build == nullptr ){
+                return;
+            }
+            if( player == nullptr ){
+                build->setOwner(' ');
+            }
+            else {
+                build->setOwner( player->getSymbol() );
+            }
             break;
         }
         i++;

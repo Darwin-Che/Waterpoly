@@ -4,7 +4,7 @@
 #include <vector>
 
 // State of the cell i.e. either dead or alive.
-enum class InfoType { player, academic};
+enum class InfoType { player, academic, building};
 
 // Information for the cell to return i.e. its state (Alive/Dead) and position in grid.
 struct Info {

@@ -4,7 +4,7 @@
 #include "Building.h"
 #include "Subject.h"
 
-class AcademicBuilding : public Building, public Subject {
+class AcademicBuilding : public Building {
     int improvementCost;
     std::vector<int> improvementFee;
     int improvementLevel;

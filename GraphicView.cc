@@ -13,6 +13,7 @@ posX(x), posY(y), blockH(h), blockW(w), improvement(improvement) {
     istringstream strm{name};
     string word;
     vector<string> parse;
+    owner = ' ';
 
     // check each word of the name of the square, and trim them to fit the display
     while (strm>>word){
@@ -41,7 +42,9 @@ posX(x), posY(y), blockH(h), blockW(w), improvement(improvement) {
 } 
 
 // constructor
-GraphicsView::GraphicsView(int height, int width): View(height, width){}
+GraphicsView::GraphicsView(int height, int width): View(height, width){
+    playerColors[' '] = Xwindow::White;
+}
 
 // move a player to a new location
 void GraphicsView::movePlayer(char player, int newlocation){
@@ -87,24 +90,43 @@ void GraphicsView::changeImprovement(int location, int newimprovement){
     }
 }
 
+// change an acdemic building
+void GraphicsView::changeAcBuilding(int location, int newimprovement, char owner){
+    if (owner != blocks[location]->owner ){
+        changeBuilding(location, owner);
+    }
+    else{
+        changeImprovement(location, newimprovement);
+    }
+}
+
+// change the owner of a block
+void GraphicsView::changeBuilding(int location, char owner){
+    blocks[location]->owner = owner;
+    if (initialized){
+        // redraw the block
+        drawBlock(blocks[location]);
+    }
+}
+
 // draw the Block b
 void GraphicsView::drawBlock(shared_ptr<Block> b){
     int x = b->posX;
     int y = b->posY;
     int line = 12;
     if (b->improvement >= View::academic){
-        win.fillRectangle(x,y,b->blockW,b->blockH,Xwindow::White);
+        win.fillRectangle(x,y,b->blockW,b->blockH,playerColors[b->owner]);
         // draw the improvement level
         string imp (b->improvement - academic, 'I');
         win.drawString(x+2, y+12, imp);
-        win.drawLine(x, y+13, x+b->blockW, y+13, Xwindow::Orange);
+        win.drawLine(x, y+13, x+b->blockW, y+13, Xwindow::Indigo);
         line = 24;
     }
     else if(b->improvement == View::nonAcademic){
-        win.fillRectangle(x,y,b->blockW,b->blockH,Xwindow::White);
+        win.fillRectangle(x,y,b->blockW,b->blockH,playerColors[b->owner]);
     }
     else{
-        win.fillRectangle(x,y,b->blockW,b->blockH,Xwindow::lightGray);
+        win.fillRectangle(x,y,b->blockW,b->blockH,Xwindow::BurlyWood);
     }
     // draw the name of the square
     for (int i=0 ;i<b->nameString.size(); i++){
@@ -116,7 +138,7 @@ void GraphicsView::drawBlock(shared_ptr<Block> b){
     }
     
     for (int i=0; i<b->playerSymbols.size();i++){
-        //win.fillRectangle(x+1+i*7,y+b->blockH-12,6,10,i);
+        win.fillRectangle(x+1+i*7,y+b->blockH-12,7,12,playerColors[b->playerSymbols[i]]);
         win.drawString(x+2+i*7,y+b->blockH-2,string(1,b->playerSymbols[i]));
     }
     // draw the player symbols on this square
@@ -137,8 +159,11 @@ void GraphicsView::initializeBlocks(){
         blocks.push_back(block);
     }
     // add the players to their block
+    int i=0;
     for (auto p: players){
         blocks[p.second]->playerSymbols += p.first;
+        playerColors[p.first] = i+Xwindow::pColor;
+        i++;
     }
 }
 

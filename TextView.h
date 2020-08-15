@@ -53,8 +53,10 @@ class TextView: public View{
     virtual void movePlayer(char player, int newlocation);
     // remove a player from the board
     virtual void removePlayer(char player);
-    // change the improvement level of a block
-    virtual void changeImprovement(int location, int newimprovement);
+    // change an acdemic building
+    virtual void changeAcBuilding(int location, int newimprovement, char owner);
+    // change the owner of a building
+    virtual void changeBuilding(int location, char owner);
   public:
     // constructor
     TextView(int height, int width);

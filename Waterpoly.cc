@@ -279,6 +279,7 @@ int main(int argc, char *argv[]) {
                 monopolyBlock[blockName].push_back(gym);
             }
             for (auto v: views) {
+                gym->attach(v);
                 v->addSquare(name, View::nonAcademic);
             }
             strategies.push_back(make_shared<GymStrategy>());
@@ -298,6 +299,7 @@ int main(int argc, char *argv[]) {
                 monopolyBlock[blockName].push_back(residence);
             }
             for (auto v: views) {
+                residence->attach(v);
                 v->addSquare(name, View::nonAcademic);
             }
             strategies.push_back(make_shared<ResidenceStrategy>());

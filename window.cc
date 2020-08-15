@@ -41,10 +41,11 @@ void Xwindow::mapXWindow(){
   // Set up colours.
   XColor xcolour;
   Colormap cmap;
-  char color_vals[10][20]={"white", "black", "light gray", "green", "powder blue", "aqua", "orange"};
+  char color_vals[20][20]={"white", "black", "light gray", "pale goldenrod", "Indigo", 
+  "tomato", "orange", "yellow", "light sea green", "deep sky blue" ,"powder blue", "violet", "hot pink"};
 
   cmap=DefaultColormap(d,DefaultScreen(d));
-  for(int i=0; i < 7; ++i) {
+  for(int i=0; i < 13; ++i) {
       XParseColor(d,cmap,color_vals[i],&xcolour);
       XAllocColor(d,cmap,&xcolour);
       colours[i]=xcolour.pixel;

@@ -30,9 +30,10 @@ class View: public Observer{
     virtual void movePlayer(char player, int newlocation) = 0;
     // remove a player from the board
     virtual void removePlayer(char player) = 0;
-    // change the improvement level of a block
-    virtual void changeImprovement(int location, int newimprovement) = 0;
-    
+    // change an acdemic building
+    virtual void changeAcBuilding(int location, int newimprovement, char owner) = 0;
+    // change the owner of a building
+    virtual void changeBuilding(int location, char owner) = 0;
   public:
     //constructor
     View(int height, int width); 

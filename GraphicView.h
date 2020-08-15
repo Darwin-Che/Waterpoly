@@ -4,13 +4,12 @@
 #include "View.h"
 #include "window.h"
 #include <memory>
-#include <vector>
 
 class GraphicsView: public View{
     // window size
     int windowSize;
     // maps each player to a color
-    
+    std::map<char,int> playerColors;
     // the grahic window
     Xwindow win;
     // stores the information of each square on the board
@@ -20,6 +19,8 @@ class GraphicsView: public View{
         int posX, posY;
         // dimensions of the block
         int blockH, blockW;
+        // owner of the block
+        char owner;
         // the char vector that stores each player on this block
         std::string playerSymbols;
         // the string vector that stores each block's name
@@ -38,6 +39,10 @@ class GraphicsView: public View{
     virtual void removePlayer(char player);
     // change the improvement level of a block
     virtual void changeImprovement(int location, int newimprovement);
+    // change an acdemic building
+    virtual void changeAcBuilding(int location, int newimprovement, char owner);
+    // change the owner of a building
+    virtual void changeBuilding(int location, char owner);
     // draw the Block b
     void drawBlock(std::shared_ptr<Block> b);
     // initialize the blocks
