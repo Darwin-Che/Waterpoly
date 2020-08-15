@@ -46,10 +46,6 @@ class TextView: public View{
     // 2d vector storing blocks
     // each block represents a square
     std::vector<std::vector<std::shared_ptr<Block> > > Blocks;
-    // add a player
-    virtual void addPlayer(const char & ID, const int & position);
-    // add a square 
-    virtual void addSquare(const std::string & name, int improvement);
 
     // move a player to a new location
     virtual void movePlayer(char player, int newlocation);
@@ -64,6 +60,10 @@ class TextView: public View{
     TextView(int height, int width);
     // draw the view
     virtual void drawBoard();
+    // add a player
+    virtual void addPlayer(const char & ID, const int & position);
+    // add a square 
+    virtual void addSquare(const std::string & name, int improvement);
 };
 
 #endif
