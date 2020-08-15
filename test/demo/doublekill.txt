@@ -1,0 +1,32 @@
+3
+p1 1 0 10   0
+p2 2 1 1500 0
+p3 3 1 1    0
+AL   p3 4
+ML   p3 4
+MKV  p3 0
+ECH  p3 1
+PAS  p3 2
+HH   p3 3
+RCH  p1 -1
+PAC  p2 -1
+DWE  p2 0
+CPH  p2 0
+UWP  p3 0
+LHI  BANK 0
+BMH  BANK 0
+OPT  p2 0
+EV1  BANK 0
+EV2  BANK 0
+EV3  BANK 0
+V1   p3 0
+PHYS BANK 0
+B1   BANK 0
+CIF  p2 0
+B2   BANK 0
+EIT  BANK 0
+ESC  BANK 0
+C2   BANK 0
+REV  p3 0
+MC   p3 0
+DC   p3 2
