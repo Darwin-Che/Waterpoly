@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <vector>
 #include <stdexcept>
+#include <cstdlib>
 
 using namespace std;
 
@@ -188,9 +189,18 @@ int main(int argc, char *argv[]) {
                 std::cerr << "No filename after -load!" << std::endl;
                 throw std::logic_error("No filename after -load!");
             }
-        } else if (std::string(argv[argct]) == "-testing")
-        {
+        } else if (std::string(argv[argct]) == "-testing") {
             testing = true;
+        } else if (std::string(argv[argct]).substr(0, 5) == "-seed") {
+            try {
+                std::string seed = std::string(argv[argct]).substr(5);
+                int seedNum = std::stoi(seed);
+                srand(seedNum);
+            } catch (std::exception& e) {
+                std::cerr << "Command line argument is incorrectly specified." << std::endl;
+                return 1;
+            }
+
         } else if (std::string(argv[argct]) == "-vText"){
             vText = true;
         } else if (std::string(argv[argct]) == "-vGraph"){
