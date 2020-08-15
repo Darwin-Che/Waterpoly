@@ -11,10 +11,7 @@
 #include "Dice.h"
 
 Controller::Controller(std::shared_ptr<Model> t_model, const std::string &startPlayerName)
-    : model{t_model}, curPlayerName{startPlayerName}
-{
-    srand(time(NULL));
-}
+    : model{t_model}, curPlayerName{startPlayerName} {}
 
 void Controller::takeTurn(std::istream &in)
 {
