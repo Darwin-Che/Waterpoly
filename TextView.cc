@@ -164,7 +164,8 @@ TextView::TextView(int height, int width):View(height,width){
 // add a player
 void TextView::addPlayer(const char & ID, const int & position){
     vector<int> pos = get2Dlocation(position);
-        Blocks[pos[0]][pos[1]]->addPlayer(ID);
+    View::addPlayer(ID, position);
+    Blocks[pos[0]][pos[1]]->addPlayer(ID);
 }
 // add a square 
 void TextView::addSquare(const std::string & name, int improvement){
@@ -179,6 +180,7 @@ void TextView::movePlayer(char player, int newlocation){
     int oldposition = players[player];
     vector<int> old2D = get2Dlocation(oldposition);
     vector<int> new2D = get2Dlocation(newlocation);
+    cout << player << ":" << oldposition << "," << newlocation << endl;
     Blocks[old2D[0]][old2D[1]]->removePlayer(player);
     Blocks[new2D[0]][new2D[1]]->addPlayer(player);
     players[player]=newlocation;
