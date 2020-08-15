@@ -127,6 +127,10 @@ int Player::getTotalNumCups() {
     return totalNumCups;
 }
 
+void Player::setTotalNumCups(int t) {
+    totalNumCups = t;
+}
+
 Info Player::getSubjectInfo(){
     return Info{InfoType::player,{isBankrupt},{position},{symbol},{}};
 }

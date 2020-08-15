@@ -3,60 +3,63 @@
 #include <string>
 #include "Subject.h"
 
-class Player: public Subject{
-    char symbol;
-    std::string name;
-    int money, position, lastMoveAmount;
-    int numCups;
-    static int totalNumCups;
-    bool isJailed;
-    int numJailed;
-    int debt;
-    std::string debtOwner;
-    bool isBankrupt;
-  public:
-    // constructors
-    Player(char symbol, const std::string& name);
-    Player(char symbol, const std::string& name, int position, int numCups, int money);
-    Player(char symbol, const std::string& name, int position, int numCups, int money, int numJailed);
-    // accessors and mutators
-    char getSymbol() const;
-    std::string getName() const;
+class Player : public Subject
+{
+  char symbol;
+  std::string name;
+  int money, position, lastMoveAmount;
+  int numCups;
+  static int totalNumCups;
+  bool isJailed;
+  int numJailed;
+  int debt;
+  std::string debtOwner;
+  bool isBankrupt;
 
-    int getMoney() const;
-    void setMoney(const int & money);
+public:
+  // constructors
+  Player(char symbol, const std::string &name);
+  Player(char symbol, const std::string &name, int position, int numCups, int money);
+  Player(char symbol, const std::string &name, int position, int numCups, int money, int numJailed);
+  // accessors and mutators
+  char getSymbol() const;
+  std::string getName() const;
 
-    int getPosition() const;
-    void moveForward(const int & moveAmount, const int & totalSquares);
+  int getMoney() const;
+  void setMoney(const int &money);
 
-    int getLastMoveAmount() const;
+  int getPosition() const;
+  void moveForward(const int &moveAmount, const int &totalSquares);
 
-    int getNumCups() const;
-    void setNumCups(const int & numcups);
+  int getLastMoveAmount() const;
 
-    static int getTotalNumCups();
+  int getNumCups() const;
+  void setNumCups(const int &numcups);
 
-    bool getIsJailed() const;
-    void setIsJailed(const bool & isJailed);
+  static int getTotalNumCups();
+  static void setTotalNumCups(int t);
 
-    int getNumJailed() const;
-    void setNumJailed(const int & getNumJailed);
+  bool getIsJailed() const;
+  void setIsJailed(const bool &isJailed);
 
-    int getDebt() const;
-    void setDebt(const int & debt);
+  int getNumJailed() const;
+  void setNumJailed(const int &getNumJailed);
 
-    std::string getDebtOwner() const;
-    void setDebtOwner(const std::string & name);
+  int getDebt() const;
+  void setDebt(const int &debt);
 
-    bool getIsBankrupt() const;
+  std::string getDebtOwner() const;
+  void setDebtOwner(const std::string &name);
 
-    // check if the player has enough money to pay debt
-    bool canPayDebt() const;
+  bool getIsBankrupt() const;
 
-    // notify Observers when the player bankrupt
-    void dropOut();
+  // check if the player has enough money to pay debt
+  bool canPayDebt() const;
 
-    virtual Info getSubjectInfo();
+  // notify Observers when the player bankrupt
+  void dropOut();
+
+  virtual Info getSubjectInfo();
 };
 
 #endif

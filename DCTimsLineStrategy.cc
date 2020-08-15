@@ -90,7 +90,7 @@ void DCTimsLineStrategy::acceptVisitor(std::shared_ptr<Player> player,
     // Otherwise, ask the player how he/she plans to leave Tims Line
     out << "You are stuck in DC Tims line, but you really want to leave." << std::endl
         << "Type 1 if you want to try to roll doubles, type 2 if you want to pay $50, "
-        << "type 3 if you want to use a Roll Up the Rim Cup.";
+        << "type 3 if you want to use a Roll Up the Rim Cup." << std::endl;
     bool finished = false;
 
     // Carry out the appropriate action based on the player's choice
