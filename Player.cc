@@ -19,6 +19,12 @@ Player::Player(char symbol, const std::string& name, int position, int numCups, 
     totalNumCups += numCups;
     this->money = money;
     lastMoveAmount = 0;
+
+    isJailed = false;
+    numJailed = 0;
+    debt = 0;
+    debtOwner = "";
+    isBankrupt = false;
 }
 
 Player::Player(char symbol, const std::string& name, int position, int numCups, int money, int numJailed) :symbol(symbol), name(name) {
@@ -29,6 +35,9 @@ Player::Player(char symbol, const std::string& name, int position, int numCups, 
     lastMoveAmount = 0;
     this->numJailed = numJailed;
     isJailed = true;
+    debt = 0;
+    debtOwner = "";
+    isBankrupt = false;
 }
 
 // accessors and mutators

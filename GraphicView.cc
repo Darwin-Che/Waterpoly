@@ -116,7 +116,7 @@ void GraphicsView::changeAcBuilding(int location, int newimprovement, char owner
     if (owner != blocks[location]->owner ){
         changeBuilding(location, owner);
     }
-    else{
+    else if (improvements[location] != academic+newimprovement){
         changeImprovement(location, newimprovement);
     }
 }

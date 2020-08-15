@@ -207,15 +207,17 @@ void TextView::removePlayer(char player){
 
 // change the improvement level of a block
 void TextView::changeAcBuilding(int location, int newimprovement, char owner) {
-    vector<int> loc2D = get2Dlocation(location);
-    Blocks[loc2D[0]][loc2D[1]]->changeImprovement(academic+newimprovement);
-    improvements[location] = academic+newimprovement;
+    if (improvements[location] != academic+newimprovement){
+        vector<int> loc2D = get2Dlocation(location);
+        Blocks[loc2D[0]][loc2D[1]]->changeImprovement(academic+newimprovement);
+        improvements[location] = academic+newimprovement;
 
-    // if the board finished initializing
-    if (initialized){
-        // redraw the board
-        this->drawBoard();
-    }
+        // if the board finished initializing
+        if (initialized){
+            // redraw the board
+            this->drawBoard();
+        }
+    } 
 }
 
 // change the owner of a block
