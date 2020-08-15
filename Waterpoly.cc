@@ -342,7 +342,7 @@ int main(int argc, char *argv[]) {
         ownershipList.push_back(shared_ptr<Player>());
         squareNum++;
     }
-
+    /*
     for (int i = 0; i < board.size(); i++) {
         cout << i << " " << board[i]->getName() << endl;
     }
@@ -354,7 +354,7 @@ int main(int argc, char *argv[]) {
         }
         cout << endl;
     }
-
+    */
     /*************** initiate board and model ****************/
 
     istream &in = cin;
