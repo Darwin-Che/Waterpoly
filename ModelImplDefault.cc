@@ -80,7 +80,7 @@ bool ModelImplDefault::askTrade(const std::string &pn)
     if (!existPlayer(pn))
         return false;
 
-    show("Do you want to trade? yes/no" + pn);
+    show("Do you want to trade? yes/no " + pn);
     std::string ans;
     while (true)
     {
