@@ -1,5 +1,5 @@
-#ifndef _DICE_
-#define _DICE_
+#ifndef _DICE_H
+#define _DICE_H
 
 #include <vector>
 #include <string>
