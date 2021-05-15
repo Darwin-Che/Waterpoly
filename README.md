@@ -18,3 +18,7 @@ Other terminal options
 -testing.   # specify dice outcome
 -rule1 -rule2 -rule3 -rule4   # enable custom rules
 ```
+
+![Alt text](img/img1.png?raw=true "Title")
+![Alt text](img/img2.png?raw=true "Title")
+
